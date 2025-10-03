@@ -230,7 +230,49 @@ function renderGridSingleClass(data, classId) {
     .forEach(a => placeBlockViz(a.classId, a.day, a.start, a, subjectById, classById, teacherById, roomById));
 }
 
-// PROFESSOR: linhas = dias; colunas = 12 períodos (só marca onde ele dá aula)
+/* ---------- Lógicas de CONFLITO para o modo Professor ---------- */
+/** Atribui “lanes” (faixas) por dia para eventos que podem se sobrepor. */
+function assignLanesByDay(events, totalPeriods) {
+  // group by day
+  const byDay = new Map();
+  events.forEach(ev => {
+    if (!byDay.has(ev.day)) byDay.set(ev.day, []);
+    byDay.get(ev.day).push(ev);
+  });
+
+  const result = new Map();        // day -> events with lane
+  const laneCountByDay = new Map();// day -> laneCount
+
+  for (const [day, list] of byDay.entries()) {
+    // ordenar: início asc, e (opcional) maior duração primeiro em empates
+    list.sort((a, b) => (a.start - b.start) || ((b.duration || 1) - (a.duration || 1)));
+
+    const laneEnds = []; // laneEnds[i] = último período ocupado nessa faixa
+    const placed = [];
+
+    for (const ev of list) {
+      const dur = Number(ev.duration || 1);
+      const evEnd = ev.start + dur;
+
+      // procura 1ª faixa onde end <= start
+      let lane = -1;
+      for (let i = 0; i < laneEnds.length; i++) {
+        if (laneEnds[i] <= ev.start) { lane = i; break; }
+      }
+      if (lane === -1) { lane = laneEnds.length; laneEnds.push(0); }
+
+      laneEnds[lane] = evEnd;
+      placed.push({ ...ev, lane, end: evEnd });
+    }
+
+    result.set(day, placed);
+    laneCountByDay.set(day, laneEnds.length || 1);
+  }
+
+  return { byDay: result, laneCountByDay };
+}
+
+/** Renderização por PROFESSOR com empilhamento (lanes) quando houver conflito. */
 function renderGridSingleTeacher(data, teacherId) {
   const grid = document.getElementById('viz-grid');
   grid.innerHTML = '';
@@ -247,6 +289,8 @@ function renderGridSingleTeacher(data, teacherId) {
 
   const dayNamesFull = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
+  // 1) grade de fundo (células) — e um contêiner absoluto por dia
+  const dayRows = []; // { rowEl, periodsCol, cellsOfDay[], overlay }
   for (let dia = 0; dia < meta.days.length; dia++) {
     const row = document.createElement('div');
     row.className = 'turma-row';
@@ -257,15 +301,20 @@ function renderGridSingleTeacher(data, teacherId) {
     row.appendChild(dayName);
 
     const periodsCol = document.createElement('div');
-    periodsCol.className = 'day-column';
+    periodsCol.className = 'day-column relative'; // importante: relative para overlay absoluto
 
-    // criamos UMA linha de células por dia e “reapontamos” para TODAS as turmas
     const cellsOfDay = [];
     for (let p = 0; p < P; p++) {
-      const cell = baseCell('ANY', dia, p); // turma não importa aqui
+      const cell = baseCell('ANY', dia, p);
       cellsOfDay.push(cell);
       periodsCol.appendChild(cell);
     }
+
+    // overlay que receberá os blocos absolutos
+    const overlay = document.createElement('div');
+    overlay.className = 'absolute inset-0 pointer-events-none'; // blocos habilitam pointer-events
+    periodsCol.appendChild(overlay);
+
     // aponta a MESMA referência de célula para todas as turmas neste dia
     classes.forEach(c => {
       for (let p = 0; p < P; p++) {
@@ -275,12 +324,56 @@ function renderGridSingleTeacher(data, teacherId) {
 
     row.appendChild(periodsCol);
     grid.appendChild(row);
+    dayRows.push({ row, periodsCol, cellsOfDay, overlay });
   }
 
-  // pinta apenas as aulas que envolvem o professor (com badge da turma)
-  allocations
+  // 2) eventos do professor
+  const myEvents = allocations
     .filter(a => (a.teacherIds || []).includes(teacherId))
-    .forEach(a => placeBlockViz(a.classId, a.day, a.start, a, subjectById, classById, teacherById, roomById, { withClassBadge: true }));
+    .map(a => ({ ...a, end: a.start + Number(a.duration || 1) }));
+
+  // 3) atribui lanes por dia
+  const { byDay, laneCountByDay } = assignLanesByDay(myEvents, P);
+
+  // 4) para cada dia, ajusta altura e posiciona blocos absolutos
+  dayRows.forEach(({ periodsCol, cellsOfDay, overlay }, dia) => {
+    const events = byDay.get(dia) || [];
+    const laneCount = laneCountByDay.get(dia) || 1;
+
+    // mede altura de uma célula (fallback 56)
+    const baseH = (cellsOfDay[0]?.offsetHeight) || 56;
+    const rowH = baseH * laneCount;
+
+    // aumenta a altura do “fundo” (todas as células daquele dia)
+    cellsOfDay.forEach(c => { c.style.height = `${rowH}px`; });
+
+    // overlay deve ter a mesma altura do fundo
+    periodsCol.style.minHeight = `${rowH}px`;
+
+    // cria blocos
+    overlay.innerHTML = '';
+    overlay.style.pointerEvents = 'none'; // overlay em si ignora, mas os blocos aceitam
+    events.forEach(ev => {
+      const leftPct = (ev.start / P) * 100;
+      const widthPct = (Math.min(ev.end, P) - ev.start) / P * 100;
+      const topPx = ev.lane * baseH;
+
+      const block = document.createElement('div');
+      block.className =
+        'absolute rounded-md bg-rose-200 border border-rose-400 shadow-sm flex items-center justify-center text-xs font-bold';
+      block.style.left = `${leftPct}%`;
+      block.style.width = `${widthPct}%`;
+      block.style.top = `${topPx + 2}px`; // pequeno respiro
+      block.style.height = `${baseH - 4}px`;
+      block.style.padding = '2px 4px';
+      block.style.pointerEvents = 'auto'; // permitir tooltip
+
+      block.innerHTML = lessonMarkup(ev, subjectById, classById, { withClassBadge: true });
+      block.title = cellTitle(ev, classById, subjectById, teacherById, roomById);
+
+      overlay.appendChild(block);
+    });
+  });
 }
 
 /* ---------- Filtros ---------- */
@@ -312,7 +405,7 @@ function applyFilters(data) {
     const teacherName = data.teachers.find(t => t.id === teacherVal)?.name || '';
     if (subtitleEl) subtitleEl.textContent = `Professor: ${teacherName}`;
     renderHeadersSingle(data.meta, `Professor: ${teacherName}`);
-    renderGridSingleTeacher(data, teacherVal);
+    renderGridSingleTeacher(data, teacherVal); // << novo modo com lanes
   } else {
     document.body.classList.remove('single-view');
     if (subtitleEl) subtitleEl.textContent = '';
