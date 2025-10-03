@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Sistema de Agendamento de Turmas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-50 p-6">
+
+  <div id="loader" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+  <div class="max-w-full mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Sistema de Agendamento de Turmas
+      </h1>
+
+      <!-- Botão Consolidar e Recarregar -->
+      <div class="mb-4 flex justify-end gap-2">
+        <button id="btn-consolidar" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
+          Consolidar horário
+        </button>
+        <button id="btn-recarregar" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
+          Recarregar horário
+        </button>
+        <!-- Controles de Zoom -->
+        <div class="flex items-center gap-2">
+          <button id="btn-zoom-out" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+            title="Diminuir (–)">–</button>
+          <button id="btn-zoom-in" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+            title="Aumentar (+)">+</button>
+          <button id="btn-zoom-reset" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+            title="Resetar (100%)">100%</button>
+          <span id="zoom-indicator" class="ml-1 text-sm text-gray-600 select-none">100%</span>
+        </div>
+
+      </div>
+
+      <div class="grid-scroller">
+        <!-- Legenda -->
+        <div class="flex items-center gap-6 mb-4 justify-start flex-wrap">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-white border border-gray-300 rounded"></div>
+            <span class="text-sm text-gray-600">Disponível</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 bg-red-200 rounded"></div>
+            <span class="text-sm text-gray-600">Ocupado</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-3 bg-green-500 rounded text-xs"></div>
+            <span class="text-sm text-gray-600">Manhã (07:00-09:30)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-3 bg-yellow-500 rounded"></div>
+            <span class="text-sm text-gray-600">Tarde (13:00-15:30)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-3 bg-purple-500 rounded"></div>
+            <span class="text-sm text-gray-600">Noite (19:00-21:30)</span>
+          </div>
+        </div>
+
+        <!-- ⬇️ Wrapper do zoom -->
+        <div id="grid-zoom-wrapper" class="zoomable">
+          <div id="grid-zoom-inner" class="zoomable__inner">
+
+            <!-- Cabeçalho dos dias -->
+            <div class="turma-row mb-4">
+              <div class="bg-gray-800 text-white p-3 font-bold text-center rounded-lg">TURMAS</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">SEGUNDA-FEIRA</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">TERÇA-FEIRA</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">QUARTA-FEIRA</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">QUINTA-FEIRA</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">SEXTA-FEIRA</div>
+              <div class="bg-blue-600 text-white p-3 font-bold text-center rounded-lg header-day">SÁBADO</div>
+            </div>
+
+            <!-- Cabeçalho dos períodos -->
+            <div id="periods-header" class="turma-row mb-2">
+              <div class="bg-gray-200 p-2 text-center text-sm font-medium">PERÍODOS</div>
+            </div>
+
+            <!-- Grade -->
+            <div id="schedule-grid"></div>
+          </div>
+        </div>
+        <!-- ⬆️ Fim do wrapper -->
+      </div>
+
+
+      <!-- Painel inferior (não alocadas) -->
+      <div class="mt-8 bg-gray-100 rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold">Aulas não alocadas</h2>
+          <span id="unalloc-count" class="text-sm text-gray-600"></span>
+        </div>
+        <div id="unallocated-list" class="flex flex-wrap gap-2"></div>
+        <div class="text-xs text-gray-500 mt-3 leading-relaxed">
+          Selecione um cartão e depois clique no <i>início</i> do bloco na grade para alocar (respeita a duração).<br />
+          Clique em uma célula ocupada para <b>remover ou substituir</b> a aula.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Adaptador
+  <script src="js/ag-adapter.js"></script>
+
+  Placeholder local (meta/days/periods)
+  <script src="js/data.js"></script>
+
+  Carrega AG payload e injeta app.js
+  <script>
+    (async function () {
+      const AG_BASE = "http://localhost:9001";
+      const loader = document.getElementById('loader');
+      loader.classList.remove('hidden');
+
+      try {
+        const r = await fetch(`${AG_BASE}/api/latest`, { credentials: "omit" });
+        if (r.ok) {
+          window.AG_PAYLOAD = await r.json();
+        }
+      } catch (e) {
+        console.warn("AG não disponível, usando data.js:", e);
+      } finally {
+        loader.classList.add('hidden');
+      }
+
+      const s = document.createElement('script');
+      s.src = "js/app.js";
+      document.body.appendChild(s);
+    })();
+  </script> -->
+
+  <script src="js/ag-adapter.js"></script>
+  <script src="js/data.js"></script>
+
+  <script>
+    (async () => {
+      // mesmo host/porta do Live Server
+      const LATEST_URL = `${location.origin}/FrontTCC/api/storage/ag_latest.json?v=${Date.now()}`;
+
+      try {
+        const resp = await fetch(LATEST_URL, { cache: 'no-store' });
+        if (resp.ok) {
+          const ag = await resp.json();
+          // expõe o bruto (opcional)
+          window.AG_PAYLOAD = ag;
+          // adapta para o formato do editor (usa meta de data.js)
+          if (window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
+            window.EDITOR_DATA = window.AG_ADAPTER.adaptAGForEditor(
+              window.EDITOR_DATA.meta,
+              ag
+            );
+          }
+          console.log('AG payload carregado do Live Server:', ag);
+        } else {
+          console.warn('ag_latest.json não encontrado (usando placeholders do data.js)');
+        }
+      } catch (e) {
+        console.warn('Falha ao buscar ag_latest.json (usando placeholders):', e);
+      }
+
+      // injeta o app.js só depois de tentar carregar/adaptar
+      const script = document.createElement('script');
+      script.src = 'js/app.js';
+      document.body.appendChild(script);
+    })();
+  </script>
+
+<script>
+(() => {
+  // Evita inicializar 2x
+  if (window.__GRID_ZOOM_INIT__) return;
+  window.__GRID_ZOOM_INIT__ = true;
+
+  const STEP = 0.1;          // 10% por clique
+  const Z_MIN = 0.5, Z_MAX = 1.0;
+
+  const inner = () => document.getElementById('grid-zoom-inner');
+  const indic = () => document.getElementById('zoom-indicator');
+
+  let z = 1;                 // <-- sempre começa em 100% a cada reload
+
+  const clamp = v => Math.max(Z_MIN, Math.min(Z_MAX, v));
+
+  function apply() {
+    const i = inner();
+    if (!i) return;
+    i.style.transform = `scale(${z})`;
+    const zi = indic();
+    if (zi) zi.textContent = `${Math.round(z * 100)}%`;
+  }
+
+  // Começa em 100% sempre
+  window.addEventListener('load', () => {
+    z = 1;
+    apply();
+  });
+
+  // Trata botões e bloqueia handlers duplicados
+  document.addEventListener('click', (e) => {
+    const id = e.target && e.target.id;
+    if (!['btn-zoom-out', 'btn-zoom-in', 'btn-zoom-reset'].includes(id)) return;
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    if (id === 'btn-zoom-out')      z = clamp(z - STEP);
+    else if (id === 'btn-zoom-in')  z = clamp(z + STEP);
+    else                            z = 1;    // reset
+
+    apply();
+  }, true);
+})();
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+  "classes": [
+    {
+      "id": "1",
+      "name": "Turma A",
+      "days": [
+        {
+          "day": 0,
+          "lessons": [
+            {
+              "start": 0,
+              "duration": 2,
+              "subjectId": "MAT001",
+              "teacherIds": ["PROF001"],
+              "roomId": "SALA01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

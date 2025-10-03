@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Visualização de Horário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-50 p-6">
+  <div class="max-w-full mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+
+      <!-- Título e subtítulo -->
+      <h1 class="text-3xl font-bold text-gray-800 text-center">Cronograma Consolidado</h1>
+      <h2 id="viz-subtitle" class="text-xl text-gray-700 mb-6 text-center"></h2>
+
+
+      <!-- Controles (filtros) -->
+      <div class="mb-4 flex gap-3 items-end">
+        <div>
+          <label for="f-class" class="text-sm text-gray-700 block">Turma</label>
+          <select id="f-class" class="border rounded px-2 py-1"></select>
+          <!-- Opção "Todas" é preenchida pelo JS (value="") -->
+        </div>
+
+        <div>
+          <label for="f-teacher" class="text-sm text-gray-700 block">Professor</label>
+          <select id="f-teacher" class="border rounded px-2 py-1"></select>
+          <!-- Opção "Todos" é preenchida pelo JS (value="") -->
+        </div>
+      </div>
+
+      <div class="grid-scroller">
+        <!-- Cabeçalho dinâmico (topo: DIAS | PERÍODOS) -->
+        <div id="days-header" class="turma-row mb-4"></div>
+
+        <!-- Cabeçalho dos períodos (modo full usa esta primeira célula) -->
+        <div id="periods-header" class="turma-row mb-2">
+          <div class="bg-gray-200 p-2 text-center text-sm font-medium">PERÍODOS</div>
+        </div>
+
+        <!-- Grade consolidada -->
+        <div id="viz-grid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Adaptador
+  <script src="js/ag-adapter.js"></script>
+
+  Placeholder local (meta/days/periods) para rótulos/bandas
+  <script src="js/data.js"></script>
+
+  Se AG estiver no ar, salva consolidated no localStorage; senão usa o que veio da edição
+  <script>
+    (async function () {
+      const AG_BASE = "http://localhost:9001";
+
+      try {
+        const r = await fetch(`${AG_BASE}/api/latest`, { credentials: "omit" });
+        if (r.ok) {
+          const agPayload = await r.json();
+          if (window.AG_ADAPTER && window.EDITOR_DATA) {
+            const consolidated = window.AG_ADAPTER.adaptAGForViewer(window.EDITOR_DATA.meta, agPayload);
+            localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
+          }
+        }
+      } catch (e) {
+        console.warn("AG não disponível, usando consolidatedSchedule salvo:", e);
+      }
+
+      // carrega o renderer após tentarmos atualizar o localStorage
+      const s = document.createElement('script');
+      s.src = "js/vizualizar.js";
+      document.body.appendChild(s);
+    })();
+  </script> -->
+
+  <script src="js/ag-adapter.js"></script>
+<script src="js/data.js"></script>
+
+<script>
+(async () => {
+  const KEY = 'consolidatedSchedule';
+
+  function loadConsolidatedFromLS() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  }
+
+  // 1) PRIORIDADE: o que veio da tela de edição (localStorage)
+  let consolidated = loadConsolidatedFromLS();
+
+  // 2) FALLBACK opcional: se não houver consolidado (página aberta direto),
+  // tenta consumir o último ag_latest.json só para não ficar vazio.
+  if (!consolidated) {
+    try {
+      const url = `${location.origin}/api/storage/ag_latest.json?v=${Date.now()}`;
+      const resp = await fetch(url, { cache: 'no-store' });
+      if (resp.ok) {
+        const ag = await resp.json();
+        if (window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
+          consolidated = window.AG_ADAPTER.adaptAGForViewer(window.EDITOR_DATA.meta, ag);
+          localStorage.setItem(KEY, JSON.stringify(consolidated));
+          console.log('viz: fallback via ag_latest.json');
+        }
+      }
+    } catch (e) {
+      console.warn('viz: sem fallback do AG', e);
+    }
+  }
+
+  // 3) Se ainda não tiver consolidado, avisa o usuário e sugere voltar
+  if (!consolidated) {
+    alert('Nenhum cronograma consolidado encontrado. Volte para a tela de edição e clique em "Consolidar horário".');
+  }
+
+  // 4) Só agora carrega o script de visualização (ele lê do localStorage)
+  const s = document.createElement('script');
+  s.src = 'js/vizualizar.js';
+  document.body.appendChild(s);
+})();
+</script>
+
+
+</body>
+
+</html>

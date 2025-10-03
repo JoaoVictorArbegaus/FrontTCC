@@ -1,0 +1,167 @@
+:root{
+  --period-w: 30.5px;     /* largura de cada período (modo normal) */
+  --slot-gap: 1px;      /* gap entre períodos */
+  --turma-name-col: 220px; /* largura da coluna do nome da turma/dia */
+}
+
+* { box-sizing: border-box; }
+
+/* ====== largura consistente da 1ª coluna em TODAS as linhas ====== */
+#days-header > div:first-child,
+#periods-header > div:first-child,
+#schedule-grid .turma-row > div:first-child {
+  width: var(--turma-name-col);
+  min-width: var(--turma-name-col);
+  max-width: var(--turma-name-col);
+}
+
+/* (opcional) melhor quebra de linha para nomes longos */
+#schedule-grid .turma-row > div:first-child {
+  white-space: normal;
+  line-height: 1.1;
+}
+
+.time-slot {
+  min-height: 52px;
+  cursor: pointer;
+  transition: all .2s;
+  border:1px solid #e5e7eb;
+  background:#fff;
+}
+.time-slot:hover {
+  background-color: #dbeafe!important;
+  transform: scale(1.02);
+  box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.occupied { background-color: #fecaca!important; }
+.occupied:hover { background-color: #fca5a5!important; }
+
+.turma-row {
+  display: grid;
+  /* 1ª col (turmas/dias) + 6 colunas (dias) */
+  grid-template-columns: var(--turma-name-col) repeat(6, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+/* cada dia tem 12 períodos lado a lado */
+.day-column {
+  display: grid;
+  grid-template-columns: repeat(12, var(--period-w));
+  gap: var(--slot-gap);
+}
+
+.period-label {
+  white-space: nowrap;
+  line-height: 1.05;
+  border: 1px solid #e5e7eb;
+}
+
+/* largura exata do “cartucho” azul de cada dia (12 períodos + gaps) */
+.header-day {
+  min-width: calc(12 * var(--period-w) + 11 * var(--slot-gap));
+}
+
+.card-selected {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.grid-scroller { overflow-x: auto; }
+
+.block-head { border-radius: 6px; }
+.block-tail { /* escondemos via display:none no JS */ }
+
+/* ================================
+   MODO VISUALIZAÇÃO DE 1 TURMA
+   ================================ */
+
+/* períodos mais largos no modo turma */
+.single-view { --period-w: 110px; }
+
+/* linha (DIAS | períodos) com coluna de dias mais larga */
+.single-view .turma-row {
+  grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap)); 
+  /* 1ª col: DIAS | 2ª col: exatamente a largura dos 12 períodos */
+}
+
+/* células mais altas para melhor leitura */
+.single-view .time-slot { min-height: 72px; }
+
+/* a faixa azul "PERÍODOS" deve aparecer e obedecer a largura da coluna 2 */
+.single-view .header-day { 
+  display: block; 
+  min-width: 0;       /* override do min-width global */
+  width: 100%;        /* ocupa a coluna 2 inteira */
+}
+
+/* alinhar a faixa azul (PERÍODOS) ao grid superior */
+.single-view #days-header{
+  display: grid;
+  /* 140px (coluna DIAS) + largura EXATA dos 12 períodos */
+  grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap));
+  margin-bottom: 4px;
+}
+.single-view #days-header .header-day{ grid-column: 2 / 3; }
+
+/* cantos arredondados da barra superior */
+.single-view #days-header > div:first-child {
+  border-top-left-radius: .5rem;
+  border-bottom-left-radius: .5rem;
+}
+.single-view #days-header > div:last-child {
+  border-top-right-radius: .5rem;
+  border-bottom-right-radius: .5rem;
+}
+
+/* largura total da tabela no modo single:
+   140px (coluna DIAS) + 12 períodos + 11 gaps */
+.single-view #days-header,
+.single-view #periods-header,
+.single-view #viz-grid {
+  width: calc(140px + (12 * var(--period-w) + 11 * var(--slot-gap)));
+  margin-inline: auto;          /* centraliza horizontalmente */
+}
+
+/* reforço: o corpo acompanha a mesma largura do cabeçalho no modo single */
+.single-view .turma-row {
+  grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap));
+}
+.single-view .grid-scroller { padding-inline: 8px; }
+
+/* Permite “encolher” mantendo cliques corretos e largura visual */
+.zoomable {
+  transform-origin: top left;
+  will-change: transform;
+}
+
+/* Opcional: quando muito pequeno, afina bordas para não “gritar” */
+.zoomable {
+  position: relative;
+  overflow: hidden;     /* corta “sobras” pós-scale */
+}
+
+.zoomable__inner {
+  transform-origin: top left; 
+  display: inline-block;      /* mede certinho a caixa interna */
+}
+
+
+.conflict-teacher {
+  outline: 2px dashed #ef4444;
+  outline-offset: -2px;
+  position: relative; /* ancora o badge */
+}
+.conflict-badge {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  font-size: 10px;
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 2px 4px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
