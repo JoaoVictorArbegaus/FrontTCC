@@ -610,6 +610,7 @@ function init() {
   renderPeriodsHeader();
   criarGrade();
   renderUnallocated();
+  adjustUnallocSpacer(); 
   reloadTimetable();
 }
 init();
