@@ -128,8 +128,14 @@ function renderUnallocated() {
 
     // clicar em card: seleciona/deseleciona o card
     card.addEventListener('click', () => {
+      // Se a aula clicada é exatamente a que está pickada na grade, devolve p/ "não alocadas"
+      if (pickedFromGrid && pickedFromGrid.lesson?.id === lesson.id) {
+        dropPickToUnallocated();
+        return;
+      }
+
+      // comportamento normal de seleção/deseleção do card
       selectedLessonId = (selectedLessonId === lesson.id) ? null : lesson.id;
-      // observar: se existe pickedFromGrid, clicar em card não descarta; descarte é clicando no fundo da área.
       renderUnallocated();
     });
 
@@ -326,10 +332,40 @@ function cancelPick() {
   pickedFromGrid = null;
 }
 
+function dropPickToUnallocated() {
+  if (!pickedFromGrid) return;
+  const { lesson, cells } = pickedFromGrid;
+
+  clearPickedHighlight();       // tira o contorno
+  removeGroupCells(cells);      // remove da grade (head + tails + groupHeads)
+
+  // evita duplicar no array de não alocadas
+  if (!unallocatedLessons.some(l => l.id === lesson.id)) {
+    unallocatedLessons.push(lesson);
+  }
+
+  pickedFromGrid = null;
+  renderUnallocated();
+  recomputeTeacherConflicts();
+}
+
+
 function movePickedToCell(targetCell) {
   if (!pickedFromGrid) return;
 
   const { cells: oldCells, lesson, group } = pickedFromGrid;
+
+  // ✅ NOVO: se clicou/droppou no MESMO grupo que está pickado,
+  // apenas remover da grade e mandar para "não alocadas".
+  if (targetCell.dataset.group === group) {
+    clearPickedHighlight();
+    removeGroupCells(oldCells);
+    unallocatedLessons.push(lesson);
+    pickedFromGrid = null;
+    renderUnallocated();
+    recomputeTeacherConflicts();
+    return; // <-- evita recolocar o bloco
+  }
 
   const turmaId = targetCell.dataset.turmaId;
   const day = Number(targetCell.dataset.dia);
@@ -403,6 +439,11 @@ function criarGrade() {
 
         // Clique em slot
         cell.addEventListener('click', () => {
+          console.debug('[click grade]', {
+            picked: !!pickedFromGrid,
+            groupClicked: cell.dataset.group,
+            same: pickedFromGrid?.group === cell.dataset.group
+          });
           const turmaId = cell.dataset.turmaId;
           const day = Number(cell.dataset.dia);
           const startP = Number(cell.dataset.periodo);
@@ -459,18 +500,30 @@ function criarGrade() {
             return;
           }
 
-          // 3) Sem card selecionado e clicou em bloco ocupado => “pegar da grade”
+          // 3) Sem card selecionado e clicou em bloco ocupado => “pegar da grade” OU remover se for o mesmo
           if (cell.classList.contains('occupied') && cell.dataset.group) {
             const info = getGroupCells(cell);
+
             if (pickedFromGrid && pickedFromGrid.group === info.group) {
-              // clique novamente no mesmo bloco => cancela
-              cancelPick();
-            } else {
-              cancelPick(); // limpa pick anterior
-              pickFromGrid(cell);
+              // 🔁 clicou de novo no MESMO bloco que estava pickado:
+              // -> remove da grade e envia para "não alocadas"
+              clearPickedHighlight();              // tira o contorno
+              removeGroupCells(info.cells);        // limpa todas as células do grupo
+              unallocatedLessons.push(info.lesson);// volta o card
+              pickedFromGrid = null;
+              renderUnallocated();
+              recomputeTeacherConflicts();
+              return;
             }
+
+            // caso contrário: inicia/alternar pick normalmente
+            cancelPick();          // limpa pick anterior (se houver)
+            pickFromGrid(cell);    // destaca este bloco
             return;
           }
+
+
+
 
           // 4) Slot vazio e nada selecionado => feedback sutil
           cell.classList.add('ring-2', 'ring-blue-400');
@@ -530,15 +583,7 @@ function criarGrade() {
     unallocArea.addEventListener('click', (e) => {
       if (e.target !== unallocArea) return; // ignora cliques nos cards
       if (!pickedFromGrid) return;
-      const { lesson, cells } = pickedFromGrid;
-      clearPickedHighlight();
-      removeGroupCells(cells);
-      unallocatedLessons.push(lesson);
-      pickedFromGrid = null;
-      renderUnallocated();
-
-      // NOVO: revalida conflitos após remover para “não alocadas”
-      recomputeTeacherConflicts();
+      dropPickToUnallocated();
     });
   }
 
