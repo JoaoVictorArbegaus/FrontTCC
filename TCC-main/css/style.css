@@ -151,3 +151,23 @@
   transform-origin: top left;
   display: inline-block;
 }
+ /* painel "Aulas não alocadas" sempre visível no rodapé */
+.unalloc-sticky {
+  position: sticky;     /* gruda dentro do fluxo da página */
+  bottom: 0;            /* no rodapé da viewport */
+  z-index: 50;          /* acima da grade */
+  background: #fff;     /* fundo sólido para sobrepor */
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -8px 16px rgba(0,0,0,.06);
+}
+
+/* opcional: cantos e respiro */
+.unalloc-sticky-inner {
+  padding: 16px;
+  border-radius: 0 0 12px 12px;
+}
+
+/* dá um respiro extra nas grades para não ficarem escondidas sob o painel */
+.grid-scroller.has-unalloc-sticky {
+  padding-bottom: 180px; /* será ajustado via JS com a altura real do painel */
+}

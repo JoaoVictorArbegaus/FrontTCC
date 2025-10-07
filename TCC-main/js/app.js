@@ -100,6 +100,17 @@ function renderPeriodsHeader() {
   }
 }
 
+function adjustUnallocSpacer() {
+  const panel = document.getElementById('unalloc-panel');
+  const scroller = document.querySelector('.grid-scroller');
+  if (!panel || !scroller) return;
+
+  // marca scroller para CSS e ajusta padding-bottom com a altura exata do painel
+  scroller.classList.add('has-unalloc-sticky');
+  const h = panel.offsetHeight || 0;
+  scroller.style.paddingBottom = (h + 16) + 'px'; // 16px de folga
+}
+
 /* ----------------- Render cards (não alocadas) ----------------- */
 function renderUnallocated() {
   const list = document.getElementById('unallocated-list');
@@ -143,7 +154,9 @@ function renderUnallocated() {
   });
 
   document.getElementById('unalloc-count').textContent = `${unallocatedLessons.length} pendente(s)`;
+  adjustUnallocSpacer();
 }
+window.addEventListener('resize', adjustUnallocSpacer);
 
 /* ----------------- Helpers de bloco ----------------- */
 function canPlaceBlock(turmaId, day, startPeriod, duration) {
