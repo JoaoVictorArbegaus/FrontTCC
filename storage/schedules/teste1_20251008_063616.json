@@ -1,0 +1,5536 @@
+{
+    "meta": {
+        "days": [
+            "SEG",
+            "TER",
+            "QUA",
+            "QUI",
+            "SEX",
+            "SAB"
+        ],
+        "periods": [
+            {
+                "code": "M1",
+                "start": "08:00",
+                "band": "M"
+            },
+            {
+                "code": "M2",
+                "start": "08:55",
+                "band": "M"
+            },
+            {
+                "code": "M3",
+                "start": "10:10",
+                "band": "M"
+            },
+            {
+                "code": "M4",
+                "start": "11:05",
+                "band": "M"
+            },
+            {
+                "code": "T1",
+                "start": "13:30",
+                "band": "T"
+            },
+            {
+                "code": "T2",
+                "start": "14:25",
+                "band": "T"
+            },
+            {
+                "code": "T3",
+                "start": "15:40",
+                "band": "T"
+            },
+            {
+                "code": "T4",
+                "start": "16:35",
+                "band": "T"
+            },
+            {
+                "code": "N1",
+                "start": "19:00",
+                "band": "N"
+            },
+            {
+                "code": "N2",
+                "start": "19:45",
+                "band": "N"
+            },
+            {
+                "code": "N3",
+                "start": "20:40",
+                "band": "N"
+            },
+            {
+                "code": "N4",
+                "start": "21:30",
+                "band": "N"
+            }
+        ]
+    },
+    "classes": [
+        {
+            "id": "141",
+            "name": "SUP. Ciência da Computação 1"
+        },
+        {
+            "id": "143",
+            "name": "SUP. Ciência da Computação 3"
+        },
+        {
+            "id": "145",
+            "name": "SUP. Ciência da Computação 5"
+        },
+        {
+            "id": "147",
+            "name": "SUP. Ciência da Computação 7"
+        },
+        {
+            "id": "203",
+            "name": "TEC. SUB  Biotecnologia 3"
+        },
+        {
+            "id": "204",
+            "name": "TEC. SUB  Biotecnologia 4"
+        },
+        {
+            "id": "214",
+            "name": "FIC - Inglês IV 4"
+        },
+        {
+            "id": "277",
+            "name": "SUP. Eng. Mecânica (NOITE) 7"
+        },
+        {
+            "id": "279",
+            "name": "SUP. Eng. Mecânica (NOITE) 9"
+        },
+        {
+            "id": "321",
+            "name": "Tec Informática para Internet 1"
+        },
+        {
+            "id": "322",
+            "name": "Tec Informática para Internet 2"
+        },
+        {
+            "id": "323",
+            "name": "Tec Informática para Internet 3"
+        },
+        {
+            "id": "324",
+            "name": "Tec Informática para Internet 4"
+        },
+        {
+            "id": "331",
+            "name": "TEC. em Eletromecânica 1"
+        },
+        {
+            "id": "332",
+            "name": "TEC. em Eletromecânica 2"
+        },
+        {
+            "id": "333",
+            "name": "TEC. em Eletromecânica 3"
+        },
+        {
+            "id": "334",
+            "name": "TEC. em Eletromecânica 4"
+        },
+        {
+            "id": "341",
+            "name": "TEC. em Mecatrônica  1"
+        },
+        {
+            "id": "343",
+            "name": "TEC. em Mecatrônica  3"
+        },
+        {
+            "id": "351",
+            "name": "TEC. em Agroecologia 1"
+        },
+        {
+            "id": "353",
+            "name": "TEC. em Agroecologia 3"
+        },
+        {
+            "id": "361",
+            "name": "Tec con Biotecnologia 1"
+        },
+        {
+            "id": "373",
+            "name": "TEC CON Administração 3"
+        },
+        {
+            "id": "531",
+            "name": "SUP. Gestão do Agronegócio 1"
+        },
+        {
+            "id": "533",
+            "name": "SUP. Gestão do Agronegócio 3"
+        },
+        {
+            "id": "535",
+            "name": "SUP. Gestão do Agronegócio 5"
+        },
+        {
+            "id": "610",
+            "name": "ESP. Gestão Pública EPT 0"
+        },
+        {
+            "id": "620",
+            "name": "ESP. Docência EP EAD  0"
+        },
+        {
+            "id": "632",
+            "name": "FIC - Inglês II 2"
+        },
+        {
+            "id": "643",
+            "name": "FIC - Inglês III 3"
+        },
+        {
+            "id": "745",
+            "name": "FIC - Inglês V 5"
+        },
+        {
+            "id": "753",
+            "name": "ESP. em Marketing 3"
+        },
+        {
+            "id": "761",
+            "name": "SUP. Engenharia Mecânica 1"
+        },
+        {
+            "id": "762",
+            "name": "SUP. Engenharia Mecânica 2"
+        },
+        {
+            "id": "763",
+            "name": "SUP. Engenharia Mecânica 3"
+        },
+        {
+            "id": "765",
+            "name": "SUP. Engenharia Mecânica 5"
+        },
+        {
+            "id": "767",
+            "name": "SUP. Engenharia Mecânica 7"
+        },
+        {
+            "id": "769",
+            "name": "SUP. Engenharia Mecânica 9"
+        },
+        {
+            "id": "776",
+            "name": "FIC - Inglês VI 6"
+        },
+        {
+            "id": "827",
+            "name": "FIC - Inglês VII 7"
+        },
+        {
+            "id": "861",
+            "name": "SUP. Engenharia Química 1"
+        },
+        {
+            "id": "863",
+            "name": "SUP. Engenharia Química 3"
+        },
+        {
+            "id": "865",
+            "name": "SUP. Engenharia Química 5"
+        },
+        {
+            "id": "867",
+            "name": "SUP. Engenharia Química 7"
+        },
+        {
+            "id": "869",
+            "name": "SUP. Engenharia Química 9"
+        },
+        {
+            "id": "871",
+            "name": "SUP. Engenharia de Alimentos 1"
+        },
+        {
+            "id": "873",
+            "name": "SUP. Engenharia de Alimentos 3"
+        },
+        {
+            "id": "875",
+            "name": "SUP. Engenharia de Alimentos 5"
+        },
+        {
+            "id": "877",
+            "name": "SUP. Engenharia de Alimentos 7"
+        },
+        {
+            "id": "879",
+            "name": "SUP. Engenharia de Alimentos 9"
+        },
+        {
+            "id": "882",
+            "name": "PROEJA-Eletricista Instalador 2"
+        },
+        {
+            "id": "1002",
+            "name": "Tec Desenv de Sistemas 2"
+        },
+        {
+            "id": "1031",
+            "name": "ESP. em Automação 1"
+        },
+        {
+            "id": "1041",
+            "name": "TEC. em Meio Ambiente 1"
+        },
+        {
+            "id": "1061",
+            "name": "Técnico em Química 1"
+        },
+        {
+            "id": "1062",
+            "name": "Técnico em Química 2"
+        },
+        {
+            "id": "1071",
+            "name": "TEC SUB em Administração  1"
+        },
+        {
+            "id": "2710",
+            "name": "SUP. Eng. Mecânica (NOITE) 10"
+        },
+        {
+            "id": "7610",
+            "name": "SUP. Engenharia Mecânica 10"
+        }
+    ],
+    "teachers": [
+        {
+            "id": "T:Jeferson Fraytag",
+            "name": "Jeferson Fraytag"
+        },
+        {
+            "id": "T:Juliana Mercedes Rheinheimer",
+            "name": "Juliana Mercedes Rheinheimer"
+        },
+        {
+            "id": "T:Wilson Castello Branco Neto",
+            "name": "Wilson Castello Branco Neto"
+        },
+        {
+            "id": "T:Edinilson da Silva Vida",
+            "name": "Edinilson da Silva Vida"
+        },
+        {
+            "id": "T:Leonardo Bravo Estacio",
+            "name": "Leonardo Bravo Estacio"
+        },
+        {
+            "id": "T:Robson Costa",
+            "name": "Robson Costa"
+        },
+        {
+            "id": "T:Alexandre Perin de Souza",
+            "name": "Alexandre Perin de Souza"
+        },
+        {
+            "id": "T:Milena Cristina França",
+            "name": "Milena Cristina França"
+        },
+        {
+            "id": "T:Ailton Durigon",
+            "name": "Ailton Durigon"
+        },
+        {
+            "id": "T:Vilma Gisele Karsburg",
+            "name": "Vilma Gisele Karsburg"
+        },
+        {
+            "id": "T:Fábio Aiub Sperotto",
+            "name": "Fábio Aiub Sperotto"
+        },
+        {
+            "id": "T:Substituto Marisa",
+            "name": "Substituto Marisa"
+        },
+        {
+            "id": "T:Samuel Ferreira de Mello",
+            "name": "Samuel Ferreira de Mello"
+        },
+        {
+            "id": "T:Ana Maria Martins",
+            "name": "Ana Maria Martins"
+        },
+        {
+            "id": "T:Letícia Tramontini",
+            "name": "Letícia Tramontini"
+        },
+        {
+            "id": "T:Giselle Camargo Mendes",
+            "name": "Giselle Camargo Mendes"
+        },
+        {
+            "id": "T:Ana Paula de Lima Veeck",
+            "name": "Ana Paula de Lima Veeck"
+        },
+        {
+            "id": "T:Haroldo Gregorio de Oliveira",
+            "name": "Haroldo Gregorio de Oliveira"
+        },
+        {
+            "id": "T:Paula Clarice S. G. de Jesus",
+            "name": "Paula Clarice S. G. de Jesus"
+        },
+        {
+            "id": "T:Lucia Helena Baggio Martins",
+            "name": "Lucia Helena Baggio Martins"
+        },
+        {
+            "id": "T:Marisa Santos Sanson",
+            "name": "Marisa Santos Sanson"
+        },
+        {
+            "id": "T:Rosane S. de Aquino",
+            "name": "Rosane S. de Aquino"
+        },
+        {
+            "id": "T:Luciane Costa de Oliveira",
+            "name": "Luciane Costa de Oliveira"
+        },
+        {
+            "id": "T:Leonardo Araldi",
+            "name": "Leonardo Araldi"
+        },
+        {
+            "id": "T:Fernando da Silva Osório",
+            "name": "Fernando da Silva Osório"
+        },
+        {
+            "id": "T:Matheus Fontanelle Pereira",
+            "name": "Matheus Fontanelle Pereira"
+        },
+        {
+            "id": "T:João Augusto da Silva Bueno",
+            "name": "João Augusto da Silva Bueno"
+        },
+        {
+            "id": "T:Fernando Sagaz",
+            "name": "Fernando Sagaz"
+        },
+        {
+            "id": "T:Fernando Weber Albiero",
+            "name": "Fernando Weber Albiero"
+        },
+        {
+            "id": "T:Substituto Vilson Heck",
+            "name": "Substituto Vilson Heck"
+        },
+        {
+            "id": "T:Luciane Bittencourt",
+            "name": "Luciane Bittencourt"
+        },
+        {
+            "id": "T:Natalia Madalena Boelter",
+            "name": "Natalia Madalena Boelter"
+        },
+        {
+            "id": "T:Ricardo Teran Muhl",
+            "name": "Ricardo Teran Muhl"
+        },
+        {
+            "id": "T:Substituto Anderson Borges",
+            "name": "Substituto Anderson Borges"
+        },
+        {
+            "id": "T:Julio Azambuja Da Silveira",
+            "name": "Julio Azambuja Da Silveira"
+        },
+        {
+            "id": "T:Rafael Gustavo Schreiber",
+            "name": "Rafael Gustavo Schreiber"
+        },
+        {
+            "id": "T:Anderson Luis Garcia Correia",
+            "name": "Anderson Luis Garcia Correia"
+        },
+        {
+            "id": "T:Substituto Adriellen",
+            "name": "Substituto Adriellen"
+        },
+        {
+            "id": "T:Claudio Marques Schaeffer",
+            "name": "Claudio Marques Schaeffer"
+        },
+        {
+            "id": "T:Gabriel Granzotto Madruga",
+            "name": "Gabriel Granzotto Madruga"
+        },
+        {
+            "id": "T:Substituto Ariton",
+            "name": "Substituto Ariton"
+        },
+        {
+            "id": "T:Thiago Henrique Mombach",
+            "name": "Thiago Henrique Mombach"
+        },
+        {
+            "id": "T:Joelma Kremer",
+            "name": "Joelma Kremer"
+        },
+        {
+            "id": "T:Eliana Fernandes Borragini",
+            "name": "Eliana Fernandes Borragini"
+        },
+        {
+            "id": "T:Darlan Felipe Klotz",
+            "name": "Darlan Felipe Klotz"
+        },
+        {
+            "id": "T:Rogério da Silva",
+            "name": "Rogério da Silva"
+        },
+        {
+            "id": "T:Jocleita Peruzzo Ferrareze",
+            "name": "Jocleita Peruzzo Ferrareze"
+        },
+        {
+            "id": "T:Paula Iaschitzki Ferreira Cipriani",
+            "name": "Paula Iaschitzki Ferreira Cipriani"
+        },
+        {
+            "id": "T:Bruno Dalazen Machado",
+            "name": "Bruno Dalazen Machado"
+        },
+        {
+            "id": "T:Vilson Heck Junior ",
+            "name": "Vilson Heck Junior "
+        },
+        {
+            "id": "T:Fernando Domingos Zinger",
+            "name": "Fernando Domingos Zinger"
+        },
+        {
+            "id": "T:José Mecabo Junior",
+            "name": "José Mecabo Junior"
+        },
+        {
+            "id": "T:Larisse Kupski",
+            "name": "Larisse Kupski"
+        },
+        {
+            "id": "T:João Gustavo Provesi",
+            "name": "João Gustavo Provesi"
+        },
+        {
+            "id": "T:Thiago Meneghel",
+            "name": "Thiago Meneghel"
+        },
+        {
+            "id": "T:Roberto Akitoshi Komatsu",
+            "name": "Roberto Akitoshi Komatsu"
+        },
+        {
+            "id": "T:Substituto Samuel",
+            "name": "Substituto Samuel"
+        },
+        {
+            "id": "T:NEAD",
+            "name": "NEAD"
+        },
+        {
+            "id": "T:Michael Ramos Nunes",
+            "name": "Michael Ramos Nunes"
+        },
+        {
+            "id": "T:Jaqueline Suave",
+            "name": "Jaqueline Suave"
+        },
+        {
+            "id": "T:Joarez Virgílio da Costa",
+            "name": "Joarez Virgílio da Costa"
+        },
+        {
+            "id": "T:Filipe Marchioro Pfutzenreuter",
+            "name": "Filipe Marchioro Pfutzenreuter"
+        },
+        {
+            "id": "T:Geovani Raulino",
+            "name": "Geovani Raulino"
+        },
+        {
+            "id": "T:Gustavo Henrique S. F. Ponce",
+            "name": "Gustavo Henrique S. F. Ponce"
+        },
+        {
+            "id": "T:Eder Daniel Corvalão",
+            "name": "Eder Daniel Corvalão"
+        },
+        {
+            "id": "T:Carolina Berger",
+            "name": "Carolina Berger"
+        },
+        {
+            "id": "T:Alessandra Piske",
+            "name": "Alessandra Piske"
+        },
+        {
+            "id": "T:Marco Aurelio Woehl",
+            "name": "Marco Aurelio Woehl"
+        },
+        {
+            "id": "T:Diego Bittencourt Machado",
+            "name": "Diego Bittencourt Machado"
+        },
+        {
+            "id": "T:Taiana Maria Deboni",
+            "name": "Taiana Maria Deboni"
+        },
+        {
+            "id": "T:Leilane Costa de Conto",
+            "name": "Leilane Costa de Conto"
+        },
+        {
+            "id": "T:Mariana Ferreira Sanches (Urupema) Substituto",
+            "name": "Mariana Ferreira Sanches (Urupema) Substituto"
+        },
+        {
+            "id": "T:Valter Oliveira de Souto",
+            "name": "Valter Oliveira de Souto"
+        },
+        {
+            "id": "T:Marcos R. D. Stroschein ",
+            "name": "Marcos R. D. Stroschein "
+        },
+        {
+            "id": "T:Giliani Veloso Sartori",
+            "name": "Giliani Veloso Sartori"
+        }
+    ],
+    "subjects": [
+        {
+            "id": "S:Eletrônica Digital",
+            "name": "Eletrônica Digital",
+            "abbr": "ED"
+        },
+        {
+            "id": "S:Matemática Discreta",
+            "name": "Matemática Discreta",
+            "abbr": "MD"
+        },
+        {
+            "id": "S:Introdução à Programação",
+            "name": "Introdução à Programação",
+            "abbr": "IAP"
+        },
+        {
+            "id": "S:Introdução ao Desenvolvimento Web",
+            "name": "Introdução ao Desenvolvimento Web",
+            "abbr": "IAD"
+        },
+        {
+            "id": "S:Computação e Sociedade",
+            "name": "Computação e Sociedade",
+            "abbr": "CES"
+        },
+        {
+            "id": "S:Redes de computadores",
+            "name": "Redes de computadores",
+            "abbr": "RDC"
+        },
+        {
+            "id": "S:Sistemas operacionais",
+            "name": "Sistemas operacionais",
+            "abbr": "SO"
+        },
+        {
+            "id": "S:Estruturas de dados",
+            "name": "Estruturas de dados",
+            "abbr": "EDD"
+        },
+        {
+            "id": "S:Desenvolvimento de aplicações orientadas a objetos",
+            "name": "Desenvolvimento de aplicações orientadas a objetos",
+            "abbr": "DDA"
+        },
+        {
+            "id": "S:Cálculo",
+            "name": "Cálculo",
+            "abbr": "CAL"
+        },
+        {
+            "id": "S:Inteligência Artificial",
+            "name": "Inteligência Artificial",
+            "abbr": "IA"
+        },
+        {
+            "id": "S:Engenharia de Software II",
+            "name": "Engenharia de Software II",
+            "abbr": "EDS"
+        },
+        {
+            "id": "S:Teoria da Computação",
+            "name": "Teoria da Computação",
+            "abbr": "TDC"
+        },
+        {
+            "id": "S:Redes de Computadores II",
+            "name": "Redes de Computadores II",
+            "abbr": "RDC"
+        },
+        {
+            "id": "S:Laboratório de Desenvolvimento de Sistemas",
+            "name": "Laboratório de Desenvolvimento de Sistemas",
+            "abbr": "LDD"
+        },
+        {
+            "id": "S:Interface Humano-Computador",
+            "name": "Interface Humano-Computador",
+            "abbr": "IH"
+        },
+        {
+            "id": "S:Tópicos Especiais em Programação",
+            "name": "Tópicos Especiais em Programação",
+            "abbr": "TEE"
+        },
+        {
+            "id": "S:Empreendedorismo",
+            "name": "Empreendedorismo",
+            "abbr": "EMP"
+        },
+        {
+            "id": "S:Modelagem e simulação",
+            "name": "Modelagem e simulação",
+            "abbr": "MES"
+        },
+        {
+            "id": "S:Trabalho de Conclusão de Curso I",
+            "name": "Trabalho de Conclusão de Curso I",
+            "abbr": "TDC"
+        },
+        {
+            "id": "S:Inglês Aplicado à Biotecnologia",
+            "name": "Inglês Aplicado à Biotecnologia",
+            "abbr": "IAA"
+        },
+        {
+            "id": "S:Elaboração de Projetos",
+            "name": "Elaboração de Projetos",
+            "abbr": "EDP"
+        },
+        {
+            "id": "S:Bioquímica",
+            "name": "Bioquímica",
+            "abbr": "BIO"
+        },
+        {
+            "id": "S:Tecnologia de Fermentações",
+            "name": "Tecnologia de Fermentações",
+            "abbr": "TDF"
+        },
+        {
+            "id": "S:Biologia Molecular",
+            "name": "Biologia Molecular",
+            "abbr": "BM"
+        },
+        {
+            "id": "S:Química Analítica Experimental",
+            "name": "Química Analítica Experimental",
+            "abbr": "QAE"
+        },
+        {
+            "id": "S:Linguagem e Comunicação",
+            "name": "Linguagem e Comunicação",
+            "abbr": "LEC"
+        },
+        {
+            "id": "S:Bioestatística",
+            "name": "Bioestatística",
+            "abbr": "BIO"
+        },
+        {
+            "id": "S:Projeto Integrador",
+            "name": "Projeto Integrador",
+            "abbr": "PI"
+        },
+        {
+            "id": "S:Análises Clínicas",
+            "name": "Análises Clínicas",
+            "abbr": "AC"
+        },
+        {
+            "id": "S:Análise de solo, água e efluentes",
+            "name": "Análise de solo, água e efluentes",
+            "abbr": "ADS"
+        },
+        {
+            "id": "S:Inglês IV",
+            "name": "Inglês IV",
+            "abbr": "II"
+        },
+        {
+            "id": "S:Ventilação, Refrigeração e Cond. de Ar",
+            "name": "Ventilação, Refrigeração e Cond. de Ar",
+            "abbr": "VRE"
+        },
+        {
+            "id": "S:Máquinas Térmicas",
+            "name": "Máquinas Térmicas",
+            "abbr": "MT"
+        },
+        {
+            "id": "S:Introdução à Programação",
+            "name": "Introdução à Programação",
+            "abbr": "IAP"
+        },
+        {
+            "id": "S:Banco de Dados",
+            "name": "Banco de Dados",
+            "abbr": "BDD"
+        },
+        {
+            "id": "S:Comunicação e Expressão",
+            "name": "Comunicação e Expressão",
+            "abbr": "CEE"
+        },
+        {
+            "id": "S:Sistemas e Conectividade",
+            "name": "Sistemas e Conectividade",
+            "abbr": "SEC"
+        },
+        {
+            "id": "S:Web Design",
+            "name": "Web Design",
+            "abbr": "WD"
+        },
+        {
+            "id": "S:Desenvolvimento de Sistema WEB I",
+            "name": "Desenvolvimento de Sistema WEB I",
+            "abbr": "DDS"
+        },
+        {
+            "id": "S:Sistemas de Gerenciamento de Conteúdo",
+            "name": "Sistemas de Gerenciamento de Conteúdo",
+            "abbr": "SDG"
+        },
+        {
+            "id": "S:Segurança da Informação",
+            "name": "Segurança da Informação",
+            "abbr": "SDI"
+        },
+        {
+            "id": "S:Administração e Suporte de Sistemas",
+            "name": "Administração e Suporte de Sistemas",
+            "abbr": "AES"
+        },
+        {
+            "id": "S:Inglês",
+            "name": "Inglês",
+            "abbr": "ING"
+        },
+        {
+            "id": "S:Gestão e Ética em TI",
+            "name": "Gestão e Ética em TI",
+            "abbr": "GEE"
+        },
+        {
+            "id": "S:Desenvolvimento de Sistema WEB II",
+            "name": "Desenvolvimento de Sistema WEB II",
+            "abbr": "DDS"
+        },
+        {
+            "id": "S:Análise e Projeto de Sistemas",
+            "name": "Análise e Projeto de Sistemas",
+            "abbr": "AEP"
+        },
+        {
+            "id": "S:Tópicos em programação",
+            "name": "Tópicos em programação",
+            "abbr": "TEP"
+        },
+        {
+            "id": "S:Desenvolvimento para Dispositivos Móveis",
+            "name": "Desenvolvimento para Dispositivos Móveis",
+            "abbr": "DPD"
+        },
+        {
+            "id": "S:Teste de Software",
+            "name": "Teste de Software",
+            "abbr": "TDS"
+        },
+        {
+            "id": "S:Cálculo Técnico",
+            "name": "Cálculo Técnico",
+            "abbr": "CT"
+        },
+        {
+            "id": "S:Desenho Técnico B",
+            "name": "Desenho Técnico B",
+            "abbr": "DTB"
+        },
+        {
+            "id": "S:Informática",
+            "name": "Informática",
+            "abbr": "INF"
+        },
+        {
+            "id": "S:Desenho Técnico A",
+            "name": "Desenho Técnico A",
+            "abbr": "DTA"
+        },
+        {
+            "id": "S:Metrologia A",
+            "name": "Metrologia A",
+            "abbr": "MA"
+        },
+        {
+            "id": "S:Metrologia B",
+            "name": "Metrologia B",
+            "abbr": "MB"
+        },
+        {
+            "id": "S:Eletricidade B",
+            "name": "Eletricidade B",
+            "abbr": "EB"
+        },
+        {
+            "id": "S:Eletricidade A",
+            "name": "Eletricidade A",
+            "abbr": "EA"
+        },
+        {
+            "id": "S:Tecnologia dos Materiais I",
+            "name": "Tecnologia dos Materiais I",
+            "abbr": "TDM"
+        },
+        {
+            "id": "S:Elementos de Máquinas",
+            "name": "Elementos de Máquinas",
+            "abbr": "EDM"
+        },
+        {
+            "id": "S:Desenho CAD",
+            "name": "Desenho CAD",
+            "abbr": "DC"
+        },
+        {
+            "id": "S:Eletrônica",
+            "name": "Eletrônica",
+            "abbr": "ELE"
+        },
+        {
+            "id": "S:Processos de Fabricação",
+            "name": "Processos de Fabricação",
+            "abbr": "PDF"
+        },
+        {
+            "id": "S:Circuitos Elétricos",
+            "name": "Circuitos Elétricos",
+            "abbr": "CE"
+        },
+        {
+            "id": "S:Tecnologia dos Materiais II",
+            "name": "Tecnologia dos Materiais II",
+            "abbr": "TDM"
+        },
+        {
+            "id": "S:Manutenção I",
+            "name": "Manutenção I",
+            "abbr": "MI"
+        },
+        {
+            "id": "S:Processos de Usinagem I",
+            "name": "Processos de Usinagem I",
+            "abbr": "PDU"
+        },
+        {
+            "id": "S:Hidráulica e Pneumática",
+            "name": "Hidráulica e Pneumática",
+            "abbr": "HEP"
+        },
+        {
+            "id": "S:Instalações Elétricas Industriais",
+            "name": "Instalações Elétricas Industriais",
+            "abbr": "IEI"
+        },
+        {
+            "id": "S:Processos de Soldagem",
+            "name": "Processos de Soldagem",
+            "abbr": "PDS"
+        },
+        {
+            "id": "S:CNC",
+            "name": "CNC",
+            "abbr": "CNC"
+        },
+        {
+            "id": "S:Controle e Automação",
+            "name": "Controle e Automação",
+            "abbr": "CEA"
+        },
+        {
+            "id": "S:Processos de Usinagem II",
+            "name": "Processos de Usinagem II",
+            "abbr": "PDU"
+        },
+        {
+            "id": "S:Máquinas Elétricas",
+            "name": "Máquinas Elétricas",
+            "abbr": "ME"
+        },
+        {
+            "id": "S:Manutenção II",
+            "name": "Manutenção II",
+            "abbr": "MI"
+        },
+        {
+            "id": "S:Eletricidade",
+            "name": "Eletricidade",
+            "abbr": "ELE"
+        },
+        {
+            "id": "S:Calculo Técnico ",
+            "name": "Calculo Técnico ",
+            "abbr": "CT"
+        },
+        {
+            "id": "S:Instrumentação",
+            "name": "Instrumentação",
+            "abbr": "INS"
+        },
+        {
+            "id": "S:Eletrônica Industrial",
+            "name": "Eletrônica Industrial",
+            "abbr": "EI"
+        },
+        {
+            "id": "S:Projeto Integrador I",
+            "name": "Projeto Integrador I",
+            "abbr": "PII"
+        },
+        {
+            "id": "S:Hidraulica e Pneumatica I",
+            "name": "Hidraulica e Pneumatica I",
+            "abbr": "HEP"
+        },
+        {
+            "id": "S:Linguagem e Programação",
+            "name": "Linguagem e Programação",
+            "abbr": "LEP"
+        },
+        {
+            "id": "S:Microcontroladores",
+            "name": "Microcontroladores",
+            "abbr": "MIC"
+        },
+        {
+            "id": "S:Motores e Acionamentos",
+            "name": "Motores e Acionamentos",
+            "abbr": "MEA"
+        },
+        {
+            "id": "S:Anatomia, morfologia e fisiologia Vegetal",
+            "name": "Anatomia, morfologia e fisiologia Vegetal",
+            "abbr": "AME"
+        },
+        {
+            "id": "S:Ecologia de Agroecossistemas",
+            "name": "Ecologia de Agroecossistemas",
+            "abbr": "EDA"
+        },
+        {
+            "id": "S:PRODUÇÃO VEGETAL 1",
+            "name": "PRODUÇÃO VEGETAL 1",
+            "abbr": "PV1"
+        },
+        {
+            "id": "S:GÊNESE E FERTILIDADE DOS SOLOS",
+            "name": "GÊNESE E FERTILIDADE DOS SOLOS",
+            "abbr": "GEF"
+        },
+        {
+            "id": "S:Extensão e Desenvolvimento Rural Sustentável",
+            "name": "Extensão e Desenvolvimento Rural Sustentável",
+            "abbr": "EED"
+        },
+        {
+            "id": "S:INFORMÁTICA",
+            "name": "INFORMÁTICA",
+            "abbr": "INF"
+        },
+        {
+            "id": "S:Produção Vegetal 3",
+            "name": "Produção Vegetal 3",
+            "abbr": "PV3"
+        },
+        {
+            "id": "S:Recursos Hídricos, Irrigação e Drenagem",
+            "name": "Recursos Hídricos, Irrigação e Drenagem",
+            "abbr": "RHI"
+        },
+        {
+            "id": "S:Conservação e Manejo do solo",
+            "name": "Conservação e Manejo do solo",
+            "abbr": "CEM"
+        },
+        {
+            "id": "S:Processamento de Alimentos 2DE ALIMENTOS 2",
+            "name": "Processamento de Alimentos 2DE ALIMENTOS 2",
+            "abbr": "PDA"
+        },
+        {
+            "id": "S:Construções Rurais e Topografia",
+            "name": "Construções Rurais e Topografia",
+            "abbr": "CRE"
+        },
+        {
+            "id": "S:Fundamentos de Economia e Gestão Rural",
+            "name": "Fundamentos de Economia e Gestão Rural",
+            "abbr": "FDE"
+        },
+        {
+            "id": "S:Fundamentos de Química",
+            "name": "Fundamentos de Química",
+            "abbr": "FDQ"
+        },
+        {
+            "id": "S:Fundamentos e Gestão de Laboratórios",
+            "name": "Fundamentos e Gestão de Laboratórios",
+            "abbr": "FEG"
+        },
+        {
+            "id": "S:Biologia Celular",
+            "name": "Biologia Celular",
+            "abbr": "BC"
+        },
+        {
+            "id": "S:Ambientação Profissional",
+            "name": "Ambientação Profissional",
+            "abbr": "AP"
+        },
+        {
+            "id": "S:Bioquímica Básica",
+            "name": "Bioquímica Básica",
+            "abbr": "BB"
+        },
+        {
+            "id": "S:Gestão de Turismo e meio ambiente",
+            "name": "Gestão de Turismo e meio ambiente",
+            "abbr": "GDT"
+        },
+        {
+            "id": "S:Administração de Produção",
+            "name": "Administração de Produção",
+            "abbr": "ADP"
+        },
+        {
+            "id": "S:Redação Oficial",
+            "name": "Redação Oficial",
+            "abbr": "RO"
+        },
+        {
+            "id": "S:Administração de Materiais",
+            "name": "Administração de Materiais",
+            "abbr": "ADM"
+        },
+        {
+            "id": "S:Cadeias Produtivas de Culturas Anuais",
+            "name": "Cadeias Produtivas de Culturas Anuais",
+            "abbr": "CPD"
+        },
+        {
+            "id": "S:Sustentabilidade na Produção Agrícola",
+            "name": "Sustentabilidade na Produção Agrícola",
+            "abbr": "SNP"
+        },
+        {
+            "id": "S:Comunicação e Expressão Empresarial",
+            "name": "Comunicação e Expressão Empresarial",
+            "abbr": "CEE"
+        },
+        {
+            "id": "S:Atividades de Extensão I",
+            "name": "Atividades de Extensão I",
+            "abbr": "ADE"
+        },
+        {
+            "id": "S:História da Ciência e Tecnologia",
+            "name": "História da Ciência e Tecnologia",
+            "abbr": "HDC"
+        },
+        {
+            "id": "S:Fundamentos do Agronegócio",
+            "name": "Fundamentos do Agronegócio",
+            "abbr": "FDA"
+        },
+        {
+            "id": "S:Cadeias Produtivas de Animais Ruminantes",
+            "name": "Cadeias Produtivas de Animais Ruminantes",
+            "abbr": "CPD"
+        },
+        {
+            "id": "S:Cooperativismo e Associativismo Rural",
+            "name": "Cooperativismo e Associativismo Rural",
+            "abbr": "CEA"
+        },
+        {
+            "id": "S:Informática Aplicada ao Agronegócio",
+            "name": "Informática Aplicada ao Agronegócio",
+            "abbr": "IAA"
+        },
+        {
+            "id": "S:Cadeias Produtivas de Olerícolas",
+            "name": "Cadeias Produtivas de Olerícolas",
+            "abbr": "CPD"
+        },
+        {
+            "id": "S:Marketing no Agronegócio",
+            "name": "Marketing no Agronegócio",
+            "abbr": "MNA"
+        },
+        {
+            "id": "S:Cadeias Produtivas Florestais II",
+            "name": "Cadeias Produtivas Florestais II",
+            "abbr": "CPF"
+        },
+        {
+            "id": "S:Inglês ",
+            "name": "Inglês ",
+            "abbr": "ING"
+        },
+        {
+            "id": "S:Gestão de Pessoas",
+            "name": "Gestão de Pessoas",
+            "abbr": "GDP"
+        },
+        {
+            "id": "S:Instalações e Construções Rurais",
+            "name": "Instalações e Construções Rurais",
+            "abbr": "IEC"
+        },
+        {
+            "id": "S:Atividades de Extensão III",
+            "name": "Atividades de Extensão III",
+            "abbr": "ADE"
+        },
+        {
+            "id": "S:Manejo Fitossanitário de Pragas",
+            "name": "Manejo Fitossanitário de Pragas",
+            "abbr": "MFD"
+        },
+        {
+            "id": "S:Tecnologia de Aplicação de Insumos Agrícolas",
+            "name": "Tecnologia de Aplicação de Insumos Agrícolas",
+            "abbr": "TDA"
+        },
+        {
+            "id": "S:Atividades de Extensão V",
+            "name": "Atividades de Extensão V",
+            "abbr": "ADE"
+        },
+        {
+            "id": "S:Tecnologia de Alimentos de Origem Animal",
+            "name": "Tecnologia de Alimentos de Origem Animal",
+            "abbr": "TDA"
+        },
+        {
+            "id": "S:Gestão da Produção",
+            "name": "Gestão da Produção",
+            "abbr": "GDP"
+        },
+        {
+            "id": "S:Mercado e Certificação Orgânica",
+            "name": "Mercado e Certificação Orgânica",
+            "abbr": "MEC"
+        },
+        {
+            "id": "S:Gestão Financeira",
+            "name": "Gestão Financeira",
+            "abbr": "GF"
+        },
+        {
+            "id": "S:Mercados Agrícolas",
+            "name": "Mercados Agrícolas",
+            "abbr": "MA"
+        },
+        {
+            "id": "S:PJC I",
+            "name": "PJC I",
+            "abbr": "PI"
+        },
+        {
+            "id": "S:Gestão Pública EPT",
+            "name": "Gestão Pública EPT",
+            "abbr": "GPE"
+        },
+        {
+            "id": "S:Docência EP",
+            "name": "Docência EP",
+            "abbr": "DE"
+        },
+        {
+            "id": "S:Inglês II",
+            "name": "Inglês II",
+            "abbr": "II"
+        },
+        {
+            "id": "S:Inglês III",
+            "name": "Inglês III",
+            "abbr": "II"
+        },
+        {
+            "id": "S:Inglês V",
+            "name": "Inglês V",
+            "abbr": "IV"
+        },
+        {
+            "id": "S:Todas Marqueting",
+            "name": "Todas Marqueting",
+            "abbr": "TM"
+        },
+        {
+            "id": "S:Cálculo I",
+            "name": "Cálculo I",
+            "abbr": "CI"
+        },
+        {
+            "id": "S:Geometria Analítica",
+            "name": "Geometria Analítica",
+            "abbr": "GA"
+        },
+        {
+            "id": "S:Engenharia e Sustentabilidade",
+            "name": "Engenharia e Sustentabilidade",
+            "abbr": "EES"
+        },
+        {
+            "id": "S:Química Geral",
+            "name": "Química Geral",
+            "abbr": "QG"
+        },
+        {
+            "id": "S:Saúde e Segurança do Trabalho",
+            "name": "Saúde e Segurança do Trabalho",
+            "abbr": "SES"
+        },
+        {
+            "id": "S:Desenho Técnico I",
+            "name": "Desenho Técnico I",
+            "abbr": "DTI"
+        },
+        {
+            "id": "S:Cálculo II",
+            "name": "Cálculo II",
+            "abbr": "CI"
+        },
+        {
+            "id": "S:Atividade de Extensão I",
+            "name": "Atividade de Extensão I",
+            "abbr": "ADE"
+        },
+        {
+            "id": "S:Metodologia da Pesquisa",
+            "name": "Metodologia da Pesquisa",
+            "abbr": "MDP"
+        },
+        {
+            "id": "S:Cálculo III",
+            "name": "Cálculo III",
+            "abbr": "CI"
+        },
+        {
+            "id": "S:Estática e Dinâmica",
+            "name": "Estática e Dinâmica",
+            "abbr": "EED"
+        },
+        {
+            "id": "S:Física II",
+            "name": "Física II",
+            "abbr": "FI"
+        },
+        {
+            "id": "S:Programação",
+            "name": "Programação",
+            "abbr": "PRO"
+        },
+        {
+            "id": "S:Mecânica dos Fluídos",
+            "name": "Mecânica dos Fluídos",
+            "abbr": "MDF"
+        },
+        {
+            "id": "S:Mecânica dos Sólidos II",
+            "name": "Mecânica dos Sólidos II",
+            "abbr": "MDS"
+        },
+        {
+            "id": "S:Cálculo Numérico",
+            "name": "Cálculo Numérico",
+            "abbr": "CN"
+        },
+        {
+            "id": "S:Propriedades Mecânicas dos Materiais",
+            "name": "Propriedades Mecânicas dos Materiais",
+            "abbr": "PMD"
+        },
+        {
+            "id": "S:Projetos Mecânicos",
+            "name": "Projetos Mecânicos",
+            "abbr": "PM"
+        },
+        {
+            "id": "S:Eletricidade Aplicada",
+            "name": "Eletricidade Aplicada",
+            "abbr": "EA"
+        },
+        {
+            "id": "S:Projeto Integrador II",
+            "name": "Projeto Integrador II",
+            "abbr": "PII"
+        },
+        {
+            "id": "S:Elementos de Máquinas II",
+            "name": "Elementos de Máquinas II",
+            "abbr": "EDM"
+        },
+        {
+            "id": "S:Economia para Engenharia",
+            "name": "Economia para Engenharia",
+            "abbr": "EPE"
+        },
+        {
+            "id": "S:Máquinas de Fluxo e Tubulações",
+            "name": "Máquinas de Fluxo e Tubulações",
+            "abbr": "MDF"
+        },
+        {
+            "id": "S:Comando numérico Computadorizado",
+            "name": "Comando numérico Computadorizado",
+            "abbr": "CNC"
+        },
+        {
+            "id": "S:Controle de Sistemas Dinâmicos",
+            "name": "Controle de Sistemas Dinâmicos",
+            "abbr": "CDS"
+        },
+        {
+            "id": "S:Soldagem",
+            "name": "Soldagem",
+            "abbr": "SOL"
+        },
+        {
+            "id": "S:Administração para Engenharia",
+            "name": "Administração para Engenharia",
+            "abbr": "APE"
+        },
+        {
+            "id": "S:Gestão da Manutenção",
+            "name": "Gestão da Manutenção",
+            "abbr": "GDM"
+        },
+        {
+            "id": "S:Vibrações Mecânicas",
+            "name": "Vibrações Mecânicas",
+            "abbr": "VM"
+        },
+        {
+            "id": "S:Sistemas Hidráulicos e Pneumáticos",
+            "name": "Sistemas Hidráulicos e Pneumáticos",
+            "abbr": "SHE"
+        },
+        {
+            "id": "S:Atividades de Extensão IV",
+            "name": "Atividades de Extensão IV",
+            "abbr": "ADE"
+        },
+        {
+            "id": "S:Engenharia, Cidadania e Sociedade",
+            "name": "Engenharia, Cidadania e Sociedade",
+            "abbr": "ECE"
+        },
+        {
+            "id": "S:Robótica (Opt III)",
+            "name": "Robótica (Opt III)",
+            "abbr": "R(I"
+        },
+        {
+            "id": "S:Inglês VI",
+            "name": "Inglês VI",
+            "abbr": "IV"
+        },
+        {
+            "id": "S:Inglês VII",
+            "name": "Inglês VII",
+            "abbr": "IV"
+        },
+        {
+            "id": "S:Química Inorgânica ",
+            "name": "Química Inorgânica ",
+            "abbr": "QI"
+        },
+        {
+            "id": "S:Química Geral e Experimental",
+            "name": "Química Geral e Experimental",
+            "abbr": "QGE"
+        },
+        {
+            "id": "S:Comunicação e expressão",
+            "name": "Comunicação e expressão",
+            "abbr": "CEE"
+        },
+        {
+            "id": "S:Pré-Calculo",
+            "name": "Pré-Calculo",
+            "abbr": "PRE"
+        },
+        {
+            "id": "S:Engenharia, Sociedade e Cidadania",
+            "name": "Engenharia, Sociedade e Cidadania",
+            "abbr": "ESE"
+        },
+        {
+            "id": "S:Química Analítica ",
+            "name": "Química Analítica ",
+            "abbr": "QA"
+        },
+        {
+            "id": "S:Estatística I ",
+            "name": "Estatística I ",
+            "abbr": "EI"
+        },
+        {
+            "id": "S:Química Orgânica II",
+            "name": "Química Orgânica II",
+            "abbr": "QOI"
+        },
+        {
+            "id": "S:Físico-Química I",
+            "name": "Físico-Química I",
+            "abbr": "FI"
+        },
+        {
+            "id": "S:Cálculo IV",
+            "name": "Cálculo IV",
+            "abbr": "CI"
+        },
+        {
+            "id": "S:Introdução aos Processos Químicos ",
+            "name": "Introdução aos Processos Químicos ",
+            "abbr": "IAP"
+        },
+        {
+            "id": "S:Síntese e Análise Orgânica ",
+            "name": "Síntese e Análise Orgânica ",
+            "abbr": "SEA"
+        },
+        {
+            "id": "S:Mecânica dos Sólidos",
+            "name": "Mecânica dos Sólidos",
+            "abbr": "MDS"
+        },
+        {
+            "id": "S:Termodinâmica II",
+            "name": "Termodinâmica II",
+            "abbr": "TI"
+        },
+        {
+            "id": "S:Cálculo de Reatores Químicos ",
+            "name": "Cálculo de Reatores Químicos ",
+            "abbr": "CDR"
+        },
+        {
+            "id": "S:Operações Unitárias I ",
+            "name": "Operações Unitárias I ",
+            "abbr": "OUI"
+        },
+        {
+            "id": "S:Fenômenos de Transporte II",
+            "name": "Fenômenos de Transporte II",
+            "abbr": "FDT"
+        },
+        {
+            "id": "S:Operações Unitárias III",
+            "name": "Operações Unitárias III",
+            "abbr": "OUI"
+        },
+        {
+            "id": "S:Projetos Industriais",
+            "name": "Projetos Industriais",
+            "abbr": "PI"
+        },
+        {
+            "id": "S:Controle de Processos II",
+            "name": "Controle de Processos II",
+            "abbr": "CDP"
+        },
+        {
+            "id": "S:Laboratório de Engenharia Química I",
+            "name": "Laboratório de Engenharia Química I",
+            "abbr": "LDE"
+        },
+        {
+            "id": "S:Trabalho de Conclusão de Curso II",
+            "name": "Trabalho de Conclusão de Curso II",
+            "abbr": "TDC"
+        },
+        {
+            "id": "S:Geometria analítica",
+            "name": "Geometria analítica",
+            "abbr": "GA"
+        },
+        {
+            "id": "S:Engenharia Cidadania e Sociedade",
+            "name": "Engenharia Cidadania e Sociedade",
+            "abbr": "ECE"
+        },
+        {
+            "id": "S:Projeto Integrador-I ",
+            "name": "Projeto Integrador-I ",
+            "abbr": "PI"
+        },
+        {
+            "id": "S:Química Analítica",
+            "name": "Química Analítica",
+            "abbr": "QA"
+        },
+        {
+            "id": "S:Microbiologia Geral",
+            "name": "Microbiologia Geral",
+            "abbr": "MG"
+        },
+        {
+            "id": "S:Análise Sensorial",
+            "name": "Análise Sensorial",
+            "abbr": "AS"
+        },
+        {
+            "id": "S:Microbiologia de Alimentos",
+            "name": "Microbiologia de Alimentos",
+            "abbr": "MDA"
+        },
+        {
+            "id": "S:Bioquímica de Alimentos",
+            "name": "Bioquímica de Alimentos",
+            "abbr": "BDA"
+        },
+        {
+            "id": "S:Projeto Integrador III",
+            "name": "Projeto Integrador III",
+            "abbr": "PII"
+        },
+        {
+            "id": "S:Introdução aos Processos",
+            "name": "Introdução aos Processos",
+            "abbr": "IAP"
+        },
+        {
+            "id": "S:Fenômenos de transporte II",
+            "name": "Fenômenos de transporte II",
+            "abbr": "FDT"
+        },
+        {
+            "id": "S:Operações unitárias I",
+            "name": "Operações unitárias I",
+            "abbr": "OUI"
+        },
+        {
+            "id": "S:Tecnologia de Bebidas",
+            "name": "Tecnologia de Bebidas",
+            "abbr": "TDB"
+        },
+        {
+            "id": "S:Análise de alimentos",
+            "name": "Análise de alimentos",
+            "abbr": "ADA"
+        },
+        {
+            "id": "S:Toxicologia",
+            "name": "Toxicologia",
+            "abbr": "TOX"
+        },
+        {
+            "id": "S:Operações unitárias III",
+            "name": "Operações unitárias III",
+            "abbr": "OUI"
+        },
+        {
+            "id": "S:Optativa II",
+            "name": "Optativa II",
+            "abbr": "OI"
+        },
+        {
+            "id": "S:Tecnologia de leites e derivados",
+            "name": "Tecnologia de leites e derivados",
+            "abbr": "TDL"
+        },
+        {
+            "id": "S:Desenvolvimento de novos produtos",
+            "name": "Desenvolvimento de novos produtos",
+            "abbr": "DDN"
+        },
+        {
+            "id": "S:Laboratório de operações unitárias",
+            "name": "Laboratório de operações unitárias",
+            "abbr": "LDO"
+        },
+        {
+            "id": "S:Projetos industriais",
+            "name": "Projetos industriais",
+            "abbr": "PI"
+        },
+        {
+            "id": "S:Eletricidade Básica turma A",
+            "name": "Eletricidade Básica turma A",
+            "abbr": "EBT"
+        },
+        {
+            "id": "S:Rodízio Desenv. Sistemas",
+            "name": "Rodízio Desenv. Sistemas",
+            "abbr": "RDS"
+        },
+        {
+            "id": "S:Desenvolvimento de Sistemas",
+            "name": "Desenvolvimento de Sistemas",
+            "abbr": "DDS"
+        },
+        {
+            "id": "S:METODOLOGIA CIENTÍFICA",
+            "name": "METODOLOGIA CIENTÍFICA",
+            "abbr": "MC"
+        },
+        {
+            "id": "S:ACIONAMENTOS ELÉTRICOS INDUSTRIAIS",
+            "name": "ACIONAMENTOS ELÉTRICOS INDUSTRIAIS",
+            "abbr": "AEI"
+        },
+        {
+            "id": "S:ELETRÔNICA INDUSTRIAL",
+            "name": "ELETRÔNICA INDUSTRIAL",
+            "abbr": "EI"
+        },
+        {
+            "id": "S:INSTRUMENTAÇÃO E DISPOSITIVOS INDUSTRIAIS",
+            "name": "INSTRUMENTAÇÃO E DISPOSITIVOS INDUSTRIAIS",
+            "abbr": "IED"
+        },
+        {
+            "id": "S:Química Ambiental",
+            "name": "Química Ambiental",
+            "abbr": "QA"
+        },
+        {
+            "id": "S:Monitoramento Ambiental",
+            "name": "Monitoramento Ambiental",
+            "abbr": "MA"
+        },
+        {
+            "id": "S:Controle da Poluição Ambiental",
+            "name": "Controle da Poluição Ambiental",
+            "abbr": "CDP"
+        },
+        {
+            "id": "S:Análise de Ciclo de Vida de Produto",
+            "name": "Análise de Ciclo de Vida de Produto",
+            "abbr": "ADC"
+        },
+        {
+            "id": "S:Microbiologia I",
+            "name": "Microbiologia I",
+            "abbr": "MI"
+        },
+        {
+            "id": "S:Química Geral e Inorgânica I",
+            "name": "Química Geral e Inorgânica I",
+            "abbr": "QGE"
+        },
+        {
+            "id": "S:Fundamentos de Gestão de Laboratórios I",
+            "name": "Fundamentos de Gestão de Laboratórios I",
+            "abbr": "FDG"
+        },
+        {
+            "id": "S:Química Orgânica I",
+            "name": "Química Orgânica I",
+            "abbr": "QOI"
+        },
+        {
+            "id": "S:Química Geral e Inorgânica II",
+            "name": "Química Geral e Inorgânica II",
+            "abbr": "QGE"
+        },
+        {
+            "id": "S:Físico-Química",
+            "name": "Físico-Química",
+            "abbr": "FIS"
+        },
+        {
+            "id": "S:Fundamentos de Gestão de Laboratório II",
+            "name": "Fundamentos de Gestão de Laboratório II",
+            "abbr": "FDG"
+        },
+        {
+            "id": "S:Fundamentos da Matemática Financeira e Estatística",
+            "name": "Fundamentos da Matemática Financeira e Estatística",
+            "abbr": "FDM"
+        },
+        {
+            "id": "S:Trabalho de Conclusão do Curso",
+            "name": "Trabalho de Conclusão do Curso",
+            "abbr": "TDC"
+        }
+    ],
+    "rooms": [
+        {
+            "id": "R:Lab. Inf. 116",
+            "name": "Lab. Inf. 116"
+        },
+        {
+            "id": "R:Sala 121",
+            "name": "Sala 121"
+        },
+        {
+            "id": "R:Lab. Inf. 112",
+            "name": "Lab. Inf. 112"
+        },
+        {
+            "id": "R:Lab. Inf. 113",
+            "name": "Lab. Inf. 113"
+        },
+        {
+            "id": "R:Lab. Inf. 114",
+            "name": "Lab. Inf. 114"
+        },
+        {
+            "id": "R:Lab. Inf. 115",
+            "name": "Lab. Inf. 115"
+        },
+        {
+            "id": "R:Sala 120",
+            "name": "Sala 120"
+        },
+        {
+            "id": "R:Sala 221",
+            "name": "Sala 221"
+        },
+        {
+            "id": "R:Sala 218",
+            "name": "Sala 218"
+        },
+        {
+            "id": "R:Lab. de Manutenção Mecânica",
+            "name": "Lab. de Manutenção Mecânica"
+        },
+        {
+            "id": "R:Sala 220 - Lab. Desenho",
+            "name": "Sala 220 - Lab. Desenho"
+        },
+        {
+            "id": "R:Lab. Metrologia",
+            "name": "Lab. Metrologia"
+        },
+        {
+            "id": "R:Lab. de Eletrônica Geral",
+            "name": "Lab. de Eletrônica Geral"
+        },
+        {
+            "id": "R:Lab. de Eletrotécnica",
+            "name": "Lab. de Eletrotécnica"
+        },
+        {
+            "id": "R:Sala 117 - Lab. Acion.Elet.",
+            "name": "Sala 117 - Lab. Acion.Elet."
+        },
+        {
+            "id": "R:Lab. Usinagem",
+            "name": "Lab. Usinagem"
+        },
+        {
+            "id": "R:Sala 219",
+            "name": "Sala 219"
+        },
+        {
+            "id": "R:Lab. de Automação Industrial",
+            "name": "Lab. de Automação Industrial"
+        },
+        {
+            "id": "R:Lab. de Hidráulica e Pneumática",
+            "name": "Lab. de Hidráulica e Pneumática"
+        },
+        {
+            "id": "R:Sala 217",
+            "name": "Sala 217"
+        },
+        {
+            "id": "R:Lab. de Desenho Técnico",
+            "name": "Lab. de Desenho Técnico"
+        },
+        {
+            "id": "R:Sala 222",
+            "name": "Sala 222"
+        },
+        {
+            "id": "R:Lab. Inf. 212",
+            "name": "Lab. Inf. 212"
+        },
+        {
+            "id": "R:Sala 122",
+            "name": "Sala 122"
+        },
+        {
+            "id": "R:Sala 223",
+            "name": "Sala 223"
+        },
+        {
+            "id": "R:Lab. Tecnologia de Alimentos",
+            "name": "Lab. Tecnologia de Alimentos"
+        },
+        {
+            "id": "R:Sala 118",
+            "name": "Sala 118"
+        },
+        {
+            "id": "R:Sala 119",
+            "name": "Sala 119"
+        }
+    ],
+    "allocations": [
+        {
+            "classId": "141",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Eletrônica Digital",
+            "teacherIds": [
+                "T:Jeferson Fraytag"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "141",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Matemática Discreta",
+            "teacherIds": [
+                "T:Juliana Mercedes Rheinheimer"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "141",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Introdução à Programação",
+            "teacherIds": [
+                "T:Wilson Castello Branco Neto"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "141",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Introdução ao Desenvolvimento Web",
+            "teacherIds": [
+                "T:Edinilson da Silva Vida",
+                "T:Leonardo Bravo Estacio"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "141",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Computação e Sociedade",
+            "teacherIds": [
+                "T:Leonardo Bravo Estacio"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "141",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Matemática Discreta",
+            "teacherIds": [
+                "T:Juliana Mercedes Rheinheimer"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "141",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Eletrônica Digital",
+            "teacherIds": [
+                "T:Jeferson Fraytag"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "141",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Introdução à Programação",
+            "teacherIds": [
+                "T:Wilson Castello Branco Neto"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "143",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Redes de computadores",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Sistemas operacionais",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Estruturas de dados",
+            "teacherIds": [
+                "T:Alexandre Perin de Souza"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Redes de computadores",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Desenvolvimento de aplicações orientadas a objetos",
+            "teacherIds": [
+                "T:Milena Cristina França"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Estruturas de dados",
+            "teacherIds": [
+                "T:Alexandre Perin de Souza"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Sistemas operacionais",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "143",
+            "day": 4,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Cálculo",
+            "teacherIds": [
+                "T:Ailton Durigon",
+                "T:Vilma Gisele Karsburg"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "145",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Inteligência Artificial",
+            "teacherIds": [
+                "T:Wilson Castello Branco Neto"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Engenharia de Software II",
+            "teacherIds": [
+                "T:Fábio Aiub Sperotto"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Teoria da Computação",
+            "teacherIds": [
+                "T:Alexandre Perin de Souza"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Redes de Computadores II",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Teoria da Computação",
+            "teacherIds": [
+                "T:Wilson Castello Branco Neto"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Redes de Computadores II",
+            "teacherIds": [
+                "T:Robson Costa"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Engenharia de Software II",
+            "teacherIds": [
+                "T:Fábio Aiub Sperotto"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "145",
+            "day": 4,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Laboratório de Desenvolvimento de Sistemas",
+            "teacherIds": [
+                "T:Fábio Aiub Sperotto"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "147",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Interface Humano-Computador",
+            "teacherIds": [
+                "T:Milena Cristina França"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "147",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Tópicos Especiais em Programação",
+            "teacherIds": [
+                "T:Edinilson da Silva Vida"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "147",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Empreendedorismo",
+            "teacherIds": [
+                "T:Substituto Marisa",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "147",
+            "day": 3,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Modelagem e simulação",
+            "teacherIds": [
+                "T:Wilson Castello Branco Neto"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "147",
+            "day": 4,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Trabalho de Conclusão de Curso I",
+            "teacherIds": [
+                "T:Robson Costa",
+                "T:Alexandre Perin de Souza"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "203",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Inglês Aplicado à Biotecnologia",
+            "teacherIds": [
+                "T:Ana Maria Martins"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 0,
+            "start": 10,
+            "duration": 1,
+            "subjectId": "S:Elaboração de Projetos",
+            "teacherIds": [
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Bioquímica",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 1,
+            "start": 10,
+            "duration": 1,
+            "subjectId": "S:Elaboração de Projetos",
+            "teacherIds": [
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 2,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Tecnologia de Fermentações",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 3,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Biologia Molecular",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "203",
+            "day": 4,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Analítica Experimental",
+            "teacherIds": [
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "204",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Linguagem e Comunicação",
+            "teacherIds": [
+                "T:Paula Clarice S. G. de Jesus"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 0,
+            "start": 10,
+            "duration": 1,
+            "subjectId": "S:Bioestatística",
+            "teacherIds": [
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Empreendedorismo",
+            "teacherIds": [
+                "T:Marisa Santos Sanson"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 1,
+            "start": 10,
+            "duration": 1,
+            "subjectId": "S:Bioestatística",
+            "teacherIds": [
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 2,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Projeto Integrador",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 3,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Análises Clínicas",
+            "teacherIds": [
+                "T:Rosane S. de Aquino"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "204",
+            "day": 4,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Análise de solo, água e efluentes",
+            "teacherIds": [
+                "T:Lucia Helena Baggio Martins",
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "214",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Inglês IV",
+            "teacherIds": [
+                "T:Leonardo Araldi"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "277",
+            "day": 2,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Ventilação, Refrigeração e Cond. de Ar",
+            "teacherIds": [
+                "T:Fernando da Silva Osório"
+            ],
+            "roomId": "R:Lab. de Manutenção Mecânica"
+        },
+        {
+            "classId": "279",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Máquinas Térmicas",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Lab. de Manutenção Mecânica"
+        },
+        {
+            "classId": "321",
+            "day": 1,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Introdução à Programação",
+            "teacherIds": [
+                "T:João Augusto da Silva Bueno"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "321",
+            "day": 2,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Banco de Dados",
+            "teacherIds": [
+                "T:Milena Cristina França"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "321",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Comunicação e Expressão",
+            "teacherIds": [
+                "T:Paula Clarice S. G. de Jesus"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "321",
+            "day": 4,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Sistemas e Conectividade",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "322",
+            "day": 0,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Web Design",
+            "teacherIds": [
+                "T:Leonardo Bravo Estacio",
+                "T:Fernando Weber Albiero"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "322",
+            "day": 1,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Desenvolvimento de Sistema WEB I",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "322",
+            "day": 2,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Sistemas de Gerenciamento de Conteúdo",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "322",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Segurança da Informação",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "322",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Desenvolvimento de Sistema WEB I",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "323",
+            "day": 0,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Administração e Suporte de Sistemas",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "323",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Inglês",
+            "teacherIds": [
+                "T:Luciane Bittencourt"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "323",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Gestão e Ética em TI",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "323",
+            "day": 3,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Desenvolvimento de Sistema WEB II",
+            "teacherIds": [
+                "T:Edinilson da Silva Vida",
+                "T:Leonardo Bravo Estacio"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "323",
+            "day": 4,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Análise e Projeto de Sistemas",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 113"
+        },
+        {
+            "classId": "324",
+            "day": 0,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Tópicos em programação",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "324",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Empreendedorismo",
+            "teacherIds": [
+                "T:Marisa Santos Sanson"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "324",
+            "day": 3,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Desenvolvimento para Dispositivos Móveis",
+            "teacherIds": [
+                "T:Fernando Weber Albiero"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "324",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Teste de Software",
+            "teacherIds": [
+                "T:Fábio Aiub Sperotto"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "331",
+            "day": 0,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Cálculo Técnico",
+            "teacherIds": [
+                "T:Juliana Mercedes Rheinheimer"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "331",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Linguagem e Comunicação",
+            "teacherIds": [
+                "T:Luciane Bittencourt"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "331",
+            "day": 1,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Desenho Técnico B",
+            "teacherIds": [
+                "T:Natalia Madalena Boelter"
+            ],
+            "roomId": "R:Sala 220 - Lab. Desenho"
+        },
+        {
+            "classId": "331",
+            "day": 2,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Informática",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "331",
+            "day": 2,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Metrologia A",
+            "teacherIds": [
+                "T:Ricardo Teran Muhl"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "331",
+            "day": 3,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Eletricidade B",
+            "teacherIds": [
+                "T:Substituto Anderson Borges"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "331",
+            "day": 4,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Eletricidade A",
+            "teacherIds": [
+                "T:Substituto Anderson Borges"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "332",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Tecnologia dos Materiais I",
+            "teacherIds": [
+                "T:Julio Azambuja Da Silveira"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "332",
+            "day": 0,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Elementos de Máquinas",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "332",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Desenho CAD",
+            "teacherIds": [
+                "T:Anderson Luis Garcia Correia"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "332",
+            "day": 2,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Eletrônica",
+            "teacherIds": [
+                "T:Jeferson Fraytag"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "332",
+            "day": 3,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Processos de Fabricação",
+            "teacherIds": [
+                "T:Ricardo Teran Muhl"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "332",
+            "day": 4,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Circuitos Elétricos",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Eletrotécnica"
+        },
+        {
+            "classId": "333",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Tecnologia dos Materiais II",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "333",
+            "day": 0,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Manutenção I",
+            "teacherIds": [
+                "T:Gabriel Granzotto Madruga"
+            ],
+            "roomId": "R:Sala 117 - Lab. Acion.Elet."
+        },
+        {
+            "classId": "333",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Processos de Usinagem I",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Lab. Usinagem"
+        },
+        {
+            "classId": "333",
+            "day": 2,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Hidráulica e Pneumática",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer",
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "333",
+            "day": 3,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Instalações Elétricas Industriais",
+            "teacherIds": [
+                "T:Thiago Henrique Mombach"
+            ],
+            "roomId": "R:Lab. de Eletrotécnica"
+        },
+        {
+            "classId": "333",
+            "day": 4,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Processos de Soldagem",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "334",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Empreendedorismo",
+            "teacherIds": [
+                "T:Joelma Kremer"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "334",
+            "day": 0,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:CNC",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "334",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Controle e Automação",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "334",
+            "day": 2,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Processos de Usinagem II",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Lab. Usinagem"
+        },
+        {
+            "classId": "334",
+            "day": 3,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Máquinas Elétricas",
+            "teacherIds": [
+                "T:Gabriel Granzotto Madruga"
+            ],
+            "roomId": "R:Sala 117 - Lab. Acion.Elet."
+        },
+        {
+            "classId": "334",
+            "day": 4,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Manutenção II",
+            "teacherIds": [
+                "T:Fernando da Silva Osório"
+            ],
+            "roomId": "R:Lab. de Hidráulica e Pneumática"
+        },
+        {
+            "classId": "341",
+            "day": 0,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Linguagem e Comunicação",
+            "teacherIds": [
+                "T:Paula Clarice S. G. de Jesus"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "341",
+            "day": 1,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Eletricidade",
+            "teacherIds": [
+                "T:Substituto Anderson Borges"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "341",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Desenho Técnico A",
+            "teacherIds": [
+                "T:Julio Azambuja Da Silveira"
+            ],
+            "roomId": "R:Lab. de Desenho Técnico"
+        },
+        {
+            "classId": "341",
+            "day": 2,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Metrologia A",
+            "teacherIds": [
+                "T:Ricardo Teran Muhl"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "341",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Informática",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "341",
+            "day": 4,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Calculo Técnico ",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "343",
+            "day": 0,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Instrumentação",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "343",
+            "day": 1,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Eletrônica Industrial",
+            "teacherIds": [
+                "T:Jeferson Fraytag"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "343",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador I",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "343",
+            "day": 2,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Hidraulica e Pneumatica I",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "343",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Linguagem e Programação",
+            "teacherIds": [
+                "T:Fernando Sagaz"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "343",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Microcontroladores",
+            "teacherIds": [
+                "T:Rogério da Silva"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "343",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:CNC",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "343",
+            "day": 4,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Motores e Acionamentos",
+            "teacherIds": [
+                "T:Jeferson Fraytag"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "351",
+            "day": 0,
+            "start": 4,
+            "duration": 3,
+            "subjectId": "S:Anatomia, morfologia e fisiologia Vegetal",
+            "teacherIds": [
+                "T:Jocleita Peruzzo Ferrareze",
+                "T:Paula Iaschitzki Ferreira Cipriani"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Ecologia de Agroecossistemas",
+            "teacherIds": [
+                "T:Paula Iaschitzki Ferreira Cipriani"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:PRODUÇÃO VEGETAL 1",
+            "teacherIds": [
+                "T:Bruno Dalazen Machado"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:GÊNESE E FERTILIDADE DOS SOLOS",
+            "teacherIds": [
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:PRODUÇÃO VEGETAL 1",
+            "teacherIds": [
+                "T:Bruno Dalazen Machado"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Extensão e Desenvolvimento Rural Sustentável",
+            "teacherIds": [
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "351",
+            "day": 4,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:INFORMÁTICA",
+            "teacherIds": [
+                "T:Vilson Heck Junior "
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "353",
+            "day": 0,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Produção Vegetal 3",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger",
+                "T:Bruno Dalazen Machado"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "353",
+            "day": 1,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Recursos Hídricos, Irrigação e Drenagem",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "353",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Conservação e Manejo do solo",
+            "teacherIds": [
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "353",
+            "day": 3,
+            "start": 4,
+            "duration": 3,
+            "subjectId": "S:Processamento de Alimentos 2DE ALIMENTOS 2",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "353",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Construções Rurais e Topografia",
+            "teacherIds": [
+                "T:José Mecabo Junior"
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "353",
+            "day": 4,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Fundamentos de Economia e Gestão Rural",
+            "teacherIds": [
+                "T:Larisse Kupski"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "361",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Fundamentos de Química",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 1,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Fundamentos e Gestão de Laboratórios",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Biologia Celular",
+            "teacherIds": [
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 2,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Ambientação Profissional",
+            "teacherIds": [
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Fundamentos de Química",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Bioquímica Básica",
+            "teacherIds": [
+                "T:João Gustavo Provesi"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Biologia Celular",
+            "teacherIds": [
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "361",
+            "day": 4,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Fundamentos e Gestão de Laboratórios",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "373",
+            "day": 0,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Gestão de Turismo e meio ambiente",
+            "teacherIds": [
+                "T:Thiago Meneghel",
+                "T:Marisa Santos Sanson"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Administração de Produção",
+            "teacherIds": [
+                "T:Larisse Kupski"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 1,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Redação Oficial",
+            "teacherIds": [
+                "T:Paula Clarice S. G. de Jesus"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Gestão de Turismo e meio ambiente",
+            "teacherIds": [
+                "T:Thiago Meneghel",
+                "T:Marisa Santos Sanson"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 2,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Redação Oficial",
+            "teacherIds": [
+                "T:Paula Clarice S. G. de Jesus"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Administração de Produção",
+            "teacherIds": [
+                "T:Larisse Kupski"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Administração de Materiais",
+            "teacherIds": [
+                "T:Joelma Kremer"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "373",
+            "day": 4,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Administração de Materiais",
+            "teacherIds": [
+                "T:Joelma Kremer"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "531",
+            "day": 0,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Cadeias Produtivas de Culturas Anuais",
+            "teacherIds": [
+                "T:Roberto Akitoshi Komatsu"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Sustentabilidade na Produção Agrícola",
+            "teacherIds": [
+                "T:Jocleita Peruzzo Ferrareze"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 1,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Comunicação e Expressão Empresarial",
+            "teacherIds": [
+                "T:Luciane Bittencourt"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 2,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão I",
+            "teacherIds": [
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 2,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:História da Ciência e Tecnologia",
+            "teacherIds": [
+                "T:Jocleita Peruzzo Ferrareze"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 3,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Fundamentos do Agronegócio",
+            "teacherIds": [
+                "T:Jocleita Peruzzo Ferrareze"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 3,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Cadeias Produtivas de Animais Ruminantes",
+            "teacherIds": [
+                "T:José Mecabo Junior"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 4,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Cooperativismo e Associativismo Rural",
+            "teacherIds": [
+                "T:Larisse Kupski"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "531",
+            "day": 4,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Informática Aplicada ao Agronegócio",
+            "teacherIds": [
+                "T:Substituto Vilson Heck"
+            ],
+            "roomId": "R:Sala 122"
+        },
+        {
+            "classId": "533",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Cadeias Produtivas de Olerícolas",
+            "teacherIds": [
+                "T:Jocleita Peruzzo Ferrareze"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 0,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Marketing no Agronegócio",
+            "teacherIds": [
+                "T:Thiago Meneghel",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Cadeias Produtivas Florestais II",
+            "teacherIds": [
+                "T:Paula Iaschitzki Ferreira Cipriani"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 1,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Marketing no Agronegócio",
+            "teacherIds": [
+                "T:Thiago Meneghel",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 2,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Inglês ",
+            "teacherIds": [
+                "T:Ana Maria Martins"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 2,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Gestão de Pessoas",
+            "teacherIds": [
+                "T:Substituto Samuel",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 3,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Instalações e Construções Rurais",
+            "teacherIds": [
+                "T:José Mecabo Junior"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 3,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Gestão de Pessoas",
+            "teacherIds": [
+                "T:Substituto Samuel",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 4,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão III",
+            "teacherIds": [
+                "T:Roberto Akitoshi Komatsu"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "533",
+            "day": 4,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Manejo Fitossanitário de Pragas",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "535",
+            "day": 0,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Tecnologia de Aplicação de Insumos Agrícolas",
+            "teacherIds": [
+                "T:José Mecabo Junior"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão V",
+            "teacherIds": [
+                "T:Luciane Costa de Oliveira"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 1,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Tecnologia de Alimentos de Origem Animal",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck"
+            ],
+            "roomId": "R:Lab. Tecnologia de Alimentos"
+        },
+        {
+            "classId": "535",
+            "day": 2,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Gestão da Produção",
+            "teacherIds": [
+                "T:Larisse Kupski"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 2,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Mercado e Certificação Orgânica",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 3,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Gestão Financeira",
+            "teacherIds": [
+                "T:Marisa Santos Sanson"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 3,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:Mercados Agrícolas",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 4,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Mercados Agrícolas",
+            "teacherIds": [
+                "T:Fernando Domingos Zinger"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "535",
+            "day": 4,
+            "start": 10,
+            "duration": 2,
+            "subjectId": "S:PJC I",
+            "teacherIds": [
+                "T:Joelma Kremer"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "610",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Gestão Pública EPT",
+            "teacherIds": [
+                "T:NEAD"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "620",
+            "day": 3,
+            "start": 4,
+            "duration": 4,
+            "subjectId": "S:Docência EP",
+            "teacherIds": [
+                "T:NEAD"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "632",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Inglês II",
+            "teacherIds": [
+                "T:Ana Maria Martins"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "643",
+            "day": 1,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Inglês III",
+            "teacherIds": [
+                "T:Leonardo Araldi"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "745",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Inglês V",
+            "teacherIds": [
+                "T:Ana Maria Martins"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "753",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Todas Marqueting",
+            "teacherIds": [
+                "T:Larisse Kupski",
+                "T:Thiago Meneghel",
+                "T:Joelma Kremer",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "753",
+            "day": 3,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Todas Marqueting",
+            "teacherIds": [
+                "T:Larisse Kupski",
+                "T:Thiago Meneghel",
+                "T:Joelma Kremer",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Cálculo I",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Geometria Analítica",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Cálculo I",
+            "teacherIds": [
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Engenharia e Sustentabilidade",
+            "teacherIds": [
+                "T:Bruno Dalazen Machado",
+                "T:Julio Azambuja Da Silveira"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 3,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Química Geral",
+            "teacherIds": [
+                "T:João Gustavo Provesi"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Saúde e Segurança do Trabalho",
+            "teacherIds": [
+                "T:Fernando da Silva Osório"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "761",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Desenho Técnico I",
+            "teacherIds": [
+                "T:Ricardo Teran Muhl"
+            ],
+            "roomId": "R:Sala 220 - Lab. Desenho"
+        },
+        {
+            "classId": "762",
+            "day": 3,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Cálculo II",
+            "teacherIds": [
+                "T:Ailton Durigon",
+                "T:Vilma Gisele Karsburg"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "763",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Atividade de Extensão I",
+            "teacherIds": [
+                "T:Fernando da Silva Osório"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "763",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Metodologia da Pesquisa",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        },
+        {
+            "classId": "763",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Cálculo III",
+            "teacherIds": [
+                "T:Juliana Mercedes Rheinheimer"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "763",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Estática e Dinâmica",
+            "teacherIds": [
+                "T:Natalia Madalena Boelter"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "763",
+            "day": 3,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Física II",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "763",
+            "day": 4,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Programação",
+            "teacherIds": [
+                "T:Rogério da Silva"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "765",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Mecânica dos Fluídos",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "765",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Mecânica dos Sólidos II",
+            "teacherIds": [
+                "T:Anderson Luis Garcia Correia"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "765",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Cálculo Numérico",
+            "teacherIds": [
+                "T:Rogério da Silva"
+            ],
+            "roomId": "R:Lab. Inf. 112"
+        },
+        {
+            "classId": "765",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Propriedades Mecânicas dos Materiais",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "765",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projetos Mecânicos",
+            "teacherIds": [
+                "T:Anderson Luis Garcia Correia"
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "765",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Eletricidade Aplicada",
+            "teacherIds": [
+                "T:Gabriel Granzotto Madruga"
+            ],
+            "roomId": "R:Sala 117 - Lab. Acion.Elet."
+        },
+        {
+            "classId": "765",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador I",
+            "teacherIds": [
+                "T:Natalia Madalena Boelter"
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "767",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Instrumentação",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "767",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador II",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "767",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Elementos de Máquinas II",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Metrologia"
+        },
+        {
+            "classId": "767",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Economia para Engenharia",
+            "teacherIds": [
+                "T:Thiago Meneghel"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "767",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Máquinas de Fluxo e Tubulações",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "767",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Comando numérico Computadorizado",
+            "teacherIds": [
+                "T:Substituto Ariton"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "767",
+            "day": 3,
+            "start": 2,
+            "duration": 1,
+            "subjectId": "S:Controle de Sistemas Dinâmicos",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "767",
+            "day": 3,
+            "start": 3,
+            "duration": 1,
+            "subjectId": "S:Soldagem",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "767",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Controle de Sistemas Dinâmicos",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "767",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Soldagem",
+            "teacherIds": [
+                "T:Claudio Marques Schaeffer"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "769",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Administração para Engenharia",
+            "teacherIds": [
+                "T:Thiago Meneghel"
+            ],
+            "roomId": "R:Sala 121"
+        },
+        {
+            "classId": "769",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Gestão da Manutenção",
+            "teacherIds": [
+                "T:Fernando da Silva Osório"
+            ],
+            "roomId": "R:Lab. de Manutenção Mecânica"
+        },
+        {
+            "classId": "769",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Vibrações Mecânicas",
+            "teacherIds": [
+                "T:Natalia Madalena Boelter"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "769",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Sistemas Hidráulicos e Pneumáticos",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Hidráulica e Pneumática"
+        },
+        {
+            "classId": "769",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão IV",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "769",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Engenharia, Cidadania e Sociedade",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "769",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Robótica (Opt III)",
+            "teacherIds": [
+                "T:Rogério da Silva"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "769",
+            "day": 4,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Atividades de Extensão IV",
+            "teacherIds": [
+                "T:Matheus Fontanelle Pereira"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "769",
+            "day": 4,
+            "start": 3,
+            "duration": 1,
+            "subjectId": "S:Sistemas Hidráulicos e Pneumáticos",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Hidráulica e Pneumática"
+        },
+        {
+            "classId": "776",
+            "day": 0,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Inglês VI",
+            "teacherIds": [
+                "T:Leonardo Araldi"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "827",
+            "day": 1,
+            "start": 4,
+            "duration": 1,
+            "subjectId": "S:Inglês VII",
+            "teacherIds": [
+                "T:Ana Maria Martins"
+            ],
+            "roomId": "R:Sala 120"
+        },
+        {
+            "classId": "861",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Química Inorgânica ",
+            "teacherIds": [
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Química Geral e Experimental",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Economia para Engenharia",
+            "teacherIds": [
+                "T:Joarez Virgílio da Costa"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Química Geral e Experimental",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Comunicação e expressão",
+            "teacherIds": [
+                "T:Filipe Marchioro Pfutzenreuter"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Pré-Calculo",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 3,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Geometria Analítica",
+            "teacherIds": [
+                "T:Geovani Raulino"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Engenharia, Sociedade e Cidadania",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "861",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Química Inorgânica ",
+            "teacherIds": [
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "863",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Física II",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 0,
+            "start": 2,
+            "duration": 1,
+            "subjectId": "S:Química Analítica ",
+            "teacherIds": [
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Estatística I ",
+            "teacherIds": [
+                "T:Eder Daniel Corvalão"
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "863",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Química Orgânica II",
+            "teacherIds": [
+                "T:Carolina Berger"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Química Orgânica II",
+            "teacherIds": [
+                "T:Carolina Berger"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Química Analítica ",
+            "teacherIds": [
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 3,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Cálculo II",
+            "teacherIds": [
+                "T:Alessandra Piske"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Física II",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "863",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Físico-Química I",
+            "teacherIds": [
+                "T:Marco Aurelio Woehl"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "865",
+            "day": 0,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Cálculo IV",
+            "teacherIds": [
+                "T:Juliana Mercedes Rheinheimer",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Introdução aos Processos Químicos ",
+            "teacherIds": [
+                "T:Diego Bittencourt Machado"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador I",
+            "teacherIds": [
+                "T:João Gustavo Provesi"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Síntese e Análise Orgânica ",
+            "teacherIds": [
+                "T:Michael Ramos Nunes",
+                "T:Carolina Berger"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Síntese e Análise Orgânica ",
+            "teacherIds": [
+                "T:Michael Ramos Nunes",
+                "T:Carolina Berger"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Mecânica dos Sólidos",
+            "teacherIds": [
+                "T:Anderson Luis Garcia Correia"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "865",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador I",
+            "teacherIds": [
+                "T:João Gustavo Provesi"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "867",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Termodinâmica II",
+            "teacherIds": [
+                "T:Marco Aurelio Woehl"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Cálculo de Reatores Químicos ",
+            "teacherIds": [
+                "T:Diego Bittencourt Machado",
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Operações Unitárias I ",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Fenômenos de Transporte II",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão III",
+            "teacherIds": [
+                "T:Leilane Costa de Conto"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Operações Unitárias I ",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Atividades de Extensão III",
+            "teacherIds": [
+                "T:Leilane Costa de Conto"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Engenharia e Sustentabilidade",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Cálculo de Reatores Químicos ",
+            "teacherIds": [
+                "T:Diego Bittencourt Machado",
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "867",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Fenômenos de Transporte II",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "869",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Operações Unitárias III",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projetos Industriais",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Controle de Processos II",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Laboratório de Engenharia Química I",
+            "teacherIds": [
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Trabalho de Conclusão de Curso II",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Eletricidade",
+            "teacherIds": [
+                "T:Gabriel Granzotto Madruga"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Operações Unitárias III",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "869",
+            "day": 4,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Trabalho de Conclusão de Curso II",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "871",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Química Geral e Experimental",
+            "teacherIds": [
+                "T:Mariana Ferreira Sanches (Urupema) Substituto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "871",
+            "day": 1,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Geometria analítica",
+            "teacherIds": [
+                "T:Geovani Raulino"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "871",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Engenharia Cidadania e Sociedade",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "871",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Economia para Engenharia",
+            "teacherIds": [
+                "T:Joarez Virgílio da Costa"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "871",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Comunicação e expressão",
+            "teacherIds": [
+                "T:Filipe Marchioro Pfutzenreuter"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "871",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Pré-Calculo",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "873",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Projeto Integrador-I ",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "873",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Física II",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "873",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Química Analítica",
+            "teacherIds": [
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "873",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Física II",
+            "teacherIds": [
+                "T:Eliana Fernandes Borragini"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "873",
+            "day": 2,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Cálculo II",
+            "teacherIds": [
+                "T:Alessandra Piske"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "873",
+            "day": 3,
+            "start": 0,
+            "duration": 3,
+            "subjectId": "S:Microbiologia Geral",
+            "teacherIds": [
+                "T:Marcos R. D. Stroschein "
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "873",
+            "day": 3,
+            "start": 3,
+            "duration": 1,
+            "subjectId": "S:Química Analítica",
+            "teacherIds": [
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "873",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Estatística I ",
+            "teacherIds": [
+                "T:Eder Daniel Corvalão"
+            ],
+            "roomId": "R:Lab. Inf. 212"
+        },
+        {
+            "classId": "873",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Físico-Química I",
+            "teacherIds": [
+                "T:Mariana Ferreira Sanches (Urupema) Substituto"
+            ],
+            "roomId": "R:Sala 218"
+        },
+        {
+            "classId": "875",
+            "day": 0,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Análise Sensorial",
+            "teacherIds": [
+                "T:Leilane Costa de Conto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Microbiologia de Alimentos",
+            "teacherIds": [
+                "T:Marcos R. D. Stroschein "
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 2,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Bioquímica de Alimentos",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 3,
+            "start": 0,
+            "duration": 1,
+            "subjectId": "S:Projeto Integrador III",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori",
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 3,
+            "start": 3,
+            "duration": 1,
+            "subjectId": "S:Projeto Integrador III",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori",
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Introdução aos Processos",
+            "teacherIds": [
+                "T:Taiana Maria Deboni",
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 222"
+        },
+        {
+            "classId": "875",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Mecânica dos Sólidos",
+            "teacherIds": [
+                "T:Anderson Luis Garcia Correia"
+            ],
+            "roomId": "R:Sala 219"
+        },
+        {
+            "classId": "877",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Fenômenos de transporte II",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Engenharia e Sustentabilidade",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Fenômenos de transporte II",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Operações unitárias I",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Operações unitárias I",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Termodinâmica II",
+            "teacherIds": [
+                "T:Marco Aurelio Woehl"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "877",
+            "day": 3,
+            "start": 0,
+            "duration": 1,
+            "subjectId": "S:Tecnologia de Bebidas",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "877",
+            "day": 3,
+            "start": 1,
+            "duration": 2,
+            "subjectId": "S:Análise de alimentos",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "877",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Tecnologia de Bebidas",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "877",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Análise de alimentos",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 0,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Toxicologia",
+            "teacherIds": [
+                "T:Giliani Veloso Sartori"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 0,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Operações unitárias III",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "879",
+            "day": 1,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Eletricidade",
+            "teacherIds": [
+                "T:Gabriel Granzotto Madruga"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "879",
+            "day": 1,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Optativa II",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 2,
+            "start": 0,
+            "duration": 1,
+            "subjectId": "S:Tecnologia de leites e derivados",
+            "teacherIds": [
+                "T:Leilane Costa de Conto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 2,
+            "start": 1,
+            "duration": 1,
+            "subjectId": "S:Desenvolvimento de novos produtos",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 2,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Desenvolvimento de novos produtos",
+            "teacherIds": [
+                "T:Valter Oliveira de Souto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 3,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Laboratório de operações unitárias",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 3,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Projetos industriais",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "879",
+            "day": 4,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Tecnologia de leites e derivados",
+            "teacherIds": [
+                "T:Leilane Costa de Conto"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "879",
+            "day": 4,
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Operações unitárias III",
+            "teacherIds": [
+                "T:Taiana Maria Deboni"
+            ],
+            "roomId": "R:Sala 221"
+        },
+        {
+            "classId": "882",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:Eletricidade Básica turma A",
+            "teacherIds": [
+                "T:Thiago Henrique Mombach"
+            ],
+            "roomId": "R:Lab. de Eletrotécnica"
+        },
+        {
+            "classId": "1002",
+            "day": 0,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Rodízio Desenv. Sistemas",
+            "teacherIds": [
+                "T:Fernando Sagaz",
+                "T:Leonardo Bravo Estacio",
+                "T:Milena Cristina França",
+                "T:Fernando Weber Albiero",
+                "T:Fábio Aiub Sperotto"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "1002",
+            "day": 1,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Desenvolvimento de Sistemas",
+            "teacherIds": [
+                "T:Edinilson da Silva Vida",
+                "T:Leonardo Bravo Estacio"
+            ],
+            "roomId": "R:Lab. Inf. 116"
+        },
+        {
+            "classId": "1031",
+            "day": 0,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:METODOLOGIA CIENTÍFICA",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "1031",
+            "day": 1,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:ACIONAMENTOS ELÉTRICOS INDUSTRIAIS",
+            "teacherIds": [
+                "T:Substituto Anderson Borges"
+            ],
+            "roomId": "R:Sala 117 - Lab. Acion.Elet."
+        },
+        {
+            "classId": "1031",
+            "day": 3,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:ELETRÔNICA INDUSTRIAL",
+            "teacherIds": [
+                "T:Substituto Adriellen"
+            ],
+            "roomId": "R:Lab. de Eletrônica Geral"
+        },
+        {
+            "classId": "1031",
+            "day": 4,
+            "start": 8,
+            "duration": 4,
+            "subjectId": "S:INSTRUMENTAÇÃO E DISPOSITIVOS INDUSTRIAIS",
+            "teacherIds": [
+                "T:Darlan Felipe Klotz"
+            ],
+            "roomId": "R:Lab. de Automação Industrial"
+        },
+        {
+            "classId": "1041",
+            "day": 1,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Química Ambiental",
+            "teacherIds": [
+                "T:Jaqueline Suave",
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1041",
+            "day": 1,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Controle da Poluição Ambiental",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck",
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1041",
+            "day": 2,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Controle da Poluição Ambiental",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck",
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1041",
+            "day": 2,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Controle da Poluição Ambiental",
+            "teacherIds": [
+                "T:Ana Paula de Lima Veeck",
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1041",
+            "day": 3,
+            "start": 4,
+            "duration": 2,
+            "subjectId": "S:Química Ambiental",
+            "teacherIds": [
+                "T:Jaqueline Suave",
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1041",
+            "day": 3,
+            "start": 6,
+            "duration": 2,
+            "subjectId": "S:Química Ambiental",
+            "teacherIds": [
+                "T:Jaqueline Suave",
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 223"
+        },
+        {
+            "classId": "1061",
+            "day": 0,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Microbiologia I",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes",
+                "T:Letícia Tramontini"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "1061",
+            "day": 1,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Geral e Inorgânica I",
+            "teacherIds": [
+                "T:João Gustavo Provesi"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "1061",
+            "day": 2,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Fundamentos de Gestão de Laboratórios I",
+            "teacherIds": [
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "1061",
+            "day": 3,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Orgânica I",
+            "teacherIds": [
+                "T:Lucia Helena Baggio Martins"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "1061",
+            "day": 4,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Ambiental",
+            "teacherIds": [
+                "T:Jaqueline Suave"
+            ],
+            "roomId": "R:Sala 118"
+        },
+        {
+            "classId": "1062",
+            "day": 0,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Geral e Inorgânica II",
+            "teacherIds": [
+                "T:Gustavo Henrique S. F. Ponce"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "1062",
+            "day": 1,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Físico-Química",
+            "teacherIds": [
+                "T:Marco Aurelio Woehl",
+                "T:Haroldo Gregorio de Oliveira"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "1062",
+            "day": 2,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Fundamentos de Gestão de Laboratório II",
+            "teacherIds": [
+                "T:Rosane S. de Aquino"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "1062",
+            "day": 3,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Fundamentos de Gestão de Laboratório II",
+            "teacherIds": [
+                "T:Michael Ramos Nunes"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "1062",
+            "day": 4,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Química Orgânica II",
+            "teacherIds": [
+                "T:Giselle Camargo Mendes"
+            ],
+            "roomId": "R:Sala 119"
+        },
+        {
+            "classId": "1071",
+            "day": 0,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Fundamentos da Matemática Financeira e Estatística",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "1071",
+            "day": 1,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Gestão de Pessoas",
+            "teacherIds": [
+                "T:Marisa Santos Sanson",
+                "T:Substituto Samuel",
+                "T:Paula Clarice S. G. de Jesus",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "1071",
+            "day": 2,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Gestão de Pessoas",
+            "teacherIds": [
+                "T:Marisa Santos Sanson",
+                "T:Substituto Samuel",
+                "T:Paula Clarice S. G. de Jesus",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "1071",
+            "day": 3,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Fundamentos da Matemática Financeira e Estatística",
+            "teacherIds": [
+                "T:Vilma Gisele Karsburg",
+                "T:Ailton Durigon"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "1071",
+            "day": 4,
+            "start": 8,
+            "duration": 3,
+            "subjectId": "S:Gestão de Pessoas",
+            "teacherIds": [
+                "T:Marisa Santos Sanson",
+                "T:Substituto Samuel",
+                "T:Paula Clarice S. G. de Jesus",
+                "T:Samuel Ferreira de Mello"
+            ],
+            "roomId": "R:Sala 217"
+        },
+        {
+            "classId": "2710",
+            "day": 3,
+            "start": 8,
+            "duration": 2,
+            "subjectId": "S:Trabalho de Conclusão de Curso II",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "7610",
+            "day": 2,
+            "start": 0,
+            "duration": 2,
+            "subjectId": "S:Trabalho de Conclusão do Curso",
+            "teacherIds": [
+                "T:Rafael Gustavo Schreiber"
+            ],
+            "roomId": "R:Lab. Inf. 114"
+        }
+    ]
+}

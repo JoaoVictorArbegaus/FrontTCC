@@ -376,6 +376,9 @@ function renderGridSingleTeacher(data, teacherId) {
   });
 }
 
+
+
+
 /* ---------- Filtros ---------- */
 function populateFilters(data) {
   const selC = document.getElementById('f-class');

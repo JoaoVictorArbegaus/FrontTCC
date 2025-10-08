@@ -11,23 +11,28 @@
     #viz-zoom-wrapper { transform-origin: 0 0; }
   </style>
 </head>
-
 <body class="bg-gray-50 p-6">
   <div class="max-w-full mx-auto">
     <div class="bg-white rounded-lg shadow-lg p-6">
-
       <!-- Título e subtítulo -->
       <h1 class="text-3xl font-bold text-gray-800 text-center">Cronograma Consolidado</h1>
       <h2 id="viz-subtitle" class="text-xl text-gray-700 mb-6 text-center"></h2>
 
-      <!-- TOOLBAR: Zoom (esq) + Filtros (dir) -->
+      <!-- TOOLBAR: Zoom (esq) + Carregar salvo (centro) + Filtros (dir) -->
       <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
         <!-- Zoom -->
         <div class="flex items-center gap-2">
           <button id="viz-zoom-out" class="px-2 py-1 border rounded">−</button>
-          <button id="viz-zoom-in"  class="px-2 py-1 border rounded">+</button>
-          <span   id="viz-zoom-indicator" class="px-2">100%</span>
+          <button id="viz-zoom-in" class="px-2 py-1 border rounded">+</button>
+          <span id="viz-zoom-indicator" class="px-2">100%</span>
           <button id="viz-zoom-reset" class="px-2 py-1 border rounded">100%</button>
+        </div>
+
+        <!-- Seleção de horários salvos -->
+        <div class="mb-4 flex items-center gap-2">
+          <label class="text-sm text-gray-700">Horário salvo:</label>
+          <select id="viz-saved-select" class="border rounded px-2 py-1 min-w-[280px]"></select>
+          <button id="viz-load-saved" class="px-3 py-1 border rounded">Carregar</button>
         </div>
 
         <!-- Filtros -->
@@ -58,63 +63,105 @@
           <div id="viz-grid"></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Dados base locais para adaptação (mantive como estava) -->
+  <!-- Dados base locais para adaptação -->
   <script src="js/ag-adapter.js"></script>
   <script src="js/data.js"></script>
 
-  <!-- Boot de dados + carregamento do renderer (vizualizar.js) -->
+  <!-- Boot único: popula select, trata 'Carregar', fallback e injeta o viewer 1x -->
   <script>
-    (async () => {
+    (async function () {
       const KEY = 'consolidatedSchedule';
 
-      function loadConsolidatedFromLS() {
+      async function listSaved() {
         try {
-          const raw = localStorage.getItem(KEY);
-          return raw ? JSON.parse(raw) : null;
-        } catch { return null; }
+          const r = await fetch(`${location.origin}/FrontTCC/api/list_schedules.php`, { cache: 'no-store' });
+          return r.ok ? await r.json() : [];
+        } catch { return []; }
       }
 
-      // 1) PRIORIDADE: o que veio da tela de edição (localStorage)
-      let consolidated = loadConsolidatedFromLS();
+      async function getSaved(file) {
+        const url = `${location.origin}/FrontTCC/api/get_schedule.php?file=${encodeURIComponent(file)}`;
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) throw new Error('Falha ao carregar');
+        return await r.json();
+      }
 
-      // 2) FALLBACK opcional: tenta consumir o último ag_latest.json se não houver consolidado
-      if (!consolidated) {
-        try {
-          const url = `${location.origin}/api/storage/ag_latest.json?v=${Date.now()}`;
-          const resp = await fetch(url, { cache: 'no-store' });
-          if (resp.ok) {
-            const ag = await resp.json();
-            if (window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
-              consolidated = window.AG_ADAPTER.adaptAGForViewer(window.EDITOR_DATA.meta, ag);
-              localStorage.setItem(KEY, JSON.stringify(consolidated));
-              console.log('viz: fallback via ag_latest.json');
-            }
-          }
-        } catch (e) {
-          console.warn('viz: sem fallback do AG', e);
+      // Preenche o select com os salvos
+      const $sel = document.getElementById('viz-saved-select');
+      const savedList = await listSaved();
+      if ($sel) {
+        $sel.innerHTML = '';
+        if (!savedList.length) {
+          const opt = document.createElement('option');
+          opt.value = '';
+          opt.textContent = '— nenhum arquivo salvo —';
+          $sel.appendChild(opt);
+        } else {
+          savedList.slice().reverse().forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item.file;
+            opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
+            $sel.appendChild(opt);
+          });
         }
       }
 
-      // 3) Se ainda não tiver consolidado, avisa o usuário
-      if (!consolidated) {
-        alert('Nenhum cronograma consolidado encontrado. Volte para a tela de edição e clique em "Consolidar horário".');
+      // Botão Carregar: grava no LS e recarrega (não injeta script novamente)
+      const $btnLoad = document.getElementById('viz-load-saved');
+      if ($btnLoad) {
+        $btnLoad.addEventListener('click', async () => {
+          const file = $sel.value;
+          if (!file) return alert('Selecione um arquivo salvo.');
+          try {
+            const consolidated = await getSaved(file);
+            localStorage.setItem(KEY, JSON.stringify(consolidated));
+            location.reload(); // evita duplicar variáveis do vizualizar.js
+          } catch (e) {
+            alert('Não foi possível carregar o horário salvo.');
+          }
+        });
       }
 
-      // 4) Carrega o script de visualização (ele lê do localStorage)
-      const s = document.createElement('script');
-      s.src = 'js/vizualizar.js';
-      document.body.appendChild(s);
+      // Se não houver consolidado no LS, tenta fallback no ag_latest.json
+      let hasLS = false;
+      try { hasLS = !!localStorage.getItem(KEY); } catch {}
+
+      if (!hasLS) {
+        try {
+          const url = `${location.origin}/FrontTCC/api/storage/ag_latest.json?v=${Date.now()}`;
+          const resp = await fetch(url, { cache: 'no-store' });
+          if (resp.ok && window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
+            const ag = await resp.json();
+            const consolidated = window.AG_ADAPTER.adaptAGForViewer(window.EDITOR_DATA.meta, ag);
+            localStorage.setItem(KEY, JSON.stringify(consolidated));
+            hasLS = true;
+          }
+        } catch {}
+      }
+
+      // Injeção protegida do vizualizar.js (apenas 1x)
+      function startViewer() {
+        if (document.getElementById('viz-script')) return; // guard
+        const s = document.createElement('script');
+        s.id = 'viz-script';
+        s.src = 'js/vizualizar.js';
+        document.body.appendChild(s);
+      }
+
+      if (hasLS) {
+        startViewer();
+      } else {
+        alert('Nenhum cronograma consolidado encontrado. Volte para a tela de edição e clique em "Visualizar".');
+      }
     })();
   </script>
 
   <!-- Controle de Zoom -->
   <script>
     (() => {
-      // Config. de zoom (iguais/semelhantes à tela de edição)
       const Z_MIN = 0.5;
       const Z_MAX = 1.00;
       const Z_STEP = 0.1;
@@ -126,38 +173,36 @@
       const $reset = document.getElementById('viz-zoom-reset');
       const $indic = document.getElementById('viz-zoom-indicator');
 
-      function clamp(z){ return Math.max(Z_MIN, Math.min(Z_MAX, z)); }
-      function getSavedZoom(){
+      const clamp = (z) => Math.max(Z_MIN, Math.min(Z_MAX, z));
+      const getSavedZoom = () => {
         const raw = localStorage.getItem(Z_KEY);
         const z = raw ? Number(raw) : 1;
         return Number.isFinite(z) ? clamp(z) : 1;
-        }
-      function applyZoom(z){
+      };
+
+      function applyZoom(z) {
         if (!$wrap) return;
         $wrap.style.transform = `scale(${z})`;
         $wrap.style.width = `${100 / z}%`;
-        if ($indic) $indic.textContent = `${Math.round(z*100)}%`;
-        try { localStorage.setItem(Z_KEY, String(z)); } catch(_) {}
+        if ($indic) $indic.textContent = `${Math.round(z * 100)}%`;
+        try { localStorage.setItem(Z_KEY, String(z)); } catch {}
       }
 
-      // Estado inicial
       let z = getSavedZoom();
       applyZoom(z);
 
-      // Botões
-      if ($out)   $out.addEventListener('click',  () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); });
-      if ($in)    $in.addEventListener('click',   () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); });
+      if ($out)   $out.addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); });
+      if ($in)    $in .addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); });
       if ($reset) $reset.addEventListener('click', () => { z = 1; applyZoom(z); });
 
-      // Atalhos: Ctrl + / Ctrl - / Ctrl 0
       document.addEventListener('keydown', (e) => {
         const isMac = navigator.platform.toUpperCase().includes('MAC');
         const mod = isMac ? e.metaKey : e.ctrlKey;
         if (!mod) return;
 
         if (e.key === '=' || e.key === '+') { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); }
-        else if (e.key === '-')            { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); }
-        else if (e.key === '0')            { e.preventDefault(); z = 1; applyZoom(z); }
+        else if (e.key === '-')             { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); }
+        else if (e.key === '0')             { e.preventDefault(); z = 1; applyZoom(z); }
       });
     })();
   </script>

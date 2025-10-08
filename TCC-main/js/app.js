@@ -610,15 +610,14 @@ function init() {
   renderPeriodsHeader();
   criarGrade();
   renderUnallocated();
-  adjustUnallocSpacer(); 
+  adjustUnallocSpacer();
   reloadTimetable();
 }
 init();
 
-/* ----------------- Consolidação ----------------- */
-function consolidar() {
+function buildConsolidated() {
   // Se estiver com uma aula pickada, “solta” visualmente (mantém onde está)
-  cancelPick();
+  cancelPick?.();
 
   const allocations = [];
   classes.forEach(t => {
@@ -626,8 +625,8 @@ function consolidar() {
       for (let p = 0; p < P; p++) {
         const cell = mapCells[t.id][d][p];
         if (cell && cell.classList.contains('occupied') && cell.dataset.lesson) {
-          const lesson = JSON.parse(cell.dataset.lesson);
           if (cell.classList.contains('block-head')) {
+            const lesson = JSON.parse(cell.dataset.lesson);
             allocations.push({
               classId: t.id,
               day: d,
@@ -643,10 +642,20 @@ function consolidar() {
     }
   });
 
-  const consolidated = { meta, classes, teachers, subjects, rooms, allocations };
-  localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
-  window.location.href = 'vizualizar.html';
+  return { meta, classes, teachers, subjects, rooms, allocations };
 }
+
+
+
+/* ----------------- Consolidação ----------------- */
+function consolidar() {
+  cancelPick(); // só para limpar destaque
+
+  const consolidated = buildConsolidated();
+  localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
+  window.location.href = 'vizualizar.html'; // sem confirm
+}
+
 
 /* ----------------- Recarregar Horário ----------------- */
 async function reloadTimetable() {
@@ -682,6 +691,44 @@ async function reloadTimetable() {
   }
 }
 
+async function salvarHorario() {
+  try {
+    cancelPick();
+
+    const consolidated = buildConsolidated();
+
+    // pergunta o nome
+    const defaultName = `horario_${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`;
+    const name = window.prompt('Nome do horário (arquivo):', defaultName);
+    if (!name) return; // cancelado
+
+    // opcional: também salva no localStorage (útil pra abrir "Visualizar" em seguida)
+    localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
+
+    // envia pro servidor
+    const resp = await fetch('api/save_schedule.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, data: consolidated }),
+      cache: 'no-store',
+      credentials: 'omit'
+    });
+
+    const out = await resp.json();
+    if (!resp.ok || !out?.ok) {
+      throw new Error(out?.error || `Falha HTTP ${resp.status}`);
+    }
+
+    alert(`Horário salvo com sucesso!\nArquivo: ${out.file}`);
+    console.log('Salvo em:', out);
+
+  } catch (err) {
+    console.error(err);
+    alert('Não foi possível salvar o horário: ' + err.message);
+  }
+}
+
+
 // Associa o evento ao botão
 const reloadBtn = document.getElementById('btn-recarregar');
 if (reloadBtn) {
@@ -690,14 +737,42 @@ if (reloadBtn) {
   });
 }
 
-/* --- Confirmação antes de consolidar --- */
-const btnConsolidar = document.getElementById('btn-consolidar');
-if (btnConsolidar) {
-  btnConsolidar.addEventListener('click', () => {
-    const ok = window.confirm('Você tem certeza que deseja consolidar? Esta ação é irreversível.');
-    if (!ok) return;
-    consolidar();
-  },);
+// Botão Visualizar — monta o consolidado e abre a tela de visualização
+const btnVisualizar = document.getElementById('btn-visualizar');
+if (btnVisualizar) {
+  btnVisualizar.addEventListener('click', () => {
+    const consolidated = buildConsolidated();
+    localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
+    window.location.href = 'vizualizar.html';
+  });
+}
+
+// Botão Salvar — envia o JSON para o PHP salvar no storage/schedules
+const btnSalvar = document.getElementById('btn-salvar');
+if (btnSalvar) {
+  btnSalvar.addEventListener('click', async () => {
+    try {
+      const name = prompt('Nome do horário para salvar (ex.: 2025_sem1):');
+      if (!name) return;
+
+      const consolidated = buildConsolidated();
+
+      const resp = await fetch(`${location.origin}/FrontTCC/api/save_schedule.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, payload: consolidated })
+      });
+
+      const ct = resp.headers.get('content-type') || '';
+      const out = ct.includes('application/json') ? await resp.json()
+                                                  : { ok:false, error: await resp.text() };
+
+      if (!resp.ok || !out.ok) throw new Error(out.error || `HTTP ${resp.status}`);
+      alert(`Horário salvo em: ${out.file}`);
+    } catch (e) {
+      alert(`Não foi possível salvar o horário: ${e.message || e}`);
+    }
+  });
 }
 
 // === Zoom da grade ===
