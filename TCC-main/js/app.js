@@ -51,6 +51,16 @@ function updateData() {
 let meta, classes, teachers, subjects, rooms, initialAllocations, initialUnallocated, preAllocations, P, teacherById, subjectById, classById, roomById;
 updateData(); // Chama na inicialização para definir as variáveis
 
+// --- Dirty tracking (uma única definição no arquivo) ---
+if (typeof window.isDirty === 'undefined') window.isDirty = false;
+function setDirty(v = true) {
+  window.isDirty = !!v;
+  // opcional: sinal visual
+  // document.body.classList.toggle('dirty', window.isDirty);
+}
+
+
+
 
 function bandColor(b) {
   return b === 'M' ? 'bg-green-500' : (b === 'T' ? 'bg-yellow-500' : 'bg-purple-500');
@@ -205,6 +215,7 @@ function placeBlock(turmaId, day, startPeriod, lesson) {
       cell.style.gridColumnEnd = 'span 1';
     }
   }
+  setDirty(true);
   return group;
 }
 
@@ -245,6 +256,8 @@ function removeGroupCells(cells) {
     delete c.dataset.group;
     delete c.dataset.lesson;
   });
+
+  setDirty(true);
 }
 
 function recomputeTeacherConflicts() {
@@ -405,6 +418,7 @@ function movePickedToCell(targetCell) {
   pickedFromGrid = null;
   renderUnallocated();
   recomputeTeacherConflicts();
+  setDirty(true);
 }
 
 /* ----------------- Grade ----------------- */
@@ -615,6 +629,96 @@ function init() {
 }
 init();
 
+/* ===== util: listar/buscar horários salvos (declare ANTES de usar) ===== */
+const ROOT = `${location.origin}/FrontTCC`; // ajuste se sua raiz mudar
+
+async function listSavedEditor() {
+  try {
+    const r = await fetch(`${ROOT}/api/list_schedules.php`, { cache: 'no-store' });
+    return r.ok ? await r.json() : [];
+  } catch { return []; }
+}
+
+async function getSavedEditor(file) {
+  const url = `${ROOT}/api/get_schedule.php?file=${encodeURIComponent(file)}`;
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error('Falha ao carregar');
+  return await r.json();
+}
+
+/* ===== aplicar consolidado salvo no editor ===== */
+function applyConsolidatedToEditor(consolidated) {
+  ED = {
+    meta: consolidated.meta,
+    classes: consolidated.classes,
+    teachers: consolidated.teachers,
+    subjects: consolidated.subjects,
+    rooms: consolidated.rooms,
+    preAllocations: Array.isArray(consolidated.allocations) ? consolidated.allocations : [],
+    initialUnallocated: []
+  };
+  updateData();
+  renderPeriodsHeader();
+  criarGrade();
+  renderUnallocated();
+  recomputeTeacherConflicts?.();
+  setDirty(false);
+}
+
+/* ===== popular o select de salvos ===== */
+(async function populateEditorSavedList() {
+  const sel = document.getElementById('ed-saved-select');
+  if (!sel) return;
+  const list = await listSavedEditor();
+  sel.innerHTML = '';
+  if (!list.length) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '— nenhum arquivo salvo —';
+    sel.appendChild(opt);
+  } else {
+    list.slice().reverse().forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item.file;
+      opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
+      sel.appendChild(opt);
+    });
+  }
+})();
+
+/* ===== sair com aviso se houver alterações ===== */
+window.addEventListener('beforeunload', (e) => {
+  if (!window.isDirty) return;
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+/* ===== botão "Carregar" na edição ===== */
+const $btnLoadEd = document.getElementById('ed-load-saved');
+if ($btnLoadEd) {
+  $btnLoadEd.addEventListener('click', async () => {
+    const sel = document.getElementById('ed-saved-select');
+    const file = sel?.value || '';
+    if (!file) return alert('Selecione um arquivo salvo.');
+
+    if (window.isDirty) {
+      const ok = confirm('Você tem alterações não salvas. Carregar outro horário vai descartá-las.\n\nDeseja continuar?');
+      if (!ok) return;
+    }
+
+    try {
+      const consolidated = await getSavedEditor(file);
+      applyConsolidatedToEditor(consolidated);
+      try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch {}
+    } catch (e) {
+      console.error(e);
+      alert('Não foi possível carregar o horário selecionado.');
+    }
+  });
+}
+
+
+
 function buildConsolidated() {
   // Se estiver com uma aula pickada, “solta” visualmente (mantém onde está)
   cancelPick?.();
@@ -683,6 +787,7 @@ async function reloadTimetable() {
     criarGrade();
     renderUnallocated();
     console.log('Dados recarregados com sucesso:', window.EDITOR_DATA);
+    setDirty(false)
   } catch (error) {
     console.error('Erro ao recarregar horário:', error);
     alert(`Falha ao recarregar horário: ${error.message}`);
@@ -721,6 +826,8 @@ async function salvarHorario() {
 
     alert(`Horário salvo com sucesso!\nArquivo: ${out.file}`);
     console.log('Salvo em:', out);
+    setDirty(false);
+
 
   } catch (err) {
     console.error(err);
@@ -765,7 +872,7 @@ if (btnSalvar) {
 
       const ct = resp.headers.get('content-type') || '';
       const out = ct.includes('application/json') ? await resp.json()
-                                                  : { ok:false, error: await resp.text() };
+        : { ok: false, error: await resp.text() };
 
       if (!resp.ok || !out.ok) throw new Error(out.error || `HTTP ${resp.status}`);
       alert(`Horário salvo em: ${out.file}`);

@@ -1922,17 +1922,6 @@
         },
         {
             "classId": "141",
-            "day": 1,
-            "start": 0,
-            "duration": 4,
-            "subjectId": "S:Introdução à Programação",
-            "teacherIds": [
-                "T:Wilson Castello Branco Neto"
-            ],
-            "roomId": "R:Lab. Inf. 116"
-        },
-        {
-            "classId": "141",
             "day": 2,
             "start": 0,
             "duration": 4,
@@ -2080,17 +2069,17 @@
             "classId": "145",
             "day": 0,
             "start": 0,
-            "duration": 2,
-            "subjectId": "S:Teoria da Computação",
+            "duration": 4,
+            "subjectId": "S:Inteligência Artificial",
             "teacherIds": [
-                "T:Alexandre Perin de Souza"
+                "T:Wilson Castello Branco Neto"
             ],
             "roomId": "R:Lab. Inf. 113"
         },
         {
             "classId": "145",
-            "day": 0,
-            "start": 2,
+            "day": 1,
+            "start": 0,
             "duration": 2,
             "subjectId": "S:Engenharia de Software II",
             "teacherIds": [
@@ -2101,11 +2090,11 @@
         {
             "classId": "145",
             "day": 1,
-            "start": 0,
-            "duration": 4,
-            "subjectId": "S:Inteligência Artificial",
+            "start": 2,
+            "duration": 2,
+            "subjectId": "S:Teoria da Computação",
             "teacherIds": [
-                "T:Wilson Castello Branco Neto"
+                "T:Alexandre Perin de Souza"
             ],
             "roomId": "R:Lab. Inf. 113"
         },

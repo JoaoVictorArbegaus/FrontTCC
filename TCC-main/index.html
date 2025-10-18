@@ -22,6 +22,16 @@
 
       <!-- Botão Consolidar e Recarregar -->
       <div class="mb-4 flex justify-end gap-2">
+
+        <!-- Seletor + botão para carregar um horário salvo -->
+        <div class="flex items-center gap-2">
+          <label class="text-sm text-gray-700">Horário salvo:</label>
+          <select id="ed-saved-select" class="border rounded px-2 py-1 min-w-[260px]"></select>
+          <button id="ed-load-saved" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded">
+            Carregar
+          </button>
+        </div>
+        
         <button id="btn-visualizar" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
           Visualizar
         </button>
@@ -31,6 +41,9 @@
         <button id="btn-recarregar" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
           Recarregar horário
         </button>
+
+        
+
         <!-- Controles de Zoom -->
         <div class="flex items-center gap-2">
           <button id="btn-zoom-out" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"

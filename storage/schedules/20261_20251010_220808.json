@@ -2177,6 +2177,17 @@
         },
         {
             "classId": "147",
+            "day": 1,
+            "start": 0,
+            "duration": 4,
+            "subjectId": "S:Tópicos Especiais em Programação",
+            "teacherIds": [
+                "T:Edinilson da Silva Vida"
+            ],
+            "roomId": "R:Lab. Inf. 115"
+        },
+        {
+            "classId": "147",
             "day": 2,
             "start": 0,
             "duration": 4,
