@@ -629,15 +629,65 @@ function init() {
 }
 init();
 
-/* ===== util: listar/buscar horários salvos (declare ANTES de usar) ===== */
+
 const ROOT = `${location.origin}/FrontTCC`; // ajuste se sua raiz mudar
+
+async function refreshSavedSelect(preselectFile = '') {
+  const sel = document.getElementById('ed-saved-select');
+  if (!sel) return;
+
+  // usa bust de cache + no-store
+  const list = await listSavedEditor(); 
+  sel.innerHTML = '';
+
+  if (!list.length) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = '— nenhum arquivo salvo —';
+    sel.appendChild(opt);
+    return;
+  }
+
+  list.slice().reverse().forEach(item => {
+    const opt = document.createElement('option');
+    opt.value = item.file;
+    opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
+    sel.appendChild(opt);
+  });
+
+  if (preselectFile) sel.value = preselectFile;
+}
+
+
+async function deleteSavedEditor(file) {
+  const r = await fetch(`${ROOT}/api/delete_schedule.php`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ file }),
+    cache: 'no-store',
+    credentials: 'omit'
+  });
+  if (!r.ok) {
+    const txt = await r.text().catch(() => '');
+    throw new Error(`HTTP ${r.status} ${txt || ''}`);
+  }
+  const out = await r.json();
+  if (!out.ok) throw new Error(out.error || 'delete failed');
+  return out;
+}
+
 
 async function listSavedEditor() {
   try {
-    const r = await fetch(`${ROOT}/api/list_schedules.php`, { cache: 'no-store' });
+    const r = await fetch(`${ROOT}/api/list_schedules.php?v=${Date.now()}`, {
+      cache: 'no-store'
+    });
     return r.ok ? await r.json() : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
+
 
 async function getSavedEditor(file) {
   const url = `${ROOT}/api/get_schedule.php?file=${encodeURIComponent(file)}`;
@@ -655,7 +705,8 @@ function applyConsolidatedToEditor(consolidated) {
     subjects: consolidated.subjects,
     rooms: consolidated.rooms,
     preAllocations: Array.isArray(consolidated.allocations) ? consolidated.allocations : [],
-    initialUnallocated: []
+    initialUnallocated: Array.isArray(consolidated.unallocated) ? consolidated.unallocated : []
+
   };
   updateData();
   renderPeriodsHeader();
@@ -665,26 +716,35 @@ function applyConsolidatedToEditor(consolidated) {
   setDirty(false);
 }
 
-/* ===== popular o select de salvos ===== */
-(async function populateEditorSavedList() {
+async function populateEditorSavedList(preselectFile = '') {
   const sel = document.getElementById('ed-saved-select');
   if (!sel) return;
+
   const list = await listSavedEditor();
   sel.innerHTML = '';
+
   if (!list.length) {
     const opt = document.createElement('option');
     opt.value = '';
     opt.textContent = '— nenhum arquivo salvo —';
     sel.appendChild(opt);
   } else {
+    // mais recentes primeiro
     list.slice().reverse().forEach(item => {
       const opt = document.createElement('option');
       opt.value = item.file;
       opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
       sel.appendChild(opt);
     });
+
+    // se pediram para pré-selecionar um arquivo recém-salvo
+    if (preselectFile) sel.value = preselectFile;
   }
-})();
+}
+
+// chamada inicial na abertura da tela
+populateEditorSavedList();
+
 
 /* ===== sair com aviso se houver alterações ===== */
 window.addEventListener('beforeunload', (e) => {
@@ -709,7 +769,7 @@ if ($btnLoadEd) {
     try {
       const consolidated = await getSavedEditor(file);
       applyConsolidatedToEditor(consolidated);
-      try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch {}
+      try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch { }
     } catch (e) {
       console.error(e);
       alert('Não foi possível carregar o horário selecionado.');
@@ -720,7 +780,7 @@ if ($btnLoadEd) {
 
 
 function buildConsolidated() {
-  // Se estiver com uma aula pickada, “solta” visualmente (mantém onde está)
+  // Se estiver com uma aula pickada, solta visualmente (mantém onde está)
   cancelPick?.();
 
   const allocations = [];
@@ -728,25 +788,38 @@ function buildConsolidated() {
     for (let d = 0; d < meta.days.length; d++) {
       for (let p = 0; p < P; p++) {
         const cell = mapCells[t.id][d][p];
-        if (cell && cell.classList.contains('occupied') && cell.dataset.lesson) {
-          if (cell.classList.contains('block-head')) {
-            const lesson = JSON.parse(cell.dataset.lesson);
-            allocations.push({
-              classId: t.id,
-              day: d,
-              start: p,
-              duration: lesson.duration,
-              subjectId: lesson.subjectId,
-              teacherIds: lesson.teacherIds || [],
-              roomId: lesson.roomId || null
-            });
-          }
-        }
+        if (!cell || !cell.classList.contains('occupied') || !cell.dataset.lesson) continue;
+
+        const lesson = JSON.parse(cell.dataset.lesson);
+        if (!cell.classList.contains('block-head')) continue;
+
+        allocations.push({
+          classId: t.id,
+          day: d,
+          start: p,
+          duration: lesson.duration,
+          subjectId: lesson.subjectId,
+          teacherIds: lesson.teacherIds || [],
+          roomId: lesson.roomId || null
+        });
       }
     }
   });
 
-  return { meta, classes, teachers, subjects, rooms, allocations };
+  // 🔹 Inclui as não alocadas junto no consolidado
+  const unallocated = Array.isArray(unallocatedLessons)
+    ? JSON.parse(JSON.stringify(unallocatedLessons))
+    : [];
+
+  return {
+    meta,
+    classes,
+    teachers,
+    subjects,
+    rooms,
+    allocations,
+    unallocated   // <-- aqui
+  };
 }
 
 
@@ -800,18 +873,16 @@ async function salvarHorario() {
   try {
     cancelPick();
 
-    const consolidated = buildConsolidated();
+    const consolidated = buildConsolidated(); // já inclui .unallocated
 
-    // pergunta o nome
     const defaultName = `horario_${new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-')}`;
     const name = window.prompt('Nome do horário (arquivo):', defaultName);
-    if (!name) return; // cancelado
+    if (!name) return;
 
-    // opcional: também salva no localStorage (útil pra abrir "Visualizar" em seguida)
-    localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
+    // opcional: manter o último consolidado no LS
+    try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch {}
 
-    // envia pro servidor
-    const resp = await fetch('api/save_schedule.php', {
+    const resp = await fetch(`${location.origin}/FrontTCC/api/save_schedule.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, data: consolidated }),
@@ -820,19 +891,57 @@ async function salvarHorario() {
     });
 
     const out = await resp.json();
-    if (!resp.ok || !out?.ok) {
-      throw new Error(out?.error || `Falha HTTP ${resp.status}`);
-    }
+    if (!resp.ok || !out?.ok) throw new Error(out?.error || `Falha HTTP ${resp.status}`);
 
     alert(`Horário salvo com sucesso!\nArquivo: ${out.file}`);
-    console.log('Salvo em:', out);
     setDirty(false);
 
-
+    await refreshSavedSelect(out.file);
+    // ================================================
   } catch (err) {
     console.error(err);
     alert('Não foi possível salvar o horário: ' + err.message);
   }
+}
+
+const $btnDeleteEd = document.getElementById('ed-delete-saved');
+if ($btnDeleteEd) {
+  $btnDeleteEd.addEventListener('click', async () => {
+    const sel = document.getElementById('ed-saved-select');
+    const file = sel?.value || '';
+    if (!file) return alert('Selecione um arquivo salvo para excluir.');
+    if (!confirm('Tem certeza que deseja excluir este horário salvo?\nEsta ação não pode ser desfeita.')) return;
+
+    try {
+      await deleteSavedEditor(file);
+      // Recarrega a lista do select
+      const list = await listSavedEditor();
+      sel.innerHTML = '';
+      if (!list.length) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = '— nenhum arquivo salvo —';
+        sel.appendChild(opt);
+      } else {
+        list.slice().reverse().forEach(item => {
+          const opt = document.createElement('option');
+          opt.value = item.file;
+          opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
+          sel.appendChild(opt);
+        });
+      }
+
+      // Se por acaso o arquivo deletado era o atualmente visualizado, você pode limpar o LS:
+      try {
+        const cur = JSON.parse(localStorage.getItem('consolidatedSchedule') || 'null');
+        if (cur && cur.__source_file === file) localStorage.removeItem('consolidatedSchedule');
+      } catch { }
+      alert('Arquivo excluído com sucesso.');
+    } catch (e) {
+      console.error(e);
+      alert('Não foi possível excluir: ' + e.message);
+    }
+  });
 }
 
 
@@ -864,10 +973,14 @@ if (btnSalvar) {
 
       const consolidated = buildConsolidated();
 
-      const resp = await fetch(`${location.origin}/FrontTCC/api/save_schedule.php`, {
+      const ROOT = `${location.origin}/FrontTCC`; // já usa isso em outros pontos
+
+      const resp = await fetch(`${ROOT}/api/save_schedule.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, payload: consolidated })
+        body: JSON.stringify({ name, data: consolidated }), // 'data' é o campo atual
+        cache: 'no-store',
+        credentials: 'omit'
       });
 
       const ct = resp.headers.get('content-type') || '';

@@ -2,40 +2,41 @@
 // /api/save_schedule.php
 header('Content-Type: application/json; charset=utf-8');
 
-$root = dirname(__DIR__); // .../FrontTCC/api  -> sobe 1 nível
+$root = dirname(__DIR__);              // .../FrontTCC/api -> sobe p/ .../FrontTCC
 $dir  = $root . '/storage/schedules';
+if (!is_dir($dir)) { @mkdir($dir, 0775, true); }
 
-if (!is_dir($dir)) {
-  @mkdir($dir, 0775, true);
-}
+$raw  = file_get_contents('php://input');
+$body = json_decode($raw, true);
 
-$raw = file_get_contents('php://input');
-$data = json_decode($raw, true);
-if (!$data || !isset($data['name'], $data['payload'])) {
+// Aceita { name, data } (atual) ou { name, payload } (legado)
+if (!$body || !isset($body['name']) || !isset($body['data']) && !isset($body['payload'])) {
   http_response_code(400);
   echo json_encode(['ok' => false, 'error' => 'invalid payload']);
   exit;
 }
+$payload = $body['data'] ?? $body['payload'];
 
-$name = preg_replace('/[^a-zA-Z0-9_\- ]+/', '', $data['name']);
+$name = preg_replace('/[^a-zA-Z0-9_\- ]+/', '', $body['name']);
 $name = trim($name);
 if ($name === '') $name = 'horario';
 
 $filename = $name . '_' . date('Ymd_His') . '.json';
-$path = $dir . '/' . $filename;
+$path     = $dir . '/' . $filename;
 
-file_put_contents($path, json_encode($data['payload'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+// grava o objeto inteiro (allocations + unallocated etc.)
+file_put_contents($path, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-// Atualiza manifesto
+// atualiza manifesto
 $manifestPath = $dir . '/index.json';
 $manifest = [];
 if (file_exists($manifestPath)) {
   $manifest = json_decode(file_get_contents($manifestPath), true) ?: [];
 }
 $manifest[] = [
-  'name'     => $data['name'],
-  'file'     => $filename,
-  'savedAt'  => date('c')
+  'name'    => $body['name'],
+  'file'    => $filename,
+  'savedAt' => date('c'),
 ];
 file_put_contents($manifestPath, json_encode($manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
