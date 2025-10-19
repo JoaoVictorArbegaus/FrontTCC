@@ -37,7 +37,6 @@ function updateData() {
   // clone de não alocadas
   unallocatedLessons = JSON.parse(JSON.stringify(initialUnallocated || []));
 
-  // <<< NOVO: chave canônica por professor (id -> nome normalizado)
   teacherKeyById = {};
   (teachers || []).forEach(t => {
     teacherKeyById[t.id] = normalizeName(t.name);
@@ -55,12 +54,31 @@ updateData(); // Chama na inicialização para definir as variáveis
 if (typeof window.isDirty === 'undefined') window.isDirty = false;
 function setDirty(v = true) {
   window.isDirty = !!v;
-  // opcional: sinal visual
   // document.body.classList.toggle('dirty', window.isDirty);
 }
 
+function isReallyDirty() {
+  try {
+    const cur = JSON.stringify(buildConsolidated());
+    return cur !== window.__lastSavedSnapshot;
+  } catch {
+    return !!window.isDirty;
+  }
+}
+// === Snapshot do último estado salvo/carregado ===
+window.__lastSavedSnapshot = null;
 
-
+function markSavedSnapshot() {
+  // guarda um snapshot do estado atual (o mesmo que iria para o arquivo)
+  try {
+    const snap = JSON.stringify(buildConsolidated());
+    window.__lastSavedSnapshot = snap;
+    // zera o flag auxiliar também, por via das dúvidas
+    setDirty(false);
+  } catch (_) {
+    // se der erro no buildConsolidated, não quebra o fluxo
+  }
+}
 
 function bandColor(b) {
   return b === 'M' ? 'bg-green-500' : (b === 'T' ? 'bg-yellow-500' : 'bg-purple-500');
@@ -88,8 +106,6 @@ const newGroupId = () => `g${gidCounter++}`;
 // mapeia cabeças de grupos para acesso rápido nas marcações
 window.groupHeads = window.groupHeads || new Map(); // garante no escopo global
 const groupHeads = window.groupHeads;               // alias local para o código
-
-
 
 
 /* ----------------- Cabeçalho de períodos ----------------- */
@@ -380,9 +396,6 @@ function movePickedToCell(targetCell) {
   if (!pickedFromGrid) return;
 
   const { cells: oldCells, lesson, group } = pickedFromGrid;
-
-  // ✅ NOVO: se clicou/droppou no MESMO grupo que está pickado,
-  // apenas remover da grade e mandar para "não alocadas".
   if (targetCell.dataset.group === group) {
     clearPickedHighlight();
     removeGroupCells(oldCells);
@@ -548,10 +561,6 @@ function criarGrade() {
             pickFromGrid(cell);    // destaca este bloco
             return;
           }
-
-
-
-
           // 4) Slot vazio e nada selecionado => feedback sutil
           cell.classList.add('ring-2', 'ring-blue-400');
           setTimeout(() => cell.classList.remove('ring-2', 'ring-blue-400'), 250);
@@ -637,7 +646,7 @@ async function refreshSavedSelect(preselectFile = '') {
   if (!sel) return;
 
   // usa bust de cache + no-store
-  const list = await listSavedEditor(); 
+  const list = await listSavedEditor();
   sel.innerHTML = '';
 
   if (!list.length) {
@@ -706,15 +715,15 @@ function applyConsolidatedToEditor(consolidated) {
     rooms: consolidated.rooms,
     preAllocations: Array.isArray(consolidated.allocations) ? consolidated.allocations : [],
     initialUnallocated: Array.isArray(consolidated.unallocated) ? consolidated.unallocated : []
-
   };
   updateData();
   renderPeriodsHeader();
   criarGrade();
   renderUnallocated();
   recomputeTeacherConflicts?.();
-  setDirty(false);
+  markSavedSnapshot(); // <-- mantenha esta
 }
+
 
 async function populateEditorSavedList(preselectFile = '') {
   const sel = document.getElementById('ed-saved-select');
@@ -748,7 +757,7 @@ populateEditorSavedList();
 
 /* ===== sair com aviso se houver alterações ===== */
 window.addEventListener('beforeunload', (e) => {
-  if (!window.isDirty) return;
+  if (!isReallyDirty()) return;
   e.preventDefault();
   e.returnValue = '';
 });
@@ -761,7 +770,7 @@ if ($btnLoadEd) {
     const file = sel?.value || '';
     if (!file) return alert('Selecione um arquivo salvo.');
 
-    if (window.isDirty) {
+    if (isReallyDirty()) {
       const ok = confirm('Você tem alterações não salvas. Carregar outro horário vai descartá-las.\n\nDeseja continuar?');
       if (!ok) return;
     }
@@ -818,7 +827,7 @@ function buildConsolidated() {
     subjects,
     rooms,
     allocations,
-    unallocated   // <-- aqui
+    unallocated   
   };
 }
 
@@ -860,7 +869,7 @@ async function reloadTimetable() {
     criarGrade();
     renderUnallocated();
     console.log('Dados recarregados com sucesso:', window.EDITOR_DATA);
-    setDirty(false)
+    markSavedSnapshot();
   } catch (error) {
     console.error('Erro ao recarregar horário:', error);
     alert(`Falha ao recarregar horário: ${error.message}`);
@@ -880,7 +889,7 @@ async function salvarHorario() {
     if (!name) return;
 
     // opcional: manter o último consolidado no LS
-    try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch {}
+    try { localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated)); } catch { }
 
     const resp = await fetch(`${location.origin}/FrontTCC/api/save_schedule.php`, {
       method: 'POST',
@@ -894,10 +903,12 @@ async function salvarHorario() {
     if (!resp.ok || !out?.ok) throw new Error(out?.error || `Falha HTTP ${resp.status}`);
 
     alert(`Horário salvo com sucesso!\nArquivo: ${out.file}`);
-    setDirty(false);
-
+    markSavedSnapshot();
     await refreshSavedSelect(out.file);
-    // ================================================
+    setTimeout(() => {
+      console.log('DEBUG dirty após salvar →', window.isDirty);
+    }, 1000);
+
   } catch (err) {
     console.error(err);
     alert('Não foi possível salvar o horário: ' + err.message);
@@ -966,34 +977,9 @@ if (btnVisualizar) {
 // Botão Salvar — envia o JSON para o PHP salvar no storage/schedules
 const btnSalvar = document.getElementById('btn-salvar');
 if (btnSalvar) {
-  btnSalvar.addEventListener('click', async () => {
-    try {
-      const name = prompt('Nome do horário para salvar (ex.: 2025_sem1):');
-      if (!name) return;
-
-      const consolidated = buildConsolidated();
-
-      const ROOT = `${location.origin}/FrontTCC`; // já usa isso em outros pontos
-
-      const resp = await fetch(`${ROOT}/api/save_schedule.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, data: consolidated }), // 'data' é o campo atual
-        cache: 'no-store',
-        credentials: 'omit'
-      });
-
-      const ct = resp.headers.get('content-type') || '';
-      const out = ct.includes('application/json') ? await resp.json()
-        : { ok: false, error: await resp.text() };
-
-      if (!resp.ok || !out.ok) throw new Error(out.error || `HTTP ${resp.status}`);
-      alert(`Horário salvo em: ${out.file}`);
-    } catch (e) {
-      alert(`Não foi possível salvar o horário: ${e.message || e}`);
-    }
-  });
+  btnSalvar.addEventListener('click', salvarHorario);
 }
+
 
 // === Zoom da grade ===
 // Range e passo (pode ajustar): 50%–100%, passo de 10%
@@ -1042,24 +1028,4 @@ function getSavedZoom() {
   });
 
   if ($zReset) $zReset.addEventListener('click', () => applyZoom(1));
-
-  // (Opcional) atalhos de teclado: Ctrl + / Ctrl -
-  document.addEventListener('keydown', (e) => {
-    const isMac = navigator.platform.toUpperCase().includes('MAC');
-    const mod = isMac ? e.metaKey : e.ctrlKey;
-    if (!mod) return;
-
-    if (e.key === '=' || e.key === '+') { // Ctrl +
-      e.preventDefault();
-      const z = clampZoom((Number(localStorage.getItem(Z_KEY)) || z0) + Z_STEP);
-      applyZoom(z);
-    } else if (e.key === '-') {           // Ctrl -
-      e.preventDefault();
-      const z = clampZoom((Number(localStorage.getItem(Z_KEY)) || z0) - Z_STEP);
-      applyZoom(z);
-    } else if (e.key === '0') {           // Ctrl 0
-      e.preventDefault();
-      applyZoom(1);
-    }
-  });
 })();
