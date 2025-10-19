@@ -126,6 +126,211 @@ function renderPeriodsHeader() {
   }
 }
 
+function updateEditButtonState() {
+  const btn = document.getElementById('btn-editar');
+  if (!btn) return;
+  const canEdit = !!pickedFromGrid || !!selectedLessonId;
+  btn.disabled = !canEdit;
+}
+
+
+function normalizeStr(s) {
+  return (s || '')
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .toLowerCase().trim();
+}
+
+// subject: aceita id exato OU abbr OU nome
+function resolveSubject(input) {
+  const raw = (input || '').trim();
+  if (!raw) return null; // usuário deixou em branco -> manter
+  // id direto
+  if (subjectById[raw]) return subjectById[raw].id;
+
+  const want = normalizeStr(raw);
+  // por abbr
+  for (const s of subjects) {
+    if (normalizeStr(s.abbr) === want) return s.id;
+  }
+  // por nome
+  for (const s of subjects) {
+    if (normalizeStr(s.name) === want) return s.id;
+  }
+  return undefined; // não encontrado
+}
+
+// teachers: aceita lista separada por vírgula (ids ou nomes)
+function resolveTeacherIds(input) {
+  const raw = (input || '').trim();
+  if (!raw) return null; // em branco -> manter
+
+  const parts = raw.split(',').map(t => t.trim()).filter(Boolean);
+  const out = [];
+  for (const piece of parts) {
+    if (teacherById[piece]) { out.push(piece); continue; }
+
+    const want = normalizeStr(piece);
+    // por nome
+    let found = null;
+    for (const t of teachers) {
+      if (normalizeStr(t.name) === want) { found = t.id; break; }
+    }
+    if (!found) return undefined; // qualquer um não encontrado invalida
+    out.push(found);
+  }
+  return out;
+}
+
+// room: aceita id direto ou nome
+function resolveRoom(input) {
+  const raw = (input || '').trim();
+  if (raw === '') return null; // limpar sala
+  if (roomById[raw]) return roomById[raw].id;
+
+  const want = normalizeStr(raw);
+  for (const r of rooms) {
+    if (normalizeStr(r.name) === want) return r.id;
+  }
+  return undefined; // não encontrado
+}
+
+function applyLessonUpdateOnGrid(info, newLesson) {
+  const { turmaId, day, startPeriod, lesson: oldLesson, cells, group } = info;
+
+  // Se duração não mudou -> só atualizar conteúdo/tooltip
+  if (Number(newLesson.duration) === Number(oldLesson.duration)) {
+    // atualiza dataset.lesson em todas as células do grupo
+    for (const c of cells) c.dataset.lesson = JSON.stringify(newLesson);
+
+    // refaz head (sigla + title)
+    const head = cells.find(c => c.classList.contains('block-head')) || cells[0];
+    if (head) {
+      head.innerHTML = lessonMarkup(newLesson);
+      head.title = cellTitle(newLesson);
+    }
+    recomputeTeacherConflicts();
+    setDirty(true);
+    return true;
+  }
+
+  // Duração mudou: precisa caber no mesmo local (ignorando o próprio grupo)
+  const dur = Number(newLesson.duration) || 1;
+  if (!canPlaceBlockOverwrite(turmaId, day, startPeriod, dur, group) || newLesson.classId !== turmaId) {
+    alert('Não é possível ajustar a duração neste local (não cabe ou turma divergente).');
+    return false;
+  }
+
+  // Remonta o bloco com a nova duração
+  removeGroupCells(cells);
+  placeBlock(turmaId, day, startPeriod, newLesson);
+  recomputeTeacherConflicts();
+  setDirty(true);
+  return true;
+}
+
+function applyLessonUpdateOnCard(lessonId, newLesson) {
+  const idx = unallocatedLessons.findIndex(l => l.id === lessonId);
+  if (idx === -1) { alert('Card não encontrado.'); return false; }
+  unallocatedLessons[idx] = newLesson;
+  renderUnallocated();
+  setDirty(true);
+  return true;
+}
+
+async function editSelected() {
+  // 1) Determina alvo: bloco na grade OU card nas não alocadas
+  let onGrid = false;
+  let baseLesson = null;
+  let contextInfo = null; // info do grupo, se onGrid
+
+  if (pickedFromGrid) {
+    onGrid = true;
+    contextInfo = pickedFromGrid; // { turmaId, day, startPeriod, cells, lesson, group }
+    baseLesson = JSON.parse(JSON.stringify(contextInfo.lesson));
+  } else if (selectedLessonId) {
+    const l = unallocatedLessons.find(x => x.id === selectedLessonId);
+    if (!l) return alert('Seleção inválida.');
+    baseLesson = JSON.parse(JSON.stringify(l));
+  } else {
+    return; // nada selecionado
+  }
+
+  // 2) Prompts (deixe em branco para manter)
+  const subjInput = prompt(
+    `Matéria (ID/ABBR/Nome)\nAtual: ${subjectById[baseLesson.subjectId]?.abbr || subjectById[baseLesson.subjectId]?.name || baseLesson.subjectId}\n(Deixe vazio para manter)`,
+    ''
+  );
+  const teacNames = (baseLesson.teacherIds || []).map(tid => teacherById[tid]?.name || tid).join(', ');
+  const teachInput = prompt(
+    `Professores (IDs ou Nomes separados por vírgula)\nAtual: ${teacNames}\n(Deixe vazio para manter)`,
+    ''
+  );
+  const roomNow = baseLesson.roomId ? (roomById[baseLesson.roomId]?.name || baseLesson.roomId) : '—';
+  const roomInput = prompt(
+    `Sala (ID ou Nome)\nAtual: ${roomNow}\n(Deixe vazio para manter)`,
+    ''
+  );
+  const durInput = prompt(
+    `Duração em períodos (>=1)\nAtual: ${baseLesson.duration}\n(Deixe vazio para manter)`,
+    ''
+  );
+
+  // 3) Resolver entradas
+  const next = JSON.parse(JSON.stringify(baseLesson)); // clone
+
+  // subject
+  if (subjInput !== null && subjInput.trim() !== '') {
+    const sid = resolveSubject(subjInput);
+    if (sid === undefined) return alert('Matéria não encontrada.');
+    if (sid !== null) next.subjectId = sid;
+  }
+
+  // teachers
+  if (teachInput !== null && teachInput.trim() !== '') {
+    const tids = resolveTeacherIds(teachInput);
+    if (tids === undefined) return alert('Um ou mais professores não foram encontrados.');
+    if (tids !== null) next.teacherIds = tids;
+  }
+
+  // room
+  if (roomInput !== null && roomInput.trim() !== '') {
+    // se veio algo, tenta resolver; se estiver vazio, mantemos a sala atual
+    const rid = resolveRoom(roomInput);
+    if (rid === undefined) return alert('Sala não encontrada.');
+    // se você quiser um atalho para limpar, aceite '-' como limpar:
+    if (roomInput.trim() === '-') next.roomId = null;
+    else next.roomId = rid; // (rid pode ser id válido)
+  }
+
+
+  // duration
+  if (durInput !== null && durInput.trim() !== '') {
+    const nv = Number(durInput.trim());
+    if (!Number.isInteger(nv) || nv < 1) return alert('Duração inválida.');
+    next.duration = nv;
+  }
+
+  // 4) Aplicar
+  if (onGrid) {
+    const ok = applyLessonUpdateOnGrid(contextInfo, next);
+    if (ok) {
+      alert('Bloco atualizado.');
+      // desmarca o pick para evitar "voltar" ao mover
+      cancelPick();
+      updateEditButtonState();
+    }
+  } else {
+    const ok = applyLessonUpdateOnCard(baseLesson.id, next);
+    if (ok) {
+      alert('Card atualizado.');
+      // limpa seleção do card também
+      selectedLessonId = null;
+      updateEditButtonState();
+    }
+  }
+}
+
+
 function adjustUnallocSpacer() {
   const panel = document.getElementById('unalloc-panel');
   const scroller = document.querySelector('.grid-scroller');
@@ -181,6 +386,7 @@ function renderUnallocated() {
 
   document.getElementById('unalloc-count').textContent = `${unallocatedLessons.length} pendente(s)`;
   adjustUnallocSpacer();
+  updateEditButtonState();
 }
 window.addEventListener('resize', adjustUnallocSpacer);
 
@@ -368,10 +574,12 @@ function pickFromGrid(cell) {
   const info = getGroupCells(cell);
   pickedFromGrid = info;
   highlightPicked(info.cells);
+  updateEditButtonState();
 }
 function cancelPick() {
   clearPickedHighlight();
   pickedFromGrid = null;
+  updateEditButtonState();
 }
 
 function dropPickToUnallocated() {
@@ -389,6 +597,7 @@ function dropPickToUnallocated() {
   pickedFromGrid = null;
   renderUnallocated();
   recomputeTeacherConflicts();
+  updateEditButtonState();
 }
 
 
@@ -432,6 +641,7 @@ function movePickedToCell(targetCell) {
   renderUnallocated();
   recomputeTeacherConflicts();
   setDirty(true);
+  updateEditButtonState();
 }
 
 /* ----------------- Grade ----------------- */
@@ -827,7 +1037,7 @@ function buildConsolidated() {
     subjects,
     rooms,
     allocations,
-    unallocated   
+    unallocated
   };
 }
 
@@ -979,6 +1189,14 @@ const btnSalvar = document.getElementById('btn-salvar');
 if (btnSalvar) {
   btnSalvar.addEventListener('click', salvarHorario);
 }
+
+// Botao editar materia
+const $btnEditar = document.getElementById('btn-editar');
+if ($btnEditar) {
+  $btnEditar.addEventListener('click', editSelected);
+}
+// garantir estado inicial
+updateEditButtonState();
 
 
 // === Zoom da grade ===
