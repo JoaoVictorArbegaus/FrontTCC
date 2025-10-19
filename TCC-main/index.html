@@ -143,6 +143,53 @@
     </div>
   </div>
 
+
+  <!-- Modal Editar Aula -->
+  <div id="edit-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+    <div class="bg-white w-full max-w-lg rounded-xl shadow-xl p-5">
+      <h3 class="text-xl font-semibold mb-4">Editar aula</h3>
+
+      <div class="space-y-3">
+        <!-- Matéria -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Matéria</span>
+          <select id="em-subject" class="mt-1 w-full border rounded px-2 py-1"></select>
+        </label>
+
+        <!-- Professores (multi-select) -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Professor(es)</span>
+          <select id="em-teachers" class="mt-1 w-full border rounded px-2 py-1" multiple size="5"></select>
+          <span class="text-xs text-gray-500">Segure Ctrl (ou Cmd no Mac) para selecionar vários.</span>
+        </label>
+
+        <!-- Sala -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Sala</span>
+          <select id="em-room" class="mt-1 w-full border rounded px-2 py-1">
+            <option value="">(sem sala)</option>
+          </select>
+        </label>
+
+        <!-- Duração -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Duração (períodos)</span>
+          <input id="em-duration" type="number" min="1" class="mt-1 w-32 border rounded px-2 py-1" />
+        </label>
+      </div>
+
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="em-cancel" class="px-3 py-1 rounded border">Cancelar</button>
+        <button id="em-save" class="px-3 py-1 rounded bg-blue-600 text-white">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-[9999]"></div>
+
+
+
   <!-- Scripts -->
   <!-- Adaptador
   <script src="js/ag-adapter.js"></script>

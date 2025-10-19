@@ -103,7 +103,6 @@ let pickedFromGrid = null;           // { turmaId, day, startPeriod, cells, less
 let gidCounter = 1;
 const newGroupId = () => `g${gidCounter++}`;
 // mapeia cabeças de grupos para acesso rápido nas marcações
-// mapeia cabeças de grupos para acesso rápido nas marcações
 window.groupHeads = window.groupHeads || new Map(); // garante no escopo global
 const groupHeads = window.groupHeads;               // alias local para o código
 
@@ -133,66 +132,6 @@ function updateEditButtonState() {
   btn.disabled = !canEdit;
 }
 
-
-function normalizeStr(s) {
-  return (s || '')
-    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
-    .toLowerCase().trim();
-}
-
-// subject: aceita id exato OU abbr OU nome
-function resolveSubject(input) {
-  const raw = (input || '').trim();
-  if (!raw) return null; // usuário deixou em branco -> manter
-  // id direto
-  if (subjectById[raw]) return subjectById[raw].id;
-
-  const want = normalizeStr(raw);
-  // por abbr
-  for (const s of subjects) {
-    if (normalizeStr(s.abbr) === want) return s.id;
-  }
-  // por nome
-  for (const s of subjects) {
-    if (normalizeStr(s.name) === want) return s.id;
-  }
-  return undefined; // não encontrado
-}
-
-// teachers: aceita lista separada por vírgula (ids ou nomes)
-function resolveTeacherIds(input) {
-  const raw = (input || '').trim();
-  if (!raw) return null; // em branco -> manter
-
-  const parts = raw.split(',').map(t => t.trim()).filter(Boolean);
-  const out = [];
-  for (const piece of parts) {
-    if (teacherById[piece]) { out.push(piece); continue; }
-
-    const want = normalizeStr(piece);
-    // por nome
-    let found = null;
-    for (const t of teachers) {
-      if (normalizeStr(t.name) === want) { found = t.id; break; }
-    }
-    if (!found) return undefined; // qualquer um não encontrado invalida
-    out.push(found);
-  }
-  return out;
-}
-
-// room: aceita id direto ou nome
-function resolveRoom(input) {
-  const raw = (input || '').trim();
-  if (raw === '') return null; // limpar sala
-  if (roomById[raw]) return roomById[raw].id;
-
-  const want = normalizeStr(raw);
-  for (const r of rooms) {
-    if (normalizeStr(r.name) === want) return r.id;
-  }
-  return undefined; // não encontrado
-}
 
 function applyLessonUpdateOnGrid(info, newLesson) {
   const { turmaId, day, startPeriod, lesson: oldLesson, cells, group } = info;
@@ -237,100 +176,6 @@ function applyLessonUpdateOnCard(lessonId, newLesson) {
   return true;
 }
 
-async function editSelected() {
-  // 1) Determina alvo: bloco na grade OU card nas não alocadas
-  let onGrid = false;
-  let baseLesson = null;
-  let contextInfo = null; // info do grupo, se onGrid
-
-  if (pickedFromGrid) {
-    onGrid = true;
-    contextInfo = pickedFromGrid; // { turmaId, day, startPeriod, cells, lesson, group }
-    baseLesson = JSON.parse(JSON.stringify(contextInfo.lesson));
-  } else if (selectedLessonId) {
-    const l = unallocatedLessons.find(x => x.id === selectedLessonId);
-    if (!l) return alert('Seleção inválida.');
-    baseLesson = JSON.parse(JSON.stringify(l));
-  } else {
-    return; // nada selecionado
-  }
-
-  // 2) Prompts (deixe em branco para manter)
-  const subjInput = prompt(
-    `Matéria (ID/ABBR/Nome)\nAtual: ${subjectById[baseLesson.subjectId]?.abbr || subjectById[baseLesson.subjectId]?.name || baseLesson.subjectId}\n(Deixe vazio para manter)`,
-    ''
-  );
-  const teacNames = (baseLesson.teacherIds || []).map(tid => teacherById[tid]?.name || tid).join(', ');
-  const teachInput = prompt(
-    `Professores (IDs ou Nomes separados por vírgula)\nAtual: ${teacNames}\n(Deixe vazio para manter)`,
-    ''
-  );
-  const roomNow = baseLesson.roomId ? (roomById[baseLesson.roomId]?.name || baseLesson.roomId) : '—';
-  const roomInput = prompt(
-    `Sala (ID ou Nome)\nAtual: ${roomNow}\n(Deixe vazio para manter)`,
-    ''
-  );
-  const durInput = prompt(
-    `Duração em períodos (>=1)\nAtual: ${baseLesson.duration}\n(Deixe vazio para manter)`,
-    ''
-  );
-
-  // 3) Resolver entradas
-  const next = JSON.parse(JSON.stringify(baseLesson)); // clone
-
-  // subject
-  if (subjInput !== null && subjInput.trim() !== '') {
-    const sid = resolveSubject(subjInput);
-    if (sid === undefined) return alert('Matéria não encontrada.');
-    if (sid !== null) next.subjectId = sid;
-  }
-
-  // teachers
-  if (teachInput !== null && teachInput.trim() !== '') {
-    const tids = resolveTeacherIds(teachInput);
-    if (tids === undefined) return alert('Um ou mais professores não foram encontrados.');
-    if (tids !== null) next.teacherIds = tids;
-  }
-
-  // room
-  if (roomInput !== null && roomInput.trim() !== '') {
-    // se veio algo, tenta resolver; se estiver vazio, mantemos a sala atual
-    const rid = resolveRoom(roomInput);
-    if (rid === undefined) return alert('Sala não encontrada.');
-    // se você quiser um atalho para limpar, aceite '-' como limpar:
-    if (roomInput.trim() === '-') next.roomId = null;
-    else next.roomId = rid; // (rid pode ser id válido)
-  }
-
-
-  // duration
-  if (durInput !== null && durInput.trim() !== '') {
-    const nv = Number(durInput.trim());
-    if (!Number.isInteger(nv) || nv < 1) return alert('Duração inválida.');
-    next.duration = nv;
-  }
-
-  // 4) Aplicar
-  if (onGrid) {
-    const ok = applyLessonUpdateOnGrid(contextInfo, next);
-    if (ok) {
-      alert('Bloco atualizado.');
-      // desmarca o pick para evitar "voltar" ao mover
-      cancelPick();
-      updateEditButtonState();
-    }
-  } else {
-    const ok = applyLessonUpdateOnCard(baseLesson.id, next);
-    if (ok) {
-      alert('Card atualizado.');
-      // limpa seleção do card também
-      selectedLessonId = null;
-      updateEditButtonState();
-    }
-  }
-}
-
-
 function adjustUnallocSpacer() {
   const panel = document.getElementById('unalloc-panel');
   const scroller = document.querySelector('.grid-scroller');
@@ -341,6 +186,157 @@ function adjustUnallocSpacer() {
   const h = panel.offsetHeight || 0;
   scroller.style.paddingBottom = (h + 16) + 'px'; // 16px de folga
 }
+
+// ===== Modal Editar Aula (UI com nomes) =====
+(function setupEditModal() {
+  const $modal = document.getElementById('edit-modal');
+  const $subj = document.getElementById('em-subject');
+  const $teach = document.getElementById('em-teachers');
+  const $room = document.getElementById('em-room');
+  const $dur = document.getElementById('em-duration');
+  const $cancel = document.getElementById('em-cancel');
+  const $save = document.getElementById('em-save');
+
+  if (!$modal) return;
+
+  // Estado da edição atual
+  let contextInfo = null;    // se veio da grade: pickedFromGrid
+  let editingCard = null;    // se veio de "não alocadas": { lessonId }
+  let baseLesson = null;    // clone da aula original
+
+  function show() { $modal.classList.remove('hidden'); $modal.classList.add('flex'); }
+  function hide() { $modal.classList.add('hidden'); $modal.classList.remove('flex'); }
+
+  // Popular selects com NOMES
+  function fillOptions() {
+    // Matéria: option.value = subject.id, option.text = subject.name
+    $subj.innerHTML = '';
+    subjects.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.name || s.abbr || s.id; // mostra NOME; se não tiver, abbr como fallback.
+      $subj.appendChild(opt);
+    });
+
+    // Professores (multi): value = teacher.id, text = teacher.name
+    $teach.innerHTML = '';
+    teachers.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.name || t.id; // mostra NOME
+      $teach.appendChild(opt);
+    });
+
+    // Sala: value = room.id, text = room.name — já tem (sem sala) no HTML
+    // Primeiro preserva o "(sem sala)"
+    const first = $room.querySelector('option[value=""]');
+    $room.innerHTML = '';
+    if (first) $room.appendChild(first);
+    rooms.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = r.name || r.id; // mostra NOME
+      $room.appendChild(opt);
+    });
+  }
+
+  // Preenche valores atuais
+  function setValuesFromLesson(lesson) {
+    // subject
+    $subj.value = lesson.subjectId ?? '';
+    // teachers
+    Array.from($teach.options).forEach(o => {
+      o.selected = (lesson.teacherIds || []).includes(o.value);
+    });
+    // room
+    $room.value = lesson.roomId || '';
+    // duration
+    $dur.value = Number(lesson.duration || 1);
+  }
+
+  // Abre o modal a partir do contexto atual (grade ou card)
+  window.openEditModal = function () {
+    // Determina origem
+    contextInfo = null;
+    editingCard = null;
+    baseLesson = null;
+
+    if (pickedFromGrid) {
+      contextInfo = pickedFromGrid; // { turmaId, day, startPeriod, cells, lesson, group }
+      baseLesson = JSON.parse(JSON.stringify(contextInfo.lesson));
+    } else if (selectedLessonId) {
+      const l = unallocatedLessons.find(x => x.id === selectedLessonId);
+      if (!l) return alert('Seleção inválida.');
+      baseLesson = JSON.parse(JSON.stringify(l));
+      editingCard = { lessonId: l.id };
+    } else {
+      return; // nada selecionado
+    }
+
+    fillOptions();
+    setValuesFromLesson(baseLesson);
+    show();
+  };
+
+  // Botões
+  $cancel?.addEventListener('click', () => { hide(); });
+
+  $save?.addEventListener('click', () => {
+    const next = JSON.parse(JSON.stringify(baseLesson));
+
+    // Coleta dos selects (valores são IDs; a UI mostra NOME)
+    next.subjectId = $subj.value || next.subjectId;
+    next.teacherIds = Array.from($teach.selectedOptions).map(o => o.value);
+    next.roomId = $room.value || null;
+    const nv = Number($dur.value);
+    if (Number.isInteger(nv) && nv >= 1) next.duration = nv;
+
+    // Aplica na grade ou no card
+    let ok = false;
+    if (contextInfo) {
+      ok = applyLessonUpdateOnGrid(contextInfo, next);
+      if (ok) {
+        // limpa pick para evitar “estado fantasma” após edição
+        cancelPick();
+      }
+    } else if (editingCard) {
+      ok = applyLessonUpdateOnCard(editingCard.lessonId, next);
+    }
+
+    if (ok) {
+      hide();
+      updateEditButtonState?.();
+      showToast('✅ Aula atualizada com sucesso!');
+    }
+  });
+})();
+
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `
+    px-4 py-2 rounded-lg shadow-md text-white text-sm font-medium
+    transition-all duration-300 transform opacity-0 translate-y-2
+    ${type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-gray-700'}
+  `;
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  // animação de entrada
+  requestAnimationFrame(() => {
+    toast.classList.remove('opacity-0', 'translate-y-2');
+  });
+
+  // desaparece depois de 3s
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
 
 /* ----------------- Render cards (não alocadas) ----------------- */
 function renderUnallocated() {
@@ -455,8 +451,6 @@ function getGroupCells(cell) {
   const lesson = JSON.parse(cells[0].dataset.lesson);
   return { turmaId, day, startPeriod, cells, lesson, group };
 }
-
-window.getGroupCells = getGroupCells;
 
 function removeGroupCells(cells) {
   // remove registro do grupo (se esta remoção contém a head)
@@ -1174,6 +1168,8 @@ if (reloadBtn) {
   });
 }
 
+
+
 // Botão Visualizar — monta o consolidado e abre a tela de visualização
 const btnVisualizar = document.getElementById('btn-visualizar');
 if (btnVisualizar) {
@@ -1193,8 +1189,11 @@ if (btnSalvar) {
 // Botao editar materia
 const $btnEditar = document.getElementById('btn-editar');
 if ($btnEditar) {
-  $btnEditar.addEventListener('click', editSelected);
+  $btnEditar.addEventListener('click', () => {
+    openEditModal();
+  });
 }
+
 // garantir estado inicial
 updateEditButtonState();
 
