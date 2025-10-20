@@ -576,6 +576,69 @@ function cancelPick() {
   updateEditButtonState();
 }
 
+document.addEventListener('pointerdown', (e) => {
+  const t = e.target;
+
+  // onde NÃO cancelamos seleção
+  const inside =
+    t.closest?.('#schedule-grid') ||
+    t.closest?.('#unallocated-list') ||
+    t.closest?.('#edit-modal') ||
+    t.closest?.('#top-toolbar') ||
+    t.closest?.('#toast-container');
+
+  if (inside) return;
+
+  let changed = false;
+
+  if (pickedFromGrid) {
+    cancelPick();
+    changed = true;
+  }
+
+  if (selectedLessonId) {
+    selectedLessonId = null;
+    renderUnallocated();
+    changed = true;
+  }
+
+  if (changed) {
+    updateEditButtonState?.();
+    showToast?.('Seleção cancelada.', 'info');
+  }
+}, { capture: true });
+
+
+// === Tecla ESC para “despickar” ===
+window.addEventListener('keyup', (e) => {
+  if (e.key !== 'Escape') return;
+
+  // Evita conflito se o modal estiver aberto ou foco em inputs/selects
+  const modalOpen = document.getElementById('edit-modal')?.classList.contains('flex');
+  const tag = (document.activeElement?.tagName || '').toLowerCase();
+  if (modalOpen || tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+  let changed = false;
+
+  if (pickedFromGrid) {
+    cancelPick();
+    changed = true;
+  }
+
+  if (selectedLessonId) {
+    selectedLessonId = null;
+    renderUnallocated();
+    changed = true;
+  }
+
+  if (changed) {
+    updateEditButtonState?.();
+  }
+});
+
+
+
+
 function dropPickToUnallocated() {
   if (!pickedFromGrid) return;
   const { lesson, cells } = pickedFromGrid;
