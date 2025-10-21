@@ -4,18 +4,20 @@
   --turma-name-col: 220px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 /* ====== largura consistente da 1ª coluna ====== */
-#days-header > div:first-child,
-#periods-header > div:first-child,
-#schedule-grid .turma-row > div:first-child {
+#days-header>div:first-child,
+#periods-header>div:first-child,
+#schedule-grid .turma-row>div:first-child {
   width: var(--turma-name-col);
   min-width: var(--turma-name-col);
   max-width: var(--turma-name-col);
 }
 
-#schedule-grid .turma-row > div:first-child {
+#schedule-grid .turma-row>div:first-child {
   white-space: normal;
   line-height: 1.1;
 }
@@ -24,9 +26,32 @@
   min-height: 52px;
   cursor: pointer;
   transition: all .2s;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #f0f3fa;
   background: #fff;
 }
+
+/* ===== Faixa vertical suave por dia ===== */
+/* Cores bem leves para alternar entre os dias (ajuste se quiser) */
+:root {
+  --day-bg-a: #f5fffb;
+  --day-bg-b: #f1f2ff;
+}
+
+/* Para a tela de edição */
+#schedule-grid .turma-row > .day-column:nth-of-type(odd)  .time-slot,
+#viz-grid .turma-row > .day-column:nth-of-type(odd)  .time-slot {
+  background-color: var(--day-bg-a);
+}
+
+#schedule-grid .turma-row > .day-column:nth-of-type(even) .time-slot,
+#viz-grid .turma-row > .day-column:nth-of-type(even) .time-slot {
+  background-color: var(--day-bg-b);
+}
+
+
+
+
+
 .time-slot:hover {
   background-color: #dbeafe !important;
   transform: scale(1.02);
@@ -35,12 +60,15 @@
 
 /* ==== NOVO: blocos alocados com cor mais suave ==== */
 .occupied {
-  background-color: #c7d2fe !important; /* lilás claro */
+  background-color: #c7d2fe !important;
+  /* lilás claro */
   border: 1px solid #a5b4fc;
   color: #1e1b4b;
 }
+
 .occupied:hover {
-  background-color: #a5b4fc !important; /* tom um pouco mais escuro no hover */
+  background-color: #a5b4fc !important;
+  /* tom um pouco mais escuro no hover */
 }
 
 /* Blocos com conflito (mantém vermelho) */
@@ -51,6 +79,7 @@
   background-color: #fecaca !important;
   border: 1px solid #f87171 !important;
 }
+
 .conflict-badge {
   position: absolute;
   top: 2px;
@@ -92,19 +121,28 @@
   outline-offset: 2px;
 }
 
-.grid-scroller { overflow-x: auto; }
+.grid-scroller {
+  overflow-x: auto;
+}
 
-.block-head { border-radius: 6px; }
+.block-head {
+  border-radius: 6px;
+}
+
 .block-tail {}
 
 /* ==== MODO VISUALIZAÇÃO DE 1 TURMA ==== */
-.single-view { --period-w: 110px; }
+.single-view {
+  --period-w: 110px;
+}
 
 .single-view .turma-row {
   grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap));
 }
 
-.single-view .time-slot { min-height: 72px; }
+.single-view .time-slot {
+  min-height: 72px;
+}
 
 .single-view .header-day {
   display: block;
@@ -117,13 +155,17 @@
   grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap));
   margin-bottom: 4px;
 }
-.single-view #days-header .header-day { grid-column: 2 / 3; }
 
-.single-view #days-header > div:first-child {
+.single-view #days-header .header-day {
+  grid-column: 2 / 3;
+}
+
+.single-view #days-header>div:first-child {
   border-top-left-radius: .5rem;
   border-bottom-left-radius: .5rem;
 }
-.single-view #days-header > div:last-child {
+
+.single-view #days-header>div:last-child {
   border-top-right-radius: .5rem;
   border-bottom-right-radius: .5rem;
 }
@@ -138,7 +180,10 @@
 .single-view .turma-row {
   grid-template-columns: 140px calc(12 * var(--period-w) + 11 * var(--slot-gap));
 }
-.single-view .grid-scroller { padding-inline: 8px; }
+
+.single-view .grid-scroller {
+  padding-inline: 8px;
+}
 
 /* ==== ZOOM ==== */
 .zoomable {
@@ -147,18 +192,24 @@
   position: relative;
   overflow: hidden;
 }
+
 .zoomable__inner {
   transform-origin: top left;
   display: inline-block;
 }
- /* painel "Aulas não alocadas" sempre visível no rodapé */
+
+/* painel "Aulas não alocadas" sempre visível no rodapé */
 .unalloc-sticky {
-  position: sticky;     /* gruda dentro do fluxo da página */
-  bottom: 0;            /* no rodapé da viewport */
-  z-index: 50;          /* acima da grade */
-  background: #fff;     /* fundo sólido para sobrepor */
+  position: sticky;
+  /* gruda dentro do fluxo da página */
+  bottom: 0;
+  /* no rodapé da viewport */
+  z-index: 50;
+  /* acima da grade */
+  background: #fff;
+  /* fundo sólido para sobrepor */
   border-top: 1px solid #e5e7eb;
-  box-shadow: 0 -8px 16px rgba(0,0,0,.06);
+  box-shadow: 0 -8px 16px rgba(0, 0, 0, .06);
 }
 
 /* opcional: cantos e respiro */
@@ -169,7 +220,8 @@
 
 /* dá um respiro extra nas grades para não ficarem escondidas sob o painel */
 .grid-scroller.has-unalloc-sticky {
-  padding-bottom: 180px; /* será ajustado via JS com a altura real do painel */
+  padding-bottom: 180px;
+  /* será ajustado via JS com a altura real do painel */
 }
 
 /* === Badges de conflito === */
@@ -179,7 +231,8 @@
   position: absolute;
   top: 4px;
   right: 4px;
-  background: #fecaca; /* vermelho claro */
+  background: #fecaca;
+  /* vermelho claro */
   color: #991b1b;
   font-size: 10px;
   padding: 1px 4px;
@@ -190,16 +243,20 @@
 
 /* professor */
 .conflict-badge-teacher {
-  background: #fecaca; /* vermelho */
+  background: #fecaca;
+  /* vermelho */
   color: #991b1b;
 }
 
 /* sala */
 .conflict-badge-room {
-  background: #ddd6fe; /* lilás claro */
+  background: #ddd6fe;
+  /* lilás claro */
   color: #5b21b6;
-  top: 20px; /* desloca um pouco pra não sobrepor o de professor */
-  z-index: 11; /* fica acima */
+  top: 20px;
+  /* desloca um pouco pra não sobrepor o de professor */
+  z-index: 11;
+  /* fica acima */
 }
 
 /* blocos */
@@ -207,31 +264,51 @@
   outline: 2px solid #dc2626;
   outline-offset: -2px;
 }
+
 .conflict-room {
   outline: 2px solid #7c3aed;
   outline-offset: -2px;
 }
 
 /* mantém as bordas de conflito */
-.conflict-teacher { outline: 2px solid #dc2626; outline-offset: -2px; } /* vermelho */
-.conflict-room    { outline: 2px solid #7c3aed; outline-offset: -2px; } /* roxo  */
+.conflict-teacher {
+  outline: 2px solid #dc2626;
+  outline-offset: -2px;
+}
+
+/* vermelho */
+.conflict-room {
+  outline: 2px solid #7c3aed;
+  outline-offset: -2px;
+}
+
+/* roxo  */
 
 /* badge base: só um “⚠” pequeno no canto, sem fundo invasivo */
 .conflict-badge {
   position: absolute;
   right: 4px;
-  width: 16px; height: 16px;
+  width: 16px;
+  height: 16px;
   line-height: 16px;
   font-size: 12px;
   text-align: center;
   pointer-events: none;
   z-index: 11;
-  color: #111827;            /* cinza-900 p/ bom contraste */
-  background: #ffffffcc;     /* leve fundo branco translúcido para legibilidade */
+  color: #111827;
+  /* cinza-900 p/ bom contraste */
+  background: #ffffffcc;
+  /* leve fundo branco translúcido para legibilidade */
   border-radius: 3px;
-  box-shadow: 0 0 0 1px #e5e7eb; /* borda fininha (tailwind gray-200) */
+  box-shadow: 0 0 0 1px #e5e7eb;
+  /* borda fininha (tailwind gray-200) */
 }
 
 /* professor e sala ficam “empilhados” verticalmente no canto direito */
-.conflict-badge-teacher { top: 4px;  }
-.conflict-badge-room    { top: 22px; }
+.conflict-badge-teacher {
+  top: 4px;
+}
+
+.conflict-badge-room {
+  top: 22px;
+}
