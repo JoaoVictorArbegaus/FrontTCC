@@ -6,13 +6,50 @@ function bandColor(b) {
       : 'bg-purple-500';
 }
 
-function loadConsolidated() {
-  const raw = localStorage.getItem('consolidatedSchedule');
-  if (!raw) {
-    alert("Nenhum cronograma consolidado encontrado.\nVolte para a página de edição e consolide.");
+/* 1) Helper para pegar ?file=... da URL */
+function getQueryParam(name) {
+  try {
+    const u = new URL(window.location.href);
+    return u.searchParams.get(name);
+  } catch {
     return null;
   }
-  return JSON.parse(raw);
+}
+
+/* 2) Carregador “flex”: prioriza ?file=..., senão localStorage */
+async function loadConsolidated() {
+  const file = getQueryParam('file');
+
+  // a) Se vier file na URL, busca direto no backend
+  if (file) {
+    try {
+      const url = `${location.origin}/FrontTCC/api/get_schedule.php?file=${encodeURIComponent(file)}`;
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      // opcional: marca no subtítulo qual arquivo está sendo exibido
+      const sub = document.getElementById('viz-subtitle');
+      if (sub) sub.textContent = (sub.textContent ? sub.textContent + ' • ' : '') + `Arquivo: ${file}`;
+      return data;
+    } catch (e) {
+      console.error('Falha ao carregar arquivo da URL:', e);
+      alert('Não foi possível abrir este horário (arquivo ausente ou inválido).');
+      return null;
+    }
+  }
+
+  // b) Fallback: localStorage (fluxo atual)
+  try {
+    const raw = localStorage.getItem('consolidatedSchedule');
+    if (!raw) {
+      alert("Nenhum cronograma consolidado encontrado.\nVolte para a página de edição e consolide.");
+      return null;
+    }
+    return JSON.parse(raw);
+  } catch {
+    alert("Consolidado inválido no navegador. Refaça a visualização a partir da tela de edição.");
+    return null;
+  }
 }
 
 function lessonMarkup(lesson, subjectById, classById, opts = {}) {
@@ -23,13 +60,12 @@ function lessonMarkup(lesson, subjectById, classById, opts = {}) {
     ? (classById?.[lesson.classId]?.name || lesson.classId || '')
     : '';
 
-  // badge opcional com a turma (fica embaixo do código da matéria)
   return `
     <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm">
       <span>${abbr}</span>
       ${showClass && classLabel
-      ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
-      : ''}
+        ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
+        : ''}
     </div>`;
 }
 
@@ -428,8 +464,8 @@ function wireFilters(data) {
 }
 
 /* ---------- Boot ---------- */
-function initViz() {
-  const data = loadConsolidated();
+async function initViz() {
+  const data = await loadConsolidated();   // << agora é assíncrono
   if (!data) return;
   populateFilters(data);
   wireFilters(data);

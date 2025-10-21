@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
@@ -8,9 +9,12 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* o zoom escala a área abaixo mantendo a âncora no canto superior esquerdo */
-    #viz-zoom-wrapper { transform-origin: 0 0; }
+    #viz-zoom-wrapper {
+      transform-origin: 0 0;
+    }
   </style>
 </head>
+
 <body class="bg-gray-50 p-6">
   <div class="max-w-full mx-auto">
     <div class="bg-white rounded-lg shadow-lg p-6">
@@ -106,6 +110,14 @@
             opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
             $sel.appendChild(opt);
           });
+
+          const url = new URL(location.href);
+          const fileFromURL = url.searchParams.get('file'); // ex: "horario_...json"
+          if (fileFromURL) {
+            // tenta selecionar exatamente o mesmo nome retornado em item.file
+            $sel.value = fileFromURL;
+          }
+
         }
       }
 
@@ -127,7 +139,7 @@
 
       // Se não houver consolidado no LS, tenta fallback no ag_latest.json
       let hasLS = false;
-      try { hasLS = !!localStorage.getItem(KEY); } catch {}
+      try { hasLS = !!localStorage.getItem(KEY); } catch { }
 
       if (!hasLS) {
         try {
@@ -139,7 +151,7 @@
             localStorage.setItem(KEY, JSON.stringify(consolidated));
             hasLS = true;
           }
-        } catch {}
+        } catch { }
       }
 
       // Injeção protegida do vizualizar.js (apenas 1x)
@@ -167,9 +179,9 @@
       const Z_STEP = 0.1;
       const Z_KEY = 'vizZoom';
 
-      const $wrap  = document.getElementById('viz-zoom-wrapper');
-      const $out   = document.getElementById('viz-zoom-out');
-      const $in    = document.getElementById('viz-zoom-in');
+      const $wrap = document.getElementById('viz-zoom-wrapper');
+      const $out = document.getElementById('viz-zoom-out');
+      const $in = document.getElementById('viz-zoom-in');
       const $reset = document.getElementById('viz-zoom-reset');
       const $indic = document.getElementById('viz-zoom-indicator');
 
@@ -185,14 +197,14 @@
         $wrap.style.transform = `scale(${z})`;
         $wrap.style.width = `${100 / z}%`;
         if ($indic) $indic.textContent = `${Math.round(z * 100)}%`;
-        try { localStorage.setItem(Z_KEY, String(z)); } catch {}
+        try { localStorage.setItem(Z_KEY, String(z)); } catch { }
       }
 
       let z = getSavedZoom();
       applyZoom(z);
 
-      if ($out)   $out.addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); });
-      if ($in)    $in .addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); });
+      if ($out) $out.addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); });
+      if ($in) $in.addEventListener('click', () => { z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); });
       if ($reset) $reset.addEventListener('click', () => { z = 1; applyZoom(z); });
 
       document.addEventListener('keydown', (e) => {
@@ -201,10 +213,11 @@
         if (!mod) return;
 
         if (e.key === '=' || e.key === '+') { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) + Z_STEP); applyZoom(z); }
-        else if (e.key === '-')             { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); }
-        else if (e.key === '0')             { e.preventDefault(); z = 1; applyZoom(z); }
+        else if (e.key === '-') { e.preventDefault(); z = clamp((Number(localStorage.getItem(Z_KEY)) || z) - Z_STEP); applyZoom(z); }
+        else if (e.key === '0') { e.preventDefault(); z = 1; applyZoom(z); }
       });
     })();
   </script>
 </body>
+
 </html>
