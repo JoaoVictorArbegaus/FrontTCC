@@ -453,22 +453,34 @@ function getGroupCells(cell) {
 }
 
 function removeGroupCells(cells) {
-  // remove registro do grupo (se esta remoção contém a head)
+  // se a remoção contém a head: remove do índice
   const head = cells.find(c => c.classList.contains('block-head'));
   if (head && head.dataset.group) {
     groupHeads.delete(head.dataset.group);
   }
 
   cells.forEach(c => {
-    c.classList.remove('occupied', 'block-head', 'block-tail', 'ring-2', 'ring-amber-400', 'conflict-teacher');
-    // remove badge de conflito se existir
-    const badge = c.querySelector?.('.conflict-badge');
-    if (badge) badge.remove();
+    // remove classes de ocupação e de conflito (prof e sala)
+    c.classList.remove(
+      'occupied', 'block-head', 'block-tail',
+      'ring-2', 'ring-amber-400',
+      'conflict-teacher', 'conflict-room'
+    );
 
+    // remove todos os badges de conflito que possam ter sobrado
+    c.querySelectorAll('.conflict-badge, .conflict-badge-teacher, .conflict-badge-room')
+      .forEach(el => el.remove());
+
+    // reset de estilos inline que podem ter sido setados no head
     c.style.gridColumnEnd = 'span 1';
     c.style.display = '';
+    c.style.position = '';   // ← importante p/ não ficar “preso” como relativo
     c.innerHTML = '';
+
+    // title default
     c.title = `${classById[c.dataset.turmaId]?.name ?? c.dataset.turmaId} - Clique para alocar`;
+
+    // limpa datasets
     delete c.dataset.group;
     delete c.dataset.lesson;
   });
@@ -476,20 +488,26 @@ function removeGroupCells(cells) {
   setDirty(true);
 }
 
-function recomputeTeacherConflicts() {
-  // 1) limpa marcas e badges anteriores
+
+function recomputeConflicts() {
+  // 1) Limpeza de marcas e badges anteriores
   for (const [, head] of groupHeads) {
-    head.classList.remove('conflict-teacher');
-    const b = head.querySelector('.conflict-badge');
-    if (b) b.remove();
+    head.classList.remove('conflict-teacher', 'conflict-room');
+
+    const bT = head.querySelector('.conflict-badge-teacher');
+    if (bT) bT.remove();
+    const bR = head.querySelector('.conflict-badge-room');
+    if (bR) bR.remove();
+
     if (head.dataset.lesson) {
       const l = JSON.parse(head.dataset.lesson);
       head.title = cellTitle(l);
     }
   }
 
-  // 2) indexa ocupações por professor (usando chave canônica), dia e período
-  const busy = {}; // busy[key][day][period] = Set(groups)
+  // 2) Index: professores e salas -> dia/período -> grupos
+  const busyTeacher = {}; // busyTeacher[key][day][period] = Set(groups)
+  const busyRoom = {};    // busyRoom[roomId][day][period] = Set(groups)
 
   for (const [group, head] of groupHeads) {
     if (!head.dataset.lesson) continue;
@@ -498,61 +516,103 @@ function recomputeTeacherConflicts() {
     const day = Number(head.dataset.dia);
     const start = Number(head.dataset.periodo);
     const dur = Number(lesson.duration || 1);
-    const tIds = Array.isArray(lesson.teacherIds) ? lesson.teacherIds : [];
 
+    // Professores
+    const tIds = Array.isArray(lesson.teacherIds) ? lesson.teacherIds : [];
     for (const tid of tIds) {
-      // chave canônica: id -> nome normalizado (ou fallback)
       const key =
         teacherKeyById[tid] ??
         normalizeName(teacherById[tid]?.name) ??
-        normalizeName(String(tid));  // <-- normaliza o próprio valor do array
+        normalizeName(String(tid));
 
-      if (!busy[key]) busy[key] = {};
-      if (!busy[key][day]) busy[key][day] = Array.from({ length: P }, () => new Set());
-
-      for (let k = 0; k < dur; k++) {
-        busy[key][day][start + k].add(group);
+      if (!busyTeacher[key]) busyTeacher[key] = {};
+      if (!busyTeacher[key][day]) {
+        busyTeacher[key][day] = Array.from({ length: P }, () => new Set());
       }
+      for (let k = 0; k < dur; k++) busyTeacher[key][day][start + k].add(group);
+    }
+
+    // Sala (se houver)
+    const roomId = lesson.roomId || null;
+    if (roomId) {
+      if (!busyRoom[roomId]) busyRoom[roomId] = {};
+      if (!busyRoom[roomId][day]) {
+        busyRoom[roomId][day] = Array.from({ length: P }, () => new Set());
+      }
+      for (let k = 0; k < dur; k++) busyRoom[roomId][day][start + k].add(group);
     }
   }
 
-  // 3) detecta conflitos (mesmo prof + mesmo dia/período com 2+ grupos)
-  const conflictGroups = new Set();
-  for (const key in busy) {
-    const days = busy[key];
+  // 3) Detectar conflitos (≥2 grupos no mesmo slot)
+  const conflictTeacherGroups = new Set();
+  for (const key in busyTeacher) {
+    const days = busyTeacher[key];
     for (const d in days) {
-      days[d].forEach(set => {
-        if (set.size > 1) set.forEach(g => conflictGroups.add(g));
-      });
+      days[d].forEach(set => { if (set.size > 1) set.forEach(g => conflictTeacherGroups.add(g)); });
     }
   }
 
-  // 4) aplica destaque aos grupos em conflito
-  for (const g of conflictGroups) {
-    const head = groupHeads.get(g);
-    if (!head) continue;
+  const conflictRoomGroups = new Set();
+  for (const roomId in busyRoom) {
+    const days = busyRoom[roomId];
+    for (const d in days) {
+      days[d].forEach(set => { if (set.size > 1) set.forEach(g => conflictRoomGroups.add(g)); });
+    }
+  }
 
-    head.classList.add('conflict-teacher');
-
-    let badge = head.querySelector('.conflict-badge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'conflict-badge';
-      badge.textContent = '⚠ Prof. em conflito';
+  // 4) Aplicar destaque e badges (apenas ícone)
+  const applyBadge = (head, cls, badgeCls) => {
+    head.classList.add(cls);
+    head.style.position = 'relative';
+    if (!head.querySelector(`.${badgeCls}`)) {
+      const badge = document.createElement('span');
+      badge.className = `conflict-badge ${badgeCls}`;
+      badge.textContent = '⚠'; // apenas o ícone
       head.appendChild(badge);
     }
+  };
 
-    if (head.dataset.lesson) {
-      const l = JSON.parse(head.dataset.lesson);
-      head.title = '⚠ CONFLITO DE PROFESSOR\n' + cellTitle(l);
-    }
+  const touched = new Set();
+
+  for (const g of conflictTeacherGroups) {
+    const head = groupHeads.get(g);
+    if (!head) continue;
+    applyBadge(head, 'conflict-teacher', 'conflict-badge-teacher');
+    touched.add(g);
   }
+
+  for (const g of conflictRoomGroups) {
+    const head = groupHeads.get(g);
+    if (!head) continue;
+    applyBadge(head, 'conflict-room', 'conflict-badge-room');
+    touched.add(g);
+  }
+
+  // 5) Ajustar o title (tooltip) para incluir avisos
+  for (const g of touched) {
+    const head = groupHeads.get(g);
+    if (!head || !head.dataset.lesson) continue;
+    const l = JSON.parse(head.dataset.lesson);
+    const lines = [];
+    if (conflictTeacherGroups.has(g)) lines.push('⚠ CONFLITO DE PROFESSOR');
+    if (conflictRoomGroups.has(g)) lines.push('⚠ CONFLITO DE SALA');
+    lines.push(cellTitle(l));
+    head.title = lines.join('\n');
+  }
+
   console.debug(
     '[conflicts] heads:', groupHeads.size,
-    'marcados:', document.querySelectorAll('.conflict-teacher').length
-  )
+    'prof-conf:', conflictTeacherGroups.size,
+    'room-conf:', conflictRoomGroups.size
+  );
 }
-window.recomputeTeacherConflicts = recomputeTeacherConflicts; // expõe para o console
+
+
+// manter compat com chamadas antigas
+function recomputeTeacherConflicts() { return recomputeConflicts(); }
+window.recomputeTeacherConflicts = recomputeTeacherConflicts;
+window.recomputeConflicts = recomputeConflicts;
+
 
 
 /* ----------------- Pick da grade (pegar/mover/soltar) ----------------- */
