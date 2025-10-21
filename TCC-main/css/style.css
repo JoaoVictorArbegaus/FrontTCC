@@ -171,3 +171,67 @@
 .grid-scroller.has-unalloc-sticky {
   padding-bottom: 180px; /* será ajustado via JS com a altura real do painel */
 }
+
+/* === Badges de conflito === */
+
+/* base (professor) */
+.conflict-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #fecaca; /* vermelho claro */
+  color: #991b1b;
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* professor */
+.conflict-badge-teacher {
+  background: #fecaca; /* vermelho */
+  color: #991b1b;
+}
+
+/* sala */
+.conflict-badge-room {
+  background: #ddd6fe; /* lilás claro */
+  color: #5b21b6;
+  top: 20px; /* desloca um pouco pra não sobrepor o de professor */
+  z-index: 11; /* fica acima */
+}
+
+/* blocos */
+.conflict-teacher {
+  outline: 2px solid #dc2626;
+  outline-offset: -2px;
+}
+.conflict-room {
+  outline: 2px solid #7c3aed;
+  outline-offset: -2px;
+}
+
+/* mantém as bordas de conflito */
+.conflict-teacher { outline: 2px solid #dc2626; outline-offset: -2px; } /* vermelho */
+.conflict-room    { outline: 2px solid #7c3aed; outline-offset: -2px; } /* roxo  */
+
+/* badge base: só um “⚠” pequeno no canto, sem fundo invasivo */
+.conflict-badge {
+  position: absolute;
+  right: 4px;
+  width: 16px; height: 16px;
+  line-height: 16px;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 11;
+  color: #111827;            /* cinza-900 p/ bom contraste */
+  background: #ffffffcc;     /* leve fundo branco translúcido para legibilidade */
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #e5e7eb; /* borda fininha (tailwind gray-200) */
+}
+
+/* professor e sala ficam “empilhados” verticalmente no canto direito */
+.conflict-badge-teacher { top: 4px;  }
+.conflict-badge-room    { top: 22px; }
