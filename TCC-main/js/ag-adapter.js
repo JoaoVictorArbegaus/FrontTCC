@@ -122,8 +122,68 @@
       });
     });
 
-    // 5) initialUnallocated vazio por enquanto
+  // 5) initialUnallocated vazio por enquanto
     const initialUnallocated = [];
+
+    // NOVO: Processar excess_lessons para initialUnallocated (cartões "Não alocados")
+if (Array.isArray(agPayload.excess_lessons) && agPayload.excess_lessons.length > 0) {
+  agPayload.excess_lessons.forEach((excess, idx) => {
+    const classId = String(excess.class_id);
+
+    // 1) garantir que a turma exista
+    uniquePush(classMap, classes, classId, id => ({
+      id, name: excess.class_name || String(excess.class_id),
+    }));
+
+    // 2) garantir que matéria/profs/salas existam nas tabelas
+    const subjName = excess.subject_name || '---';
+    uniquePush(subjMap, subjects, subjName, name => ({
+      id: 'S:' + name, name, abbr: makeAbbr(name),
+    }));
+
+    (excess.teachers || []).forEach(tname => {
+      uniquePush(teacherMap, teachers, tname, name => ({
+        id: 'T:' + name, name,
+      }));
+    });
+
+    (excess.classrooms || []).forEach(rname => {
+      uniquePush(roomMap, rooms, rname, name => ({
+        id: 'R:' + name, name,
+      }));
+    });
+
+    // 3) lookups (id <- nome) para montar os campos esperados pelo card
+    const subj = subjMap.get(subjName);
+    const teacherIds = (excess.teachers || []).map(n => (teacherMap.get(n)?.id ?? ('T:' + n)));
+    const roomIdsArr = (excess.classrooms || []).map(n => (roomMap.get(n)?.id ?? ('R:' + n)));
+    const roomId = roomIdsArr[0]; // o componente costuma ler roomId (singular)
+
+    // 4) criar um ID estável para o item "não alocado"
+    //    prioridade: lesson_id vindo do AG; fallback determinístico.
+    const id =
+      (excess.lesson_id != null && excess.lesson_id !== '')
+        ? `u:${excess.lesson_id}`
+        : `u:${classId}:${subj?.id || ('S:' + subjName)}:${idx}`;
+
+    // 5) montar o objeto no formato que a UI lê
+    initialUnallocated.push({
+      id,                    // <— NECESSÁRIO para o badge "id: ..."
+      classId,               // usado para resolver nome da turma no título
+      subjectId: subj?.id || ('S:' + subjName),
+      teacherIds,            // array de IDs "T:*"
+      roomId,                // <— singular para exibir a sala
+      roomIds: roomIdsArr,   // (opcional) mantém também a lista completa
+      duration: Number(excess.duration || excess.duration_periods || 1),
+      ppw: Number(excess.ppw || 0),
+      reason: excess.reason || 'unknown',
+      // campos de apoio (fallback de texto – a UI pode nem usar)
+      lessonId: excess.lesson_id ?? null,
+      subjectName: subjName,
+      className: excess.class_name || String(excess.class_id),
+    });
+  });
+}
 
     return { meta, classes, teachers, subjects, rooms, initialAllocations, initialUnallocated, preAllocations };
   }
