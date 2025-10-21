@@ -38,16 +38,46 @@
 }
 
 /* Para a tela de edição */
-#schedule-grid .turma-row > .day-column:nth-of-type(odd)  .time-slot,
-#viz-grid .turma-row > .day-column:nth-of-type(odd)  .time-slot {
+#schedule-grid .turma-row>.day-column:nth-of-type(odd) .time-slot,
+#viz-grid .turma-row>.day-column:nth-of-type(odd) .time-slot {
   background-color: var(--day-bg-a);
 }
 
-#schedule-grid .turma-row > .day-column:nth-of-type(even) .time-slot,
-#viz-grid .turma-row > .day-column:nth-of-type(even) .time-slot {
+#schedule-grid .turma-row>.day-column:nth-of-type(even) .time-slot,
+#viz-grid .turma-row>.day-column:nth-of-type(even) .time-slot {
   background-color: var(--day-bg-b);
 }
 
+/* Cada coluna de dia poderá renderizar a linha */
+#schedule-grid .day-column,
+#viz-grid .day-column {
+  position: relative;
+}
+
+/* Linha só no limite direito de cada dia, exceto o último */
+#schedule-grid .turma-row>.day-column:not(:last-child)::after,
+#viz-grid .turma-row>.day-column:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -0.5px;
+  /* evita “buraco” por subpixel; ajuste p/ o seu layout */
+  width: 1px;
+  height: 100%;
+  background: #292b30;
+  /* gray-200, bem sutil */
+  pointer-events: none;
+  /* não interfere com cliques */
+  z-index: 1;
+  /* acima do fundo, mas abaixo dos cards */
+}
+
+/* garante que os blocos fiquem acima da linha */
+#schedule-grid .time-slot.occupied,
+#viz-grid .time-slot.occupied {
+  position: relative;
+  z-index: 2;
+}
 
 
 
