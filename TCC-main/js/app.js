@@ -337,6 +337,12 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
+function buildShareUrl(file) {
+  // ajuste já feito por você:
+  return `${location.origin}/FrontTCC/TCC-main/vizualizar.html?file=${encodeURIComponent(file)}`;
+}
+
+
 
 /* ----------------- Render cards (não alocadas) ----------------- */
 function renderUnallocated() {
@@ -1293,15 +1299,6 @@ if (reloadBtn) {
 
 
 
-// Botão Visualizar — monta o consolidado e abre a tela de visualização
-const btnVisualizar = document.getElementById('btn-visualizar');
-if (btnVisualizar) {
-  btnVisualizar.addEventListener('click', () => {
-    const consolidated = buildConsolidated();
-    localStorage.setItem('consolidatedSchedule', JSON.stringify(consolidated));
-    window.location.href = 'vizualizar.html';
-  });
-}
 
 // Botão Salvar — envia o JSON para o PHP salvar no storage/schedules
 const btnSalvar = document.getElementById('btn-salvar');
@@ -1317,8 +1314,56 @@ if ($btnEditar) {
   });
 }
 
+const btnShare = document.getElementById('btn-compartilhar'); // novo botão
+if (btnShare) {
+  btnShare.addEventListener('click', async () => {
+    const sel = document.getElementById('ed-saved-select');
+    const file = sel?.value || '';
+
+    if (!file) {
+      alert('Selecione um horário salvo para compartilhar.');
+      return;
+    }
+
+    // Apenas AVISO se houver alterações não salvas
+    if (isReallyDirty()) {
+      const salvarAgora = confirm(
+        'Você tem alterações não salvas.\n\n' +
+        'O link abrirá o arquivo SALVO (pode não refletir as mudanças atuais).\n\n' +
+        'Deseja salvar agora antes de compartilhar?'
+      );
+      if (salvarAgora) {
+        // salva (e a própria rotina já atualiza o select/lista)
+        await salvarHorario();
+        return; // após salvar, o usuário clica novamente em "Compartilhar"
+      }
+      // Se escolher não salvar, seguimos com o arquivo selecionado mesmo assim
+    }
+
+    const url = buildShareUrl(file);
+
+    // Copia para a área de transferência (fallback com prompt)
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast?.('🔗 Link copiado! Abrindo visualização…', 'info');
+    } catch {
+      prompt('Copie o link:', url);
+    }
+
+    // Abre em nova guia
+    window.open(url, '_blank');
+  });
+}
+
+
+
 // garantir estado inicial
 updateEditButtonState();
+updateShareButtonState();
+
+// quando trocar o select, atualiza o botão
+document.getElementById('ed-saved-select')?.addEventListener('change', updateShareButtonState);
+
 
 
 // === Zoom da grade ===

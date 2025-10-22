@@ -32,13 +32,6 @@
           <button id="viz-zoom-reset" class="px-2 py-1 border rounded">100%</button>
         </div>
 
-        <!-- Seleção de horários salvos -->
-        <div class="mb-4 flex items-center gap-2">
-          <label class="text-sm text-gray-700">Horário salvo:</label>
-          <select id="viz-saved-select" class="border rounded px-2 py-1 min-w-[280px]"></select>
-          <button id="viz-load-saved" class="px-3 py-1 border rounded">Carregar</button>
-        </div>
-
         <!-- Filtros -->
         <div class="flex items-end gap-3">
           <div>
@@ -74,17 +67,10 @@
   <script src="js/ag-adapter.js"></script>
   <script src="js/data.js"></script>
 
-  <!-- Boot único: popula select, trata 'Carregar', fallback e injeta o viewer 1x -->
+  <!-- Boot: exige ?file=... e injeta o viewer lendo do LS -->
   <script>
     (async function () {
       const KEY = 'consolidatedSchedule';
-
-      async function listSaved() {
-        try {
-          const r = await fetch(`${location.origin}/FrontTCC/api/list_schedules.php`, { cache: 'no-store' });
-          return r.ok ? await r.json() : [];
-        } catch { return []; }
-      }
 
       async function getSaved(file) {
         const url = `${location.origin}/FrontTCC/api/get_schedule.php?file=${encodeURIComponent(file)}`;
@@ -93,83 +79,63 @@
         return await r.json();
       }
 
-      // Preenche o select com os salvos
-      const $sel = document.getElementById('viz-saved-select');
-      const savedList = await listSaved();
-      if ($sel) {
-        $sel.innerHTML = '';
-        if (!savedList.length) {
-          const opt = document.createElement('option');
-          opt.value = '';
-          opt.textContent = '— nenhum arquivo salvo —';
-          $sel.appendChild(opt);
-        } else {
-          savedList.slice().reverse().forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = item.file;
-            opt.textContent = `${item.name} — ${new Date(item.savedAt).toLocaleString()}`;
-            $sel.appendChild(opt);
-          });
+      // 1) Exige ?file=... na URL
+      const params = new URLSearchParams(location.search);
+      const wantedFile = params.get('file');
 
-          const url = new URL(location.href);
-          const fileFromURL = url.searchParams.get('file'); // ex: "horario_...json"
-          if (fileFromURL) {
-            // tenta selecionar exatamente o mesmo nome retornado em item.file
-            $sel.value = fileFromURL;
-          }
+      if (!wantedFile) {
+        alert('Este link está incompleto. Peça ao setor acadêmico um link com ?file=nome_do_arquivo.json');
+        return;
+      }
 
+      try {
+        // 2) Busca o consolidado desse arquivo e grava no LS (consumido por vizualizar.js)
+        const consolidated = await getSaved(wantedFile);
+        try { localStorage.setItem(KEY, JSON.stringify(consolidated)); } catch { }
+
+        // 4) Injeta o viewer 1x
+        if (!document.getElementById('viz-script')) {
+          const s = document.createElement('script');
+          s.id = 'viz-script';
+          s.src = 'js/vizualizar.js';
+          document.body.appendChild(s);
         }
+      } catch (e) {
+        console.error(e);
+        alert('Não foi possível carregar este horário. Ele pode ter sido removido.');
       }
+    })();
 
-      // Botão Carregar: grava no LS e recarrega (não injeta script novamente)
-      const $btnLoad = document.getElementById('viz-load-saved');
-      if ($btnLoad) {
-        $btnLoad.addEventListener('click', async () => {
-          const file = $sel.value;
-          if (!file) return alert('Selecione um arquivo salvo.');
-          try {
-            const consolidated = await getSaved(file);
-            localStorage.setItem(KEY, JSON.stringify(consolidated));
-            location.reload(); // evita duplicar variáveis do vizualizar.js
-          } catch (e) {
-            alert('Não foi possível carregar o horário salvo.');
-          }
-        });
-      }
 
-      // Se não houver consolidado no LS, tenta fallback no ag_latest.json
-      let hasLS = false;
-      try { hasLS = !!localStorage.getItem(KEY); } catch { }
+  </script>
 
-      if (!hasLS) {
-        try {
-          const url = `${location.origin}/FrontTCC/api/storage/ag_latest.json?v=${Date.now()}`;
-          const resp = await fetch(url, { cache: 'no-store' });
-          if (resp.ok && window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
-            const ag = await resp.json();
-            const consolidated = window.AG_ADAPTER.adaptAGForViewer(window.EDITOR_DATA.meta, ag);
-            localStorage.setItem(KEY, JSON.stringify(consolidated));
-            hasLS = true;
-          }
-        } catch { }
-      }
+  <script>
+    (async () => {
+      const params = new URLSearchParams(location.search);
+      const fileName = params.get('file');
+      if (!fileName) return;
 
-      // Injeção protegida do vizualizar.js (apenas 1x)
-      function startViewer() {
-        if (document.getElementById('viz-script')) return; // guard
-        const s = document.createElement('script');
-        s.id = 'viz-script';
-        s.src = 'js/vizualizar.js';
-        document.body.appendChild(s);
-      }
+      const titleEl = document.querySelector('h1');
+      if (!titleEl) return;
 
-      if (hasLS) {
-        startViewer();
-      } else {
-        alert('Nenhum cronograma consolidado encontrado. Volte para a tela de edição e clique em "Visualizar".');
+      try {
+        const resp = await fetch(`${location.origin}/FrontTCC/api/list_schedules.php`, { cache: 'no-store' });
+        const list = resp.ok ? await resp.json() : [];
+        const item = list.find(x => x.file === fileName);
+
+        if (item && item.name) {
+          titleEl.textContent = `Cronograma: ${item.name}`;
+        } else {
+          // fallback: usa o nome do arquivo (sem .json)
+          titleEl.textContent = `Cronograma: ${fileName.replace(/\.json$/i, '')}`;
+        }
+      } catch {
+        titleEl.textContent = `Cronograma: ${fileName.replace(/\.json$/i, '')}`;
       }
     })();
   </script>
+
+
 
   <!-- Controle de Zoom -->
   <script>
