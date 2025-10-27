@@ -52,38 +52,44 @@ async function loadConsolidated() {
   }
 }
 
-function lessonMarkup(lesson, subjectById, classById, teacherById, opts = {}) {
+function lessonMarkup(lesson, subjectById, classById, teacherById, roomById, opts = {}) {
   const subj = subjectById[lesson.subjectId];
   const abbr = subj?.abbr || (subj?.name?.slice(0, 3) ?? '---').toUpperCase();
 
   const showClass = !!opts.withClassBadge;
-  const showTeacher = !!opts.withTeacherBadge;
+  const classLabel = showClass ? (classById?.[lesson.classId]?.name || lesson.classId || '') : '';
 
-  const classLabel = showClass
-    ? (classById?.[lesson.classId]?.name || lesson.classId || '')
+  const showTeacherBadges = !!opts.withTeacherBadges;
+  const showRoomBadge = !!opts.withRoomBadge;
+
+  const teacherBadges = showTeacherBadges
+    ? (lesson.teacherIds || [])
+      .map(tid => {
+        const name = teacherById?.[tid]?.name || tid;
+        return `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">${name}</span>`;
+      })
+      .join('')
     : '';
 
-  let teacherLabel = '';
-  if (showTeacher) {
-    const names = (lesson.teacherIds || [])
-      .map(id => (teacherById && teacherById[id]?.name) || id)
-      .filter(Boolean);
-    teacherLabel = names.join(', ');
-  }
+  const roomBadge = showRoomBadge && lesson.roomId
+    ? `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">${roomById?.[lesson.roomId]?.name || lesson.roomId
+    }</span>`
+    : '';
 
   return `
-    <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm text-center">
+    <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm">
       <span>${abbr}</span>
       ${showClass && classLabel
       ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
       : ''
     }
-      ${showTeacher && teacherLabel
-      ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">${teacherLabel}</span>`
+      ${(teacherBadges || roomBadge)
+      ? `<div class="mt-1 flex flex-wrap items-center justify-center gap-1">${teacherBadges}${roomBadge}</div>`
       : ''
     }
     </div>`;
 }
+
 
 function cellTitle(lesson, classById, subjectById, teacherById, roomById) {
   const cls = classById[lesson.classId]?.name ?? lesson.classId;
@@ -178,13 +184,23 @@ function baseCell(turmaId, dia, periodo) {
 }
 
 /** Aplica o “bloco único” na visualização (sem eventos de clique). */
-function placeBlockViz(turmaId, day, start, lesson, subjectById, classById, teacherById, roomById, opts = {}) {
+function placeBlockViz(
+  turmaId,
+  day,
+  start,
+  lesson,
+  subjectById,
+  classById,
+  teacherById,
+  roomById,
+  opts = {}
+) {
   for (let k = 0; k < lesson.duration; k++) {
     const cell = vizMap[turmaId][day][start + k];
     if (k === 0) {
       cell.classList.add('occupied', 'block-head');
       cell.style.gridColumnEnd = `span ${lesson.duration}`;
-      cell.innerHTML = lessonMarkup(lesson, subjectById, classById, teacherById, opts);
+      cell.innerHTML = lessonMarkup(lesson, subjectById, classById, teacherById, roomById, opts);
       cell.title = cellTitle(lesson, classById, subjectById, teacherById, roomById);
       cell.style.display = '';
     } else {
@@ -196,6 +212,7 @@ function placeBlockViz(turmaId, day, start, lesson, subjectById, classById, teac
     }
   }
 }
+
 
 /* ---------- Grade ---------- */
 // FULL: linhas = turmas; colunas = dias (cada dia 12 períodos)
@@ -279,11 +296,14 @@ function renderGridSingleClass(data, classId) {
 
   allocations
     .filter(a => a.classId === classId)
-    .forEach(a => placeBlockViz(
-      a.classId, a.day, a.start, a,
-      subjectById, classById, teacherById, roomById,
-      { withTeacherBadge: true }  
-    ));
+    .forEach(a =>
+      placeBlockViz(
+        a.classId, a.day, a.start, a,
+        subjectById, classById, teacherById, roomById,
+        { withTeacherBadges: true, withRoomBadge: true }
+      )
+    );
+
 
 }
 
@@ -425,7 +445,7 @@ function renderGridSingleTeacher(data, teacherId) {
       block.style.padding = '2px 4px';
       block.style.pointerEvents = 'auto'; // permitir tooltip
 
-      block.innerHTML = lessonMarkup(ev, subjectById, classById, teacherById, { withClassBadge: true });
+      block.innerHTML = lessonMarkup(ev, subjectById, classById, teacherById, roomById, { withClassBadge: true });
       block.title = cellTitle(ev, classById, subjectById, teacherById, roomById);
 
       overlay.appendChild(block);
