@@ -52,20 +52,36 @@ async function loadConsolidated() {
   }
 }
 
-function lessonMarkup(lesson, subjectById, classById, opts = {}) {
+function lessonMarkup(lesson, subjectById, classById, teacherById, opts = {}) {
   const subj = subjectById[lesson.subjectId];
   const abbr = subj?.abbr || (subj?.name?.slice(0, 3) ?? '---').toUpperCase();
+
   const showClass = !!opts.withClassBadge;
+  const showTeacher = !!opts.withTeacherBadge;
+
   const classLabel = showClass
     ? (classById?.[lesson.classId]?.name || lesson.classId || '')
     : '';
 
+  let teacherLabel = '';
+  if (showTeacher) {
+    const names = (lesson.teacherIds || [])
+      .map(id => (teacherById && teacherById[id]?.name) || id)
+      .filter(Boolean);
+    teacherLabel = names.join(', ');
+  }
+
   return `
-    <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm">
+    <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm text-center">
       <span>${abbr}</span>
       ${showClass && classLabel
-        ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
-        : ''}
+      ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
+      : ''
+    }
+      ${showTeacher && teacherLabel
+      ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 border border-purple-200">${teacherLabel}</span>`
+      : ''
+    }
     </div>`;
 }
 
@@ -168,7 +184,7 @@ function placeBlockViz(turmaId, day, start, lesson, subjectById, classById, teac
     if (k === 0) {
       cell.classList.add('occupied', 'block-head');
       cell.style.gridColumnEnd = `span ${lesson.duration}`;
-      cell.innerHTML = lessonMarkup(lesson, subjectById, classById, opts);
+      cell.innerHTML = lessonMarkup(lesson, subjectById, classById, teacherById, opts);
       cell.title = cellTitle(lesson, classById, subjectById, teacherById, roomById);
       cell.style.display = '';
     } else {
@@ -263,7 +279,12 @@ function renderGridSingleClass(data, classId) {
 
   allocations
     .filter(a => a.classId === classId)
-    .forEach(a => placeBlockViz(a.classId, a.day, a.start, a, subjectById, classById, teacherById, roomById));
+    .forEach(a => placeBlockViz(
+      a.classId, a.day, a.start, a,
+      subjectById, classById, teacherById, roomById,
+      { withTeacherBadge: true }  
+    ));
+
 }
 
 /* ---------- Lógicas de CONFLITO para o modo Professor ---------- */
@@ -404,7 +425,7 @@ function renderGridSingleTeacher(data, teacherId) {
       block.style.padding = '2px 4px';
       block.style.pointerEvents = 'auto'; // permitir tooltip
 
-      block.innerHTML = lessonMarkup(ev, subjectById, classById, { withClassBadge: true });
+      block.innerHTML = lessonMarkup(ev, subjectById, classById, teacherById, { withClassBadge: true });
       block.title = cellTitle(ev, classById, subjectById, teacherById, roomById);
 
       overlay.appendChild(block);
