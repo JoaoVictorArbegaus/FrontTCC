@@ -23,6 +23,10 @@
       <!-- Botoes -->
       <div id="top-toolbar" class="mb-4 flex justify-end gap-2">
 
+        <button id="btn-add-lessons" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded">
+          Adicionar aulas
+        </button>
+
         <button id="btn-editar"
           class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
           disabled>
@@ -185,6 +189,103 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Adicionar Aulas -->
+  <div id="add-lessons-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-xl p-5">
+      <h3 class="text-xl font-semibold mb-4">Adicionar aulas (vão para "Não alocadas")</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Turma -->
+        <label class="block text-sm col-span-1 md:col-span-2">
+          <span class="text-gray-700">Turma</span>
+          <select id="al-class" class="mt-1 w-full border rounded px-2 py-1"></select>
+        </label>
+
+        <!-- Matéria -->
+        <div class="col-span-1">
+          <span class="block text-sm text-gray-700 mb-1">Matéria</span>
+          <div class="flex items-center gap-4 text-sm mb-2">
+            <label class="inline-flex items-center gap-1">
+              <input type="radio" name="al-subj-mode" value="existing" checked>
+              <span>Usar existente</span>
+            </label>
+            <label class="inline-flex items-center gap-1">
+              <input type="radio" name="al-subj-mode" value="new">
+              <span>Criar nova</span>
+            </label>
+          </div>
+
+          <div id="al-subj-existing">
+            <select id="al-subject-select" class="w-full border rounded px-2 py-1"></select>
+          </div>
+
+          <div id="al-subj-new" class="hidden space-y-2">
+            <input id="al-subject-name" type="text" placeholder="Nome da matéria"
+              class="w-full border rounded px-2 py-1">
+            <input id="al-subject-abbr" type="text" placeholder="Abreviação (opcional)"
+              class="w-40 border rounded px-2 py-1">
+          </div>
+        </div>
+
+        <!-- Professor(es) -->
+        <div class="col-span-1">
+          <span class="block text-sm text-gray-700 mb-1">Professor(es)</span>
+          <div class="flex items-center gap-4 text-sm mb-2">
+            <label class="inline-flex items-center gap-1">
+              <input type="radio" name="al-teach-mode" value="existing" checked>
+              <span>Usar existentes</span>
+            </label>
+            <label class="inline-flex items-center gap-1">
+              <input type="radio" name="al-teach-mode" value="new">
+              <span>Criar novo</span>
+            </label>
+          </div>
+
+          <div id="al-teach-existing">
+            <select id="al-teachers-select" multiple size="6" class="w-full border rounded px-2 py-1"></select>
+            <div class="text-xs text-gray-500 mt-1">Use Ctrl/Cmd para escolher vários.</div>
+          </div>
+
+          <div id="al-teach-new" class="hidden space-y-2">
+            <input id="al-teacher-name" type="text" placeholder="Nome do professor"
+              class="w-full border rounded px-2 py-1">
+            <input id="al-teacher-id" type="text" placeholder="ID curto (opcional)"
+              class="w-48 border rounded px-2 py-1">
+            <div class="text-xs text-gray-500">Se deixar o ID vazio, geramos automaticamente.</div>
+          </div>
+        </div>
+
+        <!-- Sala -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Sala (opcional)</span>
+          <select id="al-room" class="mt-1 w-full border rounded px-2 py-1">
+            <option value="">(sem sala)</option>
+          </select>
+        </label>
+
+        <!-- Duração -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Duração (períodos)</span>
+          <input id="al-duration" type="number" min="1" value="1" class="mt-1 w-32 border rounded px-2 py-1">
+        </label>
+
+        <!-- Quantidade -->
+        <label class="block text-sm">
+          <span class="text-gray-700">Quantidade de cards</span>
+          <input id="al-qty" type="number" min="1" max="50" value="1" class="mt-1 w-32 border rounded px-2 py-1">
+        </label>
+
+      </div>
+
+      <div class="mt-6 flex justify-end gap-2">
+        <button id="al-cancel" class="px-3 py-1 rounded border">Cancelar</button>
+        <button id="al-save" class="px-3 py-1 rounded bg-emerald-600 text-white">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Toast container -->
   <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-[9999]"></div>

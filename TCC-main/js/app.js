@@ -444,6 +444,7 @@ function placeBlock(turmaId, day, startPeriod, lesson) {
 }
 
 
+
 function getGroupCells(cell) {
   const turmaId = cell.dataset.turmaId;
   const day = Number(cell.dataset.dia);
@@ -973,6 +974,222 @@ init();
 
 
 const ROOT = `${location.origin}/FrontTCC`; // ajuste se sua raiz mudar
+
+/* ===== Helpers p/ IDs legíveis e únicos ===== */
+function slugifyId(s) {
+  return String(s || '')
+    .normalize('NFD').replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 24);
+}
+function ensureUniqueId(base, existsFn) {
+  let id = base || 'id';
+  let i = 1;
+  while (existsFn(id)) {
+    id = `${base}-${++i}`;
+  }
+  return id;
+}
+
+/* ===== Modal ADICIONAR AULAS ===== */
+(function setupAddLessonsModal() {
+  const $modal = document.getElementById('add-lessons-modal');
+  if (!$modal) return;
+
+  const $btnOpen  = document.getElementById('btn-add-lessons');
+  const $btnSave  = document.getElementById('al-save');
+  const $btnCancel= document.getElementById('al-cancel');
+
+  const $classSel = document.getElementById('al-class');
+
+  // Matéria
+  const $subjModeRadios = Array.from(document.querySelectorAll('input[name="al-subj-mode"]'));
+  const $subjExistingBox = document.getElementById('al-subj-existing');
+  const $subjNewBox      = document.getElementById('al-subj-new');
+  const $subjSel   = document.getElementById('al-subject-select');
+  const $subjName  = document.getElementById('al-subject-name');
+  const $subjAbbr  = document.getElementById('al-subject-abbr');
+
+  // Professores
+  const $teachModeRadios = Array.from(document.querySelectorAll('input[name="al-teach-mode"]'));
+  const $teachExistingBox = document.getElementById('al-teach-existing');
+  const $teachNewBox      = document.getElementById('al-teach-new');
+  const $teachSel   = document.getElementById('al-teachers-select');
+  const $tNewName   = document.getElementById('al-teacher-name');
+  const $tNewId     = document.getElementById('al-teacher-id');
+
+  // Sala / Duração / Qtde
+  const $roomSel  = document.getElementById('al-room');
+  const $durInput = document.getElementById('al-duration');
+  const $qtyInput = document.getElementById('al-qty');
+
+  function show()  { $modal.classList.remove('hidden'); $modal.classList.add('flex'); }
+  function hide()  { $modal.classList.add('hidden');   $modal.classList.remove('flex'); }
+
+  function toggleSubjUI() {
+    const mode = $subjModeRadios.find(r => r.checked)?.value || 'existing';
+    $subjExistingBox.classList.toggle('hidden', mode !== 'existing');
+    $subjNewBox.classList.toggle('hidden',      mode !== 'new');
+  }
+  function toggleTeachUI() {
+    const mode = $teachModeRadios.find(r => r.checked)?.value || 'existing';
+    $teachExistingBox.classList.toggle('hidden', mode !== 'existing');
+    $teachNewBox.classList.toggle('hidden',      mode !== 'new');
+  }
+
+  $subjModeRadios.forEach(r => r.addEventListener('change', toggleSubjUI));
+  $teachModeRadios.forEach(r => r.addEventListener('change', toggleTeachUI));
+
+  // Preenche selects (turma/matérias/profs/salas) SEM chamar updateData()
+  function fillOptions() {
+    // turmas
+    $classSel.innerHTML = '';
+    (classes || []).forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.name || c.id;
+      $classSel.appendChild(opt);
+    });
+
+    // matérias existentes
+    $subjSel.innerHTML = '';
+    (subjects || []).forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = s.name || s.abbr || s.id;
+      $subjSel.appendChild(opt);
+    });
+
+    // professores existentes (multi)
+    $teachSel.innerHTML = '';
+    (teachers || []).forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.name || t.id;
+      $teachSel.appendChild(opt);
+    });
+
+    // salas
+    const first = $roomSel.querySelector('option[value=""]');
+    $roomSel.innerHTML = '';
+    if (first) $roomSel.appendChild(first);
+    (rooms || []).forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = r.name || r.id;
+      $roomSel.appendChild(opt);
+    });
+
+    // defaults
+    $durInput.value = 1;
+    $qtyInput.value = 1;
+    $subjName.value = '';
+    $subjAbbr.value = '';
+    $tNewName.value = '';
+    $tNewId.value   = '';
+  }
+
+  function openModal() {
+    fillOptions();
+    toggleSubjUI();
+    toggleTeachUI();
+    show();
+  }
+
+  $btnOpen?.addEventListener('click', openModal);
+  $btnCancel?.addEventListener('click', hide);
+
+  function createSubjectIfNeeded() {
+    const mode = $subjModeRadios.find(r => r.checked)?.value || 'existing';
+    if (mode === 'existing') {
+      const sid = $subjSel.value;
+      if (!sid) { alert('Selecione uma matéria.'); return { ok:false }; }
+      return { ok:true, subjectId: sid };
+    }
+
+    // criar nova
+    const name = ($subjName.value || '').trim();
+    const abbr = ($subjAbbr.value || '').trim();
+    if (!name) { alert('Informe o nome da nova matéria.'); return { ok:false }; }
+
+    // gera id legível e único
+    const base = slugifyId(abbr || name);
+    const sid = ensureUniqueId(base, (id) => !!subjectById[id]);
+
+    const newSubj = { id: sid, name, abbr: abbr || undefined };
+    subjects.push(newSubj);
+    subjectById[sid] = newSubj;
+    return { ok:true, subjectId: sid };
+  }
+
+  function createTeacherIfNeeded() {
+    const mode = $teachModeRadios.find(r => r.checked)?.value || 'existing';
+    if (mode === 'existing') {
+      const tids = Array.from($teachSel.selectedOptions).map(o => o.value);
+      // Permite zero professores se desejar. Se quiser forçar ≥1: if(!tids.length) alert...
+      return { ok:true, teacherIds: tids };
+    }
+
+    // criar novo
+    const name = ($tNewName.value || '').trim();
+    let   tid  = ($tNewId.value || '').trim();
+    if (!name) { alert('Informe o nome do novo professor.'); return { ok:false }; }
+
+    if (!tid) {
+      tid = slugifyId(name);
+    }
+    tid = ensureUniqueId(tid, (id) => !!teacherById[id]);
+
+    const newTeacher = { id: tid, name };
+    teachers.push(newTeacher);
+    teacherById[tid] = newTeacher;
+    teacherKeyById[tid] = normalizeName(name); // importante p/ detecção de conflitos
+    return { ok:true, teacherIds: [tid] };
+  }
+
+  $btnSave?.addEventListener('click', () => {
+    const classId = $classSel.value;
+    if (!classId) return alert('Escolha a turma.');
+
+    // matéria
+    const subjRes = createSubjectIfNeeded();
+    if (!subjRes.ok) return;
+
+    // professor(es)
+    const teachRes = createTeacherIfNeeded();
+    if (!teachRes.ok) return;
+
+    // sala / duração / quantidade
+    const roomId = $roomSel.value || null;
+    const duration = Math.max(1, Number($durInput.value || 1));
+    let qty = Math.max(1, Number($qtyInput.value || 1));
+    qty = Math.min(50, qty);
+
+    // cria N cards não alocados
+    const created = [];
+    for (let i = 0; i < qty; i++) {
+      const id = `new-${classId}-${Date.now()}-${i}-${Math.random().toString(36).slice(2,6)}`;
+      const lesson = {
+        id,
+        classId,
+        subjectId: subjRes.subjectId,
+        teacherIds: teachRes.teacherIds || [],
+        roomId,
+        duration
+      };
+      unallocatedLessons.push(lesson);
+      created.push(lesson);
+    }
+
+    renderUnallocated();
+    setDirty(true);
+    showToast(`✅ ${created.length} aula(s) adicionada(s) às não alocadas.`, 'success');
+    hide();
+  });
+})();
+
 
 async function refreshSavedSelect(preselectFile = '') {
   const sel = document.getElementById('ed-saved-select');
