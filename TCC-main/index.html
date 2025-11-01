@@ -14,66 +14,94 @@
   <div id="loader" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
     <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
   </div>
+
   <div class="max-w-full mx-auto">
     <div class="bg-white rounded-lg shadow-lg p-6">
       <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
         Sistema de Agendamento de Turmas
       </h1>
 
-      <!-- Botoes -->
-      <div id="top-toolbar" class="mb-4 flex justify-end gap-2">
+      <!-- Barra superior (médio/compacta) -->
+      <div id="top-toolbar" class="mb-6 space-y-2">
 
-        <button id="btn-add-lessons" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded">
-          Adicionar aulas
-        </button>
+        <!-- Linha 1: Ações principais -->
+        <div class="flex flex-wrap items-center gap-2">
 
-        <button id="btn-editar"
-          class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled>
-          Editar Aula
-        </button>
+          <!-- Grupo: ações -->
+          <div class="flex gap-2">
+            <button id="btn-add-lessons"
+              class="flex items-center gap-1 h-9 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-sm font-medium shadow-sm">
+              ➕ Aulas
+            </button>
 
-        <!-- Seletor + botão para carregar um horário salvo -->
-        <div class="flex items-center gap-2">
-          <label class="text-sm text-gray-700">Horário salvo:</label>
-          <select id="ed-saved-select" class="border rounded px-2 py-1 min-w-[260px]"></select>
-          <button id="ed-load-saved" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded">
-            Carregar
+            <button id="btn-editar"
+              class="flex items-center gap-1 h-9 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+              disabled>
+              ✏️ Editar
+            </button>
+
+            <button id="btn-salvar"
+              class="flex items-center gap-1 h-9 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium shadow-sm">
+              💾 Salvar
+            </button>
+
+            <button id="btn-compartilhar"
+              class="flex items-center gap-1 h-9 px-3 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium shadow-sm">
+              📤 Compartilhar
+            </button>
+
+            <button id="btn-recarregar"
+              class="flex items-center gap-1 h-9 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium shadow-sm">
+              🔄 Recarregar
+            </button>
+          </div>
+
+          <!-- Carregar horário (com IDs restaurados) -->
+          <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-md h-9 pl-2 pr-2">
+            <select id="ed-saved-select"
+              class="border-0 bg-transparent text-sm px-1 py-0.5 min-w-[220px] focus:outline-none">
+              <option>Horários salvos...</option>
+            </select>
+            <button id="ed-load-saved" class="h-7 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm">
+              Carregar
+            </button>
+            <button id="ed-delete-saved" class="h-7 px-3 bg-red-500 hover:bg-red-600 text-white rounded text-sm"
+              title="Excluir horário salvo">
+              ×
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Linha 2: Datas e envio -->
+        <div class="flex flex-wrap items-center gap-3">
+
+          <!-- Datas -->
+          <div class="flex items-center gap-3">
+            <label class="text-xs text-gray-700">Início:</label>
+            <input id="dt-inicio" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
+
+            <label class="text-xs text-gray-700">Fim:</label>
+            <input id="dt-fim" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
+          </div>
+
+          <!-- Enviar -->
+          <button id="btn-enviar-mrbs"
+            class="h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-semibold shadow-sm">
+            🚀 Enviar para Reservas
           </button>
+
+          <!-- Zoom -->
+          <div class="flex items-center gap-1 ml-auto">
+            <span class="text-xs text-gray-600 mr-1">Zoom:</span>
+            <button id="btn-zoom-out" class="h-8 px-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">–</button>
+            <button id="btn-zoom-reset" class="h-8 px-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">100%</button>
+            <button id="btn-zoom-in" class="h-8 px-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">+</button>
+            <span id="zoom-indicator" class="text-xs text-gray-600 w-10 text-center">100%</span>
+          </div>
         </div>
-
-        <!-- já existe o select #ed-saved-select e o botão #ed-load-saved -->
-        <button id="ed-delete-saved" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded">
-          Excluir
-        </button>
-
-        <button id="btn-salvar" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded">
-          Salvar
-        </button>
-
-        <button id="btn-compartilhar" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded">
-          Compartilhar
-        </button>
-
-
-        <button id="btn-recarregar" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded">
-          Recarregar horário
-        </button>
-
-
-
-        <!-- Controles de Zoom -->
-        <div class="flex items-center gap-2">
-          <button id="btn-zoom-out" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            title="Diminuir (–)">–</button>
-          <button id="btn-zoom-in" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            title="Aumentar (+)">+</button>
-          <button id="btn-zoom-reset" class="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
-            title="Resetar (100%)">100%</button>
-          <span id="zoom-indicator" class="ml-1 text-sm text-gray-600 select-none">100%</span>
-        </div>
-
       </div>
+
 
       <div class="grid-scroller">
         <!-- Legenda -->
@@ -88,15 +116,15 @@
           </div>
           <div class="flex items-center gap-2">
             <div class="w-6 h-3 bg-green-500 rounded text-xs"></div>
-            <span class="text-sm text-gray-600">Manhã (07:00-09:30)</span>
+            <span class="text-sm text-gray-600">Manhã (08:00-12:00)</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-6 h-3 bg-yellow-500 rounded"></div>
-            <span class="text-sm text-gray-600">Tarde (13:00-15:30)</span>
+            <span class="text-sm text-gray-600">Tarde (13:30-17:30)</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-6 h-3 bg-purple-500 rounded"></div>
-            <span class="text-sm text-gray-600">Noite (19:00-21:30)</span>
+            <span class="text-sm text-gray-600">Noite (19:00-22:10)</span>
           </div>
         </div>
 
@@ -412,6 +440,112 @@
       }, true);
     })();
   </script>
+
+  <script>
+    (function () {
+      const ENDPOINT = "http://localhost:8080/FrontTCC/api/mrbs_import.php";
+      const FALLBACK_SCHEDULE_URL = "http://localhost:8080/FrontTCC/storage/schedules/20252_20251010_220412.json";
+
+      function computeAllocationsFromGrid() {
+        if (!window.EDITOR_DATA?.meta || !window.mapCells) return [];
+        const { meta, classes } = window.EDITOR_DATA;
+        const P = meta.periods.length;
+        const allocations = [];
+        classes.forEach(t => {
+          for (let d = 0; d < meta.days.length; d++) {
+            for (let p = 0; p < P; p++) {
+              const cell = window.mapCells?.[t.id]?.[d]?.[p];
+              if (!cell) continue;
+              if (cell.classList.contains('occupied') && cell.classList.contains('block-head') && cell.dataset.lesson) {
+                const lesson = JSON.parse(cell.dataset.lesson);
+                allocations.push({
+                  classId: t.id,
+                  day: d,
+                  start: p,
+                  duration: Number(lesson.duration) || 1,
+                  subjectId: lesson.subjectId,
+                  teacherIds: lesson.teacherIds || [],
+                  roomId: lesson.roomId || null
+                });
+              }
+            }
+          }
+        });
+        return allocations;
+      }
+
+      async function fetchSchedule(url) {
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      }
+
+      async function getCurrentScheduleForSending() {
+        // 3) Fallback fixo: teu arquivo atual no storage
+        try {
+          const json = await fetchSchedule(FALLBACK_SCHEDULE_URL);
+          if (json?.meta && json?.allocations) return json;
+        } catch { }
+
+        // // 4) Extrai direto do DOM (o que estiver alocado na grade agora)
+        // if (window.EDITOR_DATA) {
+        //   const { meta, classes, teachers, subjects, rooms } = window.EDITOR_DATA;
+        //   const allocations = computeAllocationsFromGrid();
+        //   if (allocations.length) return { meta, classes, teachers, subjects, rooms, allocations };
+        // }
+
+        return null;
+      }
+
+      async function enviarParaMRBS() {
+        const dtInicio = document.getElementById('dt-inicio').value;
+        const dtFim = document.getElementById('dt-fim').value;
+        if (!dtInicio || !dtFim) {
+          alert("Informe a data de início e fim do semestre antes de enviar.");
+          return;
+        }
+
+        const sched = await getCurrentScheduleForSending();
+        if (!sched?.allocations?.length) {
+          alert("Não encontrei alocações para enviar. Carregue um horário salvo ou aloque aulas na grade.");
+          return;
+        }
+
+        const payload = {
+          tz: "America/Sao_Paulo",
+          start_date: dtInicio,
+          end_date: dtFim,
+          meta: { periods: sched.meta.periods },
+          classes: sched.classes,
+          teachers: sched.teachers,
+          subjects: sched.subjects,
+          rooms: sched.rooms,
+          allocations: sched.allocations
+        };
+
+        try {
+          const r = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const resp = await r.json().catch(() => ({}));
+          if (!r.ok || !resp.ok) {
+            console.error("Falha MRBS", r.status, resp);
+            alert("Falha ao enviar para o MRBS. Veja o console para detalhes.");
+            return;
+          }
+          alert(`MRBS: ${resp.inserted} reservas inseridas, ${resp.skipped} puladas.`);
+        } catch (e) {
+          console.error(e);
+          alert("Erro de rede ao enviar para o MRBS.");
+        }
+      }
+
+      document.getElementById("btn-enviar-mrbs")?.addEventListener("click", enviarParaMRBS);
+    })();
+  </script>
+
 
 
 </body>
