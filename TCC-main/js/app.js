@@ -491,8 +491,6 @@ function placeBlock(turmaId, day, startPeriod, lesson) {
   return group;
 }
 
-
-
 function getGroupCells(cell) {
   const turmaId = cell.dataset.turmaId;
   const day = Number(cell.dataset.dia);
@@ -727,7 +725,8 @@ document.addEventListener('pointerdown', (e) => {
     t.closest?.('#unallocated-list') ||
     t.closest?.('#edit-modal') ||
     t.closest?.('#top-toolbar') ||
-    t.closest?.('#toast-container');
+    t.closest?.('#toast-container') ||
+    t.closest?.('#edit-fab');  
 
   if (inside) return;
 
@@ -1623,8 +1622,27 @@ if (reloadBtn) {
   });
 }
 
+const $fabBtn  = document.getElementById('fab-edit');
 
+$fabBtn?.addEventListener('click', (ev) => {
+  ev.preventDefault();
+  ev.stopPropagation();
 
+  // tenta abrir a modal diretamente
+  if (typeof window.openEditModal === 'function') {
+    const lesson = window.getSelectedLesson?.(); // se existir essa helper
+    if (lesson) {
+      window.openEditModal(lesson);
+      return;
+    }
+  }
+
+  // fallback: tenta o mesmo comportamento do botão do topo
+  const $btnTopo = document.getElementById('btn-editar');
+  if ($btnTopo && !$btnTopo.disabled) {
+    $btnTopo.click();
+  }
+});
 
 // Botão Salvar — envia o JSON para o PHP salvar no storage/schedules
 const btnSalvar = document.getElementById('btn-salvar');

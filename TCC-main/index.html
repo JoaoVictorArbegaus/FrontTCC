@@ -23,75 +23,57 @@
 
       <!-- Barra superior (médio/compacta) -->
       <div id="top-toolbar" class="mb-6 space-y-2">
-
         <!-- Linha 1: Ações principais -->
         <div class="flex flex-wrap items-center gap-2">
 
-          <!-- Grupo: ações -->
-          <div class="flex gap-2">
-            <button id="btn-add-lessons"
-              class="flex items-center gap-1 h-9 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-sm font-medium shadow-sm">
-              ➕ Aulas
-            </button>
-
-            <button id="btn-editar"
-              class="flex items-center gap-1 h-9 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled>
-              ✏️ Editar
-            </button>
-
-            <button id="btn-salvar"
-              class="flex items-center gap-1 h-9 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium shadow-sm">
-              💾 Salvar
-            </button>
-
-            <button id="btn-compartilhar"
-              class="flex items-center gap-1 h-9 px-3 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium shadow-sm">
-              📤 Compartilhar
-            </button>
-
-            <button id="btn-recarregar"
-              class="flex items-center gap-1 h-9 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium shadow-sm">
-              🔄 Recarregar
-            </button>
-          </div>
-
-          <!-- Carregar horário (com IDs restaurados) -->
-          <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-md h-9 pl-2 pr-2">
-            <select id="ed-saved-select"
-              class="border-0 bg-transparent text-sm px-1 py-0.5 min-w-[220px] focus:outline-none">
-              <option>Horários salvos...</option>
-            </select>
-            <button id="ed-load-saved" class="h-7 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm">
-              Carregar
-            </button>
-            <button id="ed-delete-saved" class="h-7 px-3 bg-red-500 hover:bg-red-600 text-white rounded text-sm"
-              title="Excluir horário salvo">
-              ×
-            </button>
-          </div>
-
-        </div>
-
-        <!-- Linha 2: Datas e envio -->
-        <div class="flex flex-wrap items-center gap-3">
-
-          <!-- Datas -->
-          <div class="flex items-center gap-3">
-            <label class="text-xs text-gray-700">Início:</label>
-            <input id="dt-inicio" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
-
-            <label class="text-xs text-gray-700">Fim:</label>
-            <input id="dt-fim" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
-          </div>
-
-          <!-- Enviar -->
-          <button id="btn-enviar-mrbs"
-            class="h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-semibold shadow-sm">
-            🚀 Enviar para Reservas
+          <!-- Grupo: ações principais -->
+          <button id="btn-add-lessons"
+            class="flex items-center gap-1 h-9 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-sm font-medium shadow-sm">
+            Adicionar Aula
           </button>
 
-          <!-- Zoom -->
+          <button id="btn-editar"
+            class="flex items-center gap-1 h-9 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled>
+            Editar Aula
+          </button>
+
+          <button id="btn-recarregar"
+            class="flex items-center gap-1 h-9 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium shadow-sm">
+            Recarregar
+          </button>
+
+          <!-- Grupo: selecionar e carregar horário -->
+          <div class="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-md h-9 pl-2 pr-2">
+            <select id="ed-saved-select"
+              class="border-0 bg-transparent text-sm px-1 py-0.5 min-w-[240px] focus:outline-none">
+              <option>Horários salvos...</option>
+            </select>
+
+            <button id="ed-load-saved"
+              class="h-7 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm font-medium">
+              Carregar
+            </button>
+
+            <button id="ed-delete-saved"
+              class="h-7 px-3 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-medium"
+              title="Excluir horário salvo">
+              Excluir
+            </button>
+          </div>
+
+          <!-- À direita do seletor -->
+          <button id="btn-salvar"
+            class="flex items-center gap-1 h-9 px-3 bg-orange-600 hover:bg-orange-700 text-white rounded-md text-sm font-medium shadow-sm">
+            Salvar
+          </button>
+
+          <button id="btn-compartilhar"
+            class="flex items-center gap-1 h-9 px-3 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium shadow-sm">
+            Compartilhar
+          </button>
+
+          <!-- Zoom no final da linha -->
           <div class="flex items-center gap-1 ml-auto">
             <span class="text-xs text-gray-600 mr-1">Zoom:</span>
             <button id="btn-zoom-out" class="h-8 px-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">–</button>
@@ -100,7 +82,24 @@
             <span id="zoom-indicator" class="text-xs text-gray-600 w-10 text-center">100%</span>
           </div>
         </div>
+
+        <!-- Linha 2: Datas e envio -->
+        <div class="flex flex-wrap items-center gap-3 mt-2">
+          <div class="flex items-center gap-3">
+            <label class="text-xs text-gray-700">Início:</label>
+            <input id="dt-inicio" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
+            <label class="text-xs text-gray-700">Fim:</label>
+            <input id="dt-fim" type="date" class="h-9 border rounded-md px-2 text-sm w-32" />
+          </div>
+
+          <button id="btn-enviar-mrbs"
+            class="h-9 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-semibold shadow-sm">
+            Enviar para Reservas
+          </button>
+        </div>
       </div>
+
+
 
 
       <div class="grid-scroller">
@@ -320,7 +319,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- Toast container -->
   <div id="toast-container" class="fixed top-4 right-4 space-y-2 z-[9999]"></div>
@@ -546,7 +544,66 @@
     })();
   </script>
 
+ 
+<!-- FAB Editar (fora de wrappers com transform) -->
+<div id="edit-fab" class="fixed bottom-16 right-8 z-[10000]">
+  <button id="fab-edit"
+    class="flex items-center gap-2 px-5 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-base font-semibold shadow-xl ring-1 ring-amber-700/30">
+    Editar aula
+  </button>
+</div>
 
+<script>
+(() => {
+  const $fabWrap  = document.getElementById('edit-fab');
+  const $fabBtn   = document.getElementById('fab-edit');
+  const $btnTopo  = document.getElementById('btn-editar');
+  if (!$fabWrap || !$fabBtn || !$btnTopo) return;
+
+  // 1) Não deixe o "clique fora" cancelar a seleção quando clicamos no FAB
+  document.addEventListener('pointerdown', (e) => {
+    if (e.target.closest?.('#edit-fab')) {
+      e.stopPropagation();
+    }
+  }, true);
+
+  // 2) Sincroniza a visibilidade do FAB com o estado do botão do topo
+  function syncFab() {
+    const hidden = !!$btnTopo.disabled;
+    $fabWrap.classList.toggle('hidden', hidden);
+  }
+  new MutationObserver(syncFab).observe($btnTopo, { attributes:true, attributeFilter:['disabled'] });
+  window.addEventListener('load', syncFab);
+
+  // 3) Clique no FAB: chama diretamente a função global do app, se existir.
+  //    Se não existir, emula um click real no botão do topo como fallback.
+  $fabBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    // tenta a função global (alguns projetos expõem algo assim)
+    if (typeof window.openEditModal === 'function') {
+      window.openEditModal();
+      return;
+    }
+
+    // fallback: disparo de clique "real" no botão do topo
+    if (!$btnTopo.disabled) {
+      const evt = new MouseEvent('click', { bubbles:true, cancelable:true, view:window });
+      $btnTopo.dispatchEvent(evt);
+    }
+  });
+
+  // 4) Se o app alterar o estado de seleção por ESC/click fora, re-sincroniza
+  document.addEventListener('keydown', () => setTimeout(syncFab, 0), true);
+  document.addEventListener('click',  () => setTimeout(syncFab, 0), true);
+
+  // 5) Logs rápidos para depuração (pode remover depois)
+  new MutationObserver((muts) => {
+    muts.forEach(() => console.log('[FAB] btn-editar disabled =', $btnTopo.disabled));
+  }).observe($btnTopo, { attributes:true, attributeFilter:['disabled'] });
+})();
+</script>
 
 </body>
 
