@@ -64,32 +64,30 @@ function lessonMarkup(lesson, subjectById, classById, teacherById, roomById, opt
 
   const teacherBadges = showTeacherBadges
     ? (lesson.teacherIds || [])
-      .map(tid => {
-        const name = teacherById?.[tid]?.name || tid;
-        return `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">${name}</span>`;
-      })
-      .join('')
+        .map(tid => {
+          const name = teacherById?.[tid]?.name || tid;
+          return `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">${name}</span>`;
+        })
+        .join('')
     : '';
 
   const roomBadge = showRoomBadge && lesson.roomId
-    ? `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">${roomById?.[lesson.roomId]?.name || lesson.roomId
-    }</span>`
+    ? `<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">${roomById?.[lesson.roomId]?.name || lesson.roomId}</span>`
     : '';
 
   return `
     <div class="flex flex-col items-center justify-center leading-tight font-bold text-sm">
       <span>${abbr}</span>
       ${showClass && classLabel
-      ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
-      : ''
-    }
+        ? `<span class="mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 border border-blue-200">${classLabel}</span>`
+        : ''
+      }
       ${(teacherBadges || roomBadge)
-      ? `<div class="mt-1 flex flex-wrap items-center justify-center gap-1">${teacherBadges}${roomBadge}</div>`
-      : ''
-    }
+        ? `<div class="mt-1 flex flex-wrap items-center justify-center gap-1">${teacherBadges}${roomBadge}</div>`
+        : ''
+      }
     </div>`;
 }
-
 
 function cellTitle(lesson, classById, subjectById, teacherById, roomById) {
   const cls = classById[lesson.classId]?.name ?? lesson.classId;
@@ -213,7 +211,6 @@ function placeBlockViz(
   }
 }
 
-
 /* ---------- Grade ---------- */
 // FULL: linhas = turmas; colunas = dias (cada dia 12 períodos)
 function renderGridFull(data) {
@@ -303,35 +300,29 @@ function renderGridSingleClass(data, classId) {
         { withTeacherBadges: true, withRoomBadge: true }
       )
     );
-
-
 }
 
-/* ---------- Lógicas de CONFLITO para o modo Professor ---------- */
-/** Atribui “lanes” (faixas) por dia para eventos que podem se sobrepor. */
+/* ---------- Lógicas de CONFLITO (teacher/room) ---------- */
 function assignLanesByDay(events, totalPeriods) {
-  // group by day
   const byDay = new Map();
   events.forEach(ev => {
     if (!byDay.has(ev.day)) byDay.set(ev.day, []);
     byDay.get(ev.day).push(ev);
   });
 
-  const result = new Map();        // day -> events with lane
-  const laneCountByDay = new Map();// day -> laneCount
+  const result = new Map();
+  const laneCountByDay = new Map();
 
   for (const [day, list] of byDay.entries()) {
-    // ordenar: início asc, e (opcional) maior duração primeiro em empates
     list.sort((a, b) => (a.start - b.start) || ((b.duration || 1) - (a.duration || 1)));
 
-    const laneEnds = []; // laneEnds[i] = último período ocupado nessa faixa
+    const laneEnds = [];
     const placed = [];
 
     for (const ev of list) {
       const dur = Number(ev.duration || 1);
       const evEnd = ev.start + dur;
 
-      // procura 1ª faixa onde end <= start
       let lane = -1;
       for (let i = 0; i < laneEnds.length; i++) {
         if (laneEnds[i] <= ev.start) { lane = i; break; }
@@ -349,7 +340,7 @@ function assignLanesByDay(events, totalPeriods) {
   return { byDay: result, laneCountByDay };
 }
 
-/** Renderização por PROFESSOR com empilhamento (lanes) quando houver conflito. */
+/** Renderização por PROFESSOR com empilhamento (lanes) */
 function renderGridSingleTeacher(data, teacherId) {
   const grid = document.getElementById('viz-grid');
   grid.innerHTML = '';
@@ -361,13 +352,11 @@ function renderGridSingleTeacher(data, teacherId) {
   const roomById = Object.fromEntries((rooms || []).map(r => [r.id, r]));
   const P = meta.periods.length;
 
-  // zera e garante estrutura em memória para todas as turmas
   ensureVizMap(classes, meta);
 
   const dayNamesFull = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
-  // 1) grade de fundo (células) — e um contêiner absoluto por dia
-  const dayRows = []; // { rowEl, periodsCol, cellsOfDay[], overlay }
+  const dayRows = [];
   for (let dia = 0; dia < meta.days.length; dia++) {
     const row = document.createElement('div');
     row.className = 'turma-row';
@@ -378,7 +367,7 @@ function renderGridSingleTeacher(data, teacherId) {
     row.appendChild(dayName);
 
     const periodsCol = document.createElement('div');
-    periodsCol.className = 'day-column relative'; // importante: relative para overlay absoluto
+    periodsCol.className = 'day-column relative';
 
     const cellsOfDay = [];
     for (let p = 0; p < P; p++) {
@@ -387,12 +376,10 @@ function renderGridSingleTeacher(data, teacherId) {
       periodsCol.appendChild(cell);
     }
 
-    // overlay que receberá os blocos absolutos
     const overlay = document.createElement('div');
-    overlay.className = 'absolute inset-0 pointer-events-none'; // blocos habilitam pointer-events
+    overlay.className = 'absolute inset-0 pointer-events-none';
     periodsCol.appendChild(overlay);
 
-    // aponta a MESMA referência de célula para todas as turmas neste dia
     classes.forEach(c => {
       for (let p = 0; p < P; p++) {
         vizMap[c.id][dia][p] = cellsOfDay[p];
@@ -401,35 +388,27 @@ function renderGridSingleTeacher(data, teacherId) {
 
     row.appendChild(periodsCol);
     grid.appendChild(row);
-    dayRows.push({ row, periodsCol, cellsOfDay, overlay });
+    dayRows.push({ periodsCol, cellsOfDay, overlay });
   }
 
-  // 2) eventos do professor
   const myEvents = allocations
     .filter(a => (a.teacherIds || []).includes(teacherId))
     .map(a => ({ ...a, end: a.start + Number(a.duration || 1) }));
 
-  // 3) atribui lanes por dia
   const { byDay, laneCountByDay } = assignLanesByDay(myEvents, P);
 
-  // 4) para cada dia, ajusta altura e posiciona blocos absolutos
   dayRows.forEach(({ periodsCol, cellsOfDay, overlay }, dia) => {
     const events = byDay.get(dia) || [];
     const laneCount = laneCountByDay.get(dia) || 1;
 
-    // mede altura de uma célula (fallback 56)
     const baseH = (cellsOfDay[0]?.offsetHeight) || 56;
     const rowH = baseH * laneCount;
 
-    // aumenta a altura do “fundo” (todas as células daquele dia)
     cellsOfDay.forEach(c => { c.style.height = `${rowH}px`; });
-
-    // overlay deve ter a mesma altura do fundo
     periodsCol.style.minHeight = `${rowH}px`;
 
-    // cria blocos
     overlay.innerHTML = '';
-    overlay.style.pointerEvents = 'none'; // overlay em si ignora, mas os blocos aceitam
+    overlay.style.pointerEvents = 'none';
     events.forEach(ev => {
       const leftPct = (ev.start / P) * 100;
       const widthPct = (Math.min(ev.end, P) - ev.start) / P * 100;
@@ -440,10 +419,10 @@ function renderGridSingleTeacher(data, teacherId) {
         'absolute rounded-md bg-rose-200 border border-rose-400 shadow-sm flex items-center justify-center text-xs font-bold';
       block.style.left = `${leftPct}%`;
       block.style.width = `${widthPct}%`;
-      block.style.top = `${topPx + 2}px`; // pequeno respiro
+      block.style.top = `${topPx + 2}px`;
       block.style.height = `${baseH - 4}px`;
       block.style.padding = '2px 4px';
-      block.style.pointerEvents = 'auto'; // permitir tooltip
+      block.style.pointerEvents = 'auto';
 
       block.innerHTML = lessonMarkup(ev, subjectById, classById, teacherById, roomById, { withClassBadge: true });
       block.title = cellTitle(ev, classById, subjectById, teacherById, roomById);
@@ -453,27 +432,132 @@ function renderGridSingleTeacher(data, teacherId) {
   });
 }
 
+/** Renderização por SALA */
+function renderGridSingleRoom(data, roomId) {
+  const grid = document.getElementById('viz-grid');
+  grid.innerHTML = '';
 
+  const { classes, subjects, teachers, rooms, meta, allocations } = data;
+  const subjectById = Object.fromEntries(subjects.map(s => [s.id, s]));
+  const teacherById = Object.fromEntries(teachers.map(t => [t.id, t]));
+  const classById = Object.fromEntries(classes.map(c => [c.id, c]));
+  const roomById = Object.fromEntries((rooms || []).map(r => [r.id, r]));
+  const P = meta.periods.length;
+
+  ensureVizMap(classes, meta);
+
+  const dayNamesFull = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+  const dayRows = [];
+  for (let dia = 0; dia < meta.days.length; dia++) {
+    const row = document.createElement('div');
+    row.className = 'turma-row';
+
+    const dayName = document.createElement('div');
+    dayName.className =
+      'bg-gray-100 p-3 font-bold text-lg border-2 border-gray-300 flex items-center justify-center rounded-lg';
+    dayName.textContent = dayNamesFull[dia];
+    row.appendChild(dayName);
+
+    const periodsCol = document.createElement('div');
+    periodsCol.className = 'day-column relative';
+
+    const cellsOfDay = [];
+    for (let p = 0; p < P; p++) {
+      const cell = baseCell('ANY', dia, p);
+      cellsOfDay.push(cell);
+      periodsCol.appendChild(cell);
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'absolute inset-0 pointer-events-none';
+    periodsCol.appendChild(overlay);
+
+    classes.forEach(c => {
+      for (let p = 0; p < P; p++) {
+        vizMap[c.id][dia][p] = cellsOfDay[p];
+      }
+    });
+
+    row.appendChild(periodsCol);
+    grid.appendChild(row);
+    dayRows.push({ periodsCol, cellsOfDay, overlay });
+  }
+
+  const myEvents = allocations
+    .filter(a => a.roomId === roomId)
+    .map(a => ({ ...a, end: a.start + Number(a.duration || 1) }));
+
+  const { byDay, laneCountByDay } = assignLanesByDay(myEvents, P);
+
+  dayRows.forEach(({ periodsCol, cellsOfDay, overlay }, dia) => {
+    const events = byDay.get(dia) || [];
+    const laneCount = laneCountByDay.get(dia) || 1;
+
+    const baseH = (cellsOfDay[0]?.offsetHeight) || 56;
+    const rowH = baseH * laneCount;
+
+    cellsOfDay.forEach(c => { c.style.height = `${rowH}px`; });
+    periodsCol.style.minHeight = `${rowH}px`;
+
+    overlay.innerHTML = '';
+    overlay.style.pointerEvents = 'none';
+    events.forEach(ev => {
+      const leftPct = (ev.start / P) * 100;
+      const widthPct = (Math.min(ev.end, P) - ev.start) / P * 100;
+      const topPx = ev.lane * baseH;
+
+      const block = document.createElement('div');
+      block.className =
+        'absolute rounded-md bg-violet-200 border border-violet-400 shadow-sm flex items-center justify-center text-xs font-bold';
+      block.style.left = `${leftPct}%`;
+      block.style.width = `${widthPct}%`;
+      block.style.top = `${topPx + 2}px`;
+      block.style.height = `${baseH - 4}px`;
+      block.style.padding = '2px 4px';
+      block.style.pointerEvents = 'auto';
+
+      // Mostra disciplina e turma (sem professor)
+      block.innerHTML = lessonMarkup(ev, subjectById, classById, teacherById, roomById, {
+        withClassBadge: true,
+        withTeacherBadges: false,
+        withRoomBadge: false
+      });
+      block.title = cellTitle(ev, classById, subjectById, teacherById, roomById);
+
+      overlay.appendChild(block);
+    });
+  });
+}
 
 
 /* ---------- Filtros ---------- */
 function populateFilters(data) {
   const selC = document.getElementById('f-class');
   const selT = document.getElementById('f-teacher');
+  const selR = document.getElementById('f-room');
+
   if (selC) selC.innerHTML = '<option value="">Todas</option>' +
     data.classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
   if (selT) selT.innerHTML = '<option value="">Todos</option>' +
     data.teachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+  if (selR) selR.innerHTML = '<option value="">Todas</option>' +
+    (data.rooms || []).map(r => `<option value="${r.id}">${r.name}</option>`).join('');
 }
 
 function applyFilters(data) {
   const selC = document.getElementById('f-class');
   const selT = document.getElementById('f-teacher');
+  const selR = document.getElementById('f-room');
+
   const classVal = selC?.value || '';
   const teacherVal = selT?.value || '';
+  const roomVal = selR?.value || '';
   const subtitleEl = document.getElementById('viz-subtitle');
 
-  // não permitir ambos ao mesmo tempo; prioridade para turma se ambos setados
+  // Prioridade: Turma > Professor > Sala
   if (classVal) {
     document.body.classList.add('single-view');
     const turmaName = data.classes.find(c => c.id === classVal)?.name || '';
@@ -485,7 +569,13 @@ function applyFilters(data) {
     const teacherName = data.teachers.find(t => t.id === teacherVal)?.name || '';
     if (subtitleEl) subtitleEl.textContent = `Professor: ${teacherName}`;
     renderHeadersSingle(data.meta, `Professor: ${teacherName}`);
-    renderGridSingleTeacher(data, teacherVal); // << novo modo com lanes
+    renderGridSingleTeacher(data, teacherVal);
+  } else if (roomVal) {
+    document.body.classList.add('single-view');
+    const roomName = (data.rooms || []).find(r => r.id === roomVal)?.name || '';
+    if (subtitleEl) subtitleEl.textContent = `Sala: ${roomName}`;
+    renderHeadersSingle(data.meta, `Sala: ${roomName}`);
+    renderGridSingleRoom(data, roomVal);
   } else {
     document.body.classList.remove('single-view');
     if (subtitleEl) subtitleEl.textContent = '';
@@ -497,16 +587,29 @@ function applyFilters(data) {
 function wireFilters(data) {
   const selC = document.getElementById('f-class');
   const selT = document.getElementById('f-teacher');
+  const selR = document.getElementById('f-room');
 
-  if (selC) selC.addEventListener('change', () => applyFilters(data));
-  if (selT) selT.addEventListener('change', () => applyFilters(data));
+  if (selC) selC.addEventListener('change', () => {
+    if (selC.value) { if (selT) selT.value = ''; if (selR) selR.value = ''; }
+    applyFilters(data);
+  });
+
+  if (selT) selT.addEventListener('change', () => {
+    if (selT.value) { if (selC) selC.value = ''; if (selR) selR.value = ''; }
+    applyFilters(data);
+  });
+
+  if (selR) selR.addEventListener('change', () => {
+    if (selR.value) { if (selC) selC.value = ''; if (selT) selT.value = ''; }
+    applyFilters(data);
+  });
 
   applyFilters(data); // estado inicial
 }
 
 /* ---------- Boot ---------- */
 async function initViz() {
-  const data = await loadConsolidated();   // << agora é assíncrono
+  const data = await loadConsolidated();
   if (!data) return;
   populateFilters(data);
   wireFilters(data);
