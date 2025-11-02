@@ -1,7 +1,7 @@
 <?php
 // ======================================================
 //  MRBS Import API — FrontTCC
-//  Versão: NÃO cria salas automaticamente, apenas usa as existentes
+//  Versão: Datas flexíveis de início e fim
 // ======================================================
 
 ob_start();
@@ -184,10 +184,23 @@ function resolve_room_id_from_front(PDO $pdo, string $tbl, array $ROOM_MAP, stri
   return get_existing_room_id($pdo, $tbl, $mrbsName);
 }
 
-function next_monday_on_or_after($ymd) {
-  $dt = new DateTime($ymd);
-  while ((int)$dt->format('N') !== 1) $dt->modify('+1 day');
-  return $dt;
+// FUNÇÃO MODIFICADA: Calcula data base considerando o dia da semana da data de início
+function calculate_base_date($start_date, $dayIndex) {
+  $start_dt = new DateTime($start_date);
+  $start_day_of_week = (int)$start_dt->format('N') - 1; // 0=Segunda, 1=Terça, ..., 5=Sábado
+  
+  $base_dt = clone $start_dt;
+  
+  // Se o dayIndex for menor que o dia da semana de início, vai para a próxima semana
+  if ($dayIndex < $start_day_of_week) {
+    $base_dt->modify('next monday')->modify("+{$dayIndex} days");
+  } else {
+    // Ajusta para o dia correto na semana de início
+    $days_to_add = $dayIndex - $start_day_of_week;
+    $base_dt->modify("+{$days_to_add} days");
+  }
+  
+  return $base_dt;
 }
 
 // ===== SQL =====
@@ -211,17 +224,16 @@ try {
     'mrbs_index_map_fail'  => 0,
     'overlap'              => 0,
     'no_room_id'           => 0,
-    'room_not_found'       => 0, // Novo motivo: sala não existe
+    'room_not_found'       => 0,
   ];
   $unknown_rooms = [];   // nomes sem correspondência no ROOM_MAP
   $room_map_hits = [];   // contagem de mapeamentos usados
-  $missing_rooms = [];   // salas que não existem no MRBS
+  $missing_rooms = [];   // salas que não existem no MRBS;
 
   $create_by = 'admin';
   $type = 'I';
 
-  $seriesStart = next_monday_on_or_after($start_date);
-  $seriesEnd   = new DateTime($end_date.' 23:59:59');
+  $seriesEnd = new DateTime($end_date . ' 23:59:59');
 
   foreach ($allocs as $a) {
     $classId    = (string)($a['classId'] ?? '');
@@ -265,7 +277,6 @@ try {
       $skipped++; 
       $skipped_reasons['room_not_found']++; 
       
-      // Registra qual sala não foi encontrada
       $frontName = $roomNameByFrontId[(string)$roomIdFront] ?? (string)$roomIdFront;
       if (!in_array($frontName, $missing_rooms)) {
         $missing_rooms[] = $frontName;
@@ -273,10 +284,11 @@ try {
       continue; 
     }
 
-    // Expande semanalmente
-    $dayIndex = (int)($a['day'] ?? 0); // 0=Seg
-    $dt = clone $seriesStart;
-    $dt->modify("+{$dayIndex} day");
+    // Expande semanalmente com data de início flexível
+    $dayIndex = (int)($a['day'] ?? 0); // 0=Segunda, 1=Terça, ..., 5=Sábado
+    
+    // Calcula a data base considerando o dia da semana da data de início
+    $dt = calculate_base_date($start_date, $dayIndex);
 
     while ($dt <= $seriesEnd) {
       $ymd = $dt->format('Y-m-d');
@@ -291,7 +303,8 @@ try {
       ]);
       if ((int)$overlap->fetchColumn() > 0) {
         $skipped++; $skipped_reasons['overlap']++;
-        $dt->modify('+7 day'); continue;
+        $dt->modify('+7 day'); 
+        continue;
       }
 
       $title = "{$className} - {$subjectName}";
@@ -321,7 +334,7 @@ try {
     'skipped'         => $skipped,
     'skipped_reasons' => $skipped_reasons,
     'unknown_rooms'   => array_values(array_unique($unknown_rooms)),
-    'missing_rooms'   => array_values(array_unique($missing_rooms)), // Salas que não existem
+    'missing_rooms'   => array_values(array_unique($missing_rooms)),
     'room_map_hits'   => $room_map_hits
   ], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
   exit;
