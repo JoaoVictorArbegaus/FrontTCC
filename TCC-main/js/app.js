@@ -545,40 +545,37 @@ function removeGroupCells(cells) {
 
 
 function recomputeConflicts() {
-  // 1) Limpeza de marcas e badges anteriores
+  // 1) limpar marcas/badges e restaurar title
   for (const [, head] of groupHeads) {
     head.classList.remove('conflict-teacher', 'conflict-room');
-
-    const bT = head.querySelector('.conflict-badge-teacher');
-    if (bT) bT.remove();
-    const bR = head.querySelector('.conflict-badge-room');
-    if (bR) bR.remove();
-
+    head.querySelectorAll('.conflict-badge-teacher, .conflict-badge-room').forEach(n => n.remove());
     if (head.dataset.lesson) {
       const l = JSON.parse(head.dataset.lesson);
       head.title = cellTitle(l);
     }
   }
 
-  // 2) Index: professores e salas -> dia/período -> grupos
+  // 2) indexações de ocupação
   const busyTeacher = {}; // busyTeacher[key][day][period] = Set(groups)
-  const busyRoom = {};    // busyRoom[roomId][day][period] = Set(groups)
+  const busyRoom    = {}; // busyRoom[roomId][day][period] = Set(groups)
+  const teacherKeyToLabel = {}; // key -> label legível (nome)
 
   for (const [group, head] of groupHeads) {
     if (!head.dataset.lesson) continue;
 
     const lesson = JSON.parse(head.dataset.lesson);
-    const day = Number(head.dataset.dia);
+    const day   = Number(head.dataset.dia);
     const start = Number(head.dataset.periodo);
-    const dur = Number(lesson.duration || 1);
+    const dur   = Number(lesson.duration || 1);
 
-    // Professores
+    // --- professores
     const tIds = Array.isArray(lesson.teacherIds) ? lesson.teacherIds : [];
     for (const tid of tIds) {
       const key =
-        teacherKeyById[tid] ??
-        normalizeName(teacherById[tid]?.name) ??
-        normalizeName(String(tid));
+        teacherKeyById?.[tid] ??
+        normalizeName(teacherById?.[tid]?.name ?? String(tid));
+      const label = teacherById?.[tid]?.name ?? String(tid);
+      teacherKeyToLabel[key] = teacherKeyToLabel[key] || label;
 
       if (!busyTeacher[key]) busyTeacher[key] = {};
       if (!busyTeacher[key][day]) {
@@ -587,7 +584,7 @@ function recomputeConflicts() {
       for (let k = 0; k < dur; k++) busyTeacher[key][day][start + k].add(group);
     }
 
-    // Sala (se houver)
+    // --- salas
     const roomId = lesson.roomId || null;
     if (roomId) {
       if (!busyRoom[roomId]) busyRoom[roomId] = {};
@@ -598,32 +595,56 @@ function recomputeConflicts() {
     }
   }
 
-  // 3) Detectar conflitos (≥2 grupos no mesmo slot)
+  // 3) detectar conflitos e coletar "quem" conflitou
   const conflictTeacherGroups = new Set();
+  const conflictRoomGroups    = new Set();
+
+  const teacherConfLabelsByGroup = {}; // group -> Set(nomes)
+  const roomConfLabelsByGroup    = {}; // group -> Set(nomes)
+
+  const addT = (g, label) => {
+    if (!teacherConfLabelsByGroup[g]) teacherConfLabelsByGroup[g] = new Set();
+    teacherConfLabelsByGroup[g].add(label);
+  };
+  const addR = (g, label) => {
+    if (!roomConfLabelsByGroup[g]) roomConfLabelsByGroup[g] = new Set();
+    roomConfLabelsByGroup[g].add(label);
+  };
+
+  // professores
   for (const key in busyTeacher) {
     const days = busyTeacher[key];
     for (const d in days) {
-      days[d].forEach(set => { if (set.size > 1) set.forEach(g => conflictTeacherGroups.add(g)); });
+      days[d].forEach(set => {
+        if (set.size > 1) {
+          const label = teacherKeyToLabel[key] || key;
+          set.forEach(g => { conflictTeacherGroups.add(g); addT(g, label); });
+        }
+      });
     }
   }
 
-  const conflictRoomGroups = new Set();
+  // salas
   for (const roomId in busyRoom) {
     const days = busyRoom[roomId];
+    const roomLabel = (roomById?.[roomId]?.name ?? roomId);
     for (const d in days) {
-      days[d].forEach(set => { if (set.size > 1) set.forEach(g => conflictRoomGroups.add(g)); });
+      days[d].forEach(set => {
+        if (set.size > 1) {
+          set.forEach(g => { conflictRoomGroups.add(g); addR(g, roomLabel); });
+        }
+      });
     }
   }
 
-  // 4) Aplicar destaque e badges (apenas ícone)
-  const applyBadge = (head, cls, badgeCls) => {
-    head.classList.add(cls);
+  // 4) aplicar classes + badges e montar title com nomes
+  const ensureBadge = (head, badgeCls) => {
     head.style.position = 'relative';
     if (!head.querySelector(`.${badgeCls}`)) {
-      const badge = document.createElement('span');
-      badge.className = `conflict-badge ${badgeCls}`;
-      badge.textContent = '⚠'; // apenas o ícone
-      head.appendChild(badge);
+      const b = document.createElement('span');
+      b.className = `conflict-badge ${badgeCls}`;
+      b.textContent = '⚠';
+      head.appendChild(b);
     }
   };
 
@@ -632,35 +653,41 @@ function recomputeConflicts() {
   for (const g of conflictTeacherGroups) {
     const head = groupHeads.get(g);
     if (!head) continue;
-    applyBadge(head, 'conflict-teacher', 'conflict-badge-teacher');
+    head.classList.add('conflict-teacher');
+    ensureBadge(head, 'conflict-badge-teacher');
     touched.add(g);
   }
 
   for (const g of conflictRoomGroups) {
     const head = groupHeads.get(g);
     if (!head) continue;
-    applyBadge(head, 'conflict-room', 'conflict-badge-room');
+    head.classList.add('conflict-room');
+    ensureBadge(head, 'conflict-badge-room');
     touched.add(g);
   }
 
-  // 5) Ajustar o title (tooltip) para incluir avisos
+  // atualizar tooltip com os nomes específicos
   for (const g of touched) {
     const head = groupHeads.get(g);
     if (!head || !head.dataset.lesson) continue;
     const l = JSON.parse(head.dataset.lesson);
-    const lines = [];
-    if (conflictTeacherGroups.has(g)) lines.push('⚠ CONFLITO DE PROFESSOR');
-    if (conflictRoomGroups.has(g)) lines.push('⚠ CONFLITO DE SALA');
-    lines.push(cellTitle(l));
-    head.title = lines.join('\n');
+
+    const parts = [];
+    if (teacherConfLabelsByGroup[g]?.size) {
+      parts.push(`⚠ CONFLITO DE PROFESSOR: ${[...teacherConfLabelsByGroup[g]].join(', ')}`);
+    }
+    if (roomConfLabelsByGroup[g]?.size) {
+      parts.push(`⚠ CONFLITO DE SALA: ${[...roomConfLabelsByGroup[g]].join(', ')}`);
+    }
+    parts.push(cellTitle(l));
+    head.title = parts.join('\n');
   }
 
-  console.debug(
-    '[conflicts] heads:', groupHeads.size,
+  console.debug('[conflicts] heads:', groupHeads.size,
     'prof-conf:', conflictTeacherGroups.size,
-    'room-conf:', conflictRoomGroups.size
-  );
+    'room-conf:', conflictRoomGroups.size);
 }
+
 
 
 // manter compat com chamadas antigas
