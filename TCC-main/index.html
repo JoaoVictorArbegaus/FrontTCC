@@ -442,56 +442,29 @@
   <script>
     (function () {
       const ENDPOINT = "http://localhost:8080/FrontTCC/api/mrbs_import.php";
-      const FALLBACK_SCHEDULE_URL = "http://localhost:8080/FrontTCC/storage/schedules/20252_20251010_220412.json";
-
-      function computeAllocationsFromGrid() {
-        if (!window.EDITOR_DATA?.meta || !window.mapCells) return [];
-        const { meta, classes } = window.EDITOR_DATA;
-        const P = meta.periods.length;
-        const allocations = [];
-        classes.forEach(t => {
-          for (let d = 0; d < meta.days.length; d++) {
-            for (let p = 0; p < P; p++) {
-              const cell = window.mapCells?.[t.id]?.[d]?.[p];
-              if (!cell) continue;
-              if (cell.classList.contains('occupied') && cell.classList.contains('block-head') && cell.dataset.lesson) {
-                const lesson = JSON.parse(cell.dataset.lesson);
-                allocations.push({
-                  classId: t.id,
-                  day: d,
-                  start: p,
-                  duration: Number(lesson.duration) || 1,
-                  subjectId: lesson.subjectId,
-                  teacherIds: lesson.teacherIds || [],
-                  roomId: lesson.roomId || null
-                });
-              }
-            }
-          }
-        });
-        return allocations;
-      }
-
-      async function fetchSchedule(url) {
-        const r = await fetch(url, { cache: 'no-store' });
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      }
 
       async function getCurrentScheduleForSending() {
-        // 3) Fallback fixo: teu arquivo atual no storage
-        try {
-          const json = await fetchSchedule(FALLBACK_SCHEDULE_URL);
-          if (json?.meta && json?.allocations) return json;
-        } catch { }
+        // USA A MESMA FUNÇÃO QUE O BOTÃO SALVAR
+        if (typeof buildConsolidated === 'function') {
+          const consolidated = buildConsolidated();
 
-        // // 4) Extrai direto do DOM (o que estiver alocado na grade agora)
-        // if (window.EDITOR_DATA) {
-        //   const { meta, classes, teachers, subjects, rooms } = window.EDITOR_DATA;
-        //   const allocations = computeAllocationsFromGrid();
-        //   if (allocations.length) return { meta, classes, teachers, subjects, rooms, allocations };
-        // }
+          if (!consolidated?.allocations?.length) {
+            alert("⚠️ Não há aulas alocadas na grade!");
+            return null;
+          }
 
+          console.log("📊 Enviando da grade:", consolidated.allocations.length, "aulas");
+          return {
+            meta: consolidated.meta,
+            classes: consolidated.classes,
+            teachers: consolidated.teachers,
+            subjects: consolidated.subjects,
+            rooms: consolidated.rooms,
+            allocations: consolidated.allocations
+          };
+        }
+
+        alert("❌ Função buildConsolidated não encontrada.");
         return null;
       }
 
@@ -499,15 +472,12 @@
         const dtInicio = document.getElementById('dt-inicio').value;
         const dtFim = document.getElementById('dt-fim').value;
         if (!dtInicio || !dtFim) {
-          alert("Informe a data de início e fim do semestre antes de enviar.");
+          alert("Informe a data de início e fim do semestre.");
           return;
         }
 
         const sched = await getCurrentScheduleForSending();
-        if (!sched?.allocations?.length) {
-          alert("Não encontrei alocações para enviar. Carregue um horário salvo ou aloque aulas na grade.");
-          return;
-        }
+        if (!sched) return;
 
         const payload = {
           tz: "America/Sao_Paulo",
@@ -522,18 +492,29 @@
         };
 
         try {
-          const r = await fetch(ENDPOINT, {
+          const r = await fetch(ENDPOINT + '?nocache=' + Date.now(), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
+
           const resp = await r.json().catch(() => ({}));
           if (!r.ok || !resp.ok) {
             console.error("Falha MRBS", r.status, resp);
-            alert("Falha ao enviar para o MRBS. Veja o console para detalhes.");
+            alert("Falha ao enviar para o MRBS. Verifique o console.");
             return;
           }
-          alert(`MRBS: ${resp.inserted} reservas inseridas, ${resp.skipped} puladas.`);
+
+          alert(`✅ MRBS: ${resp.inserted} reservas inseridas, ${resp.skipped} puladas.`);
+
+          // Debug info no console
+          if (resp.debug_info) {
+            console.log("🔍 Debug MRBS:", resp.debug_info);
+          }
+          if (resp.class_mappings) {
+            console.log("🎯 Mapeamentos por turma:", resp.class_mappings);
+          }
+
         } catch (e) {
           console.error(e);
           alert("Erro de rede ao enviar para o MRBS.");
@@ -541,69 +522,72 @@
       }
 
       document.getElementById("btn-enviar-mrbs")?.addEventListener("click", enviarParaMRBS);
+
+      // Debug helper
+      console.log("✅ Botão enviar-MRBS configurado com buildConsolidated");
     })();
   </script>
 
- 
-<!-- FAB Editar (fora de wrappers com transform) -->
-<div id="edit-fab" class="fixed bottom-16 right-8 z-[10000]">
-  <button id="fab-edit"
-    class="flex items-center gap-2 px-5 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-base font-semibold shadow-xl ring-1 ring-amber-700/30">
-    Editar aula
-  </button>
-</div>
 
-<script>
-(() => {
-  const $fabWrap  = document.getElementById('edit-fab');
-  const $fabBtn   = document.getElementById('fab-edit');
-  const $btnTopo  = document.getElementById('btn-editar');
-  if (!$fabWrap || !$fabBtn || !$btnTopo) return;
+  <!-- FAB Editar (fora de wrappers com transform) -->
+  <div id="edit-fab" class="fixed bottom-16 right-8 z-[10000]">
+    <button id="fab-edit"
+      class="flex items-center gap-2 px-5 py-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-base font-semibold shadow-xl ring-1 ring-amber-700/30">
+      Editar aula
+    </button>
+  </div>
 
-  // 1) Não deixe o "clique fora" cancelar a seleção quando clicamos no FAB
-  document.addEventListener('pointerdown', (e) => {
-    if (e.target.closest?.('#edit-fab')) {
-      e.stopPropagation();
-    }
-  }, true);
+  <script>
+    (() => {
+      const $fabWrap = document.getElementById('edit-fab');
+      const $fabBtn = document.getElementById('fab-edit');
+      const $btnTopo = document.getElementById('btn-editar');
+      if (!$fabWrap || !$fabBtn || !$btnTopo) return;
 
-  // 2) Sincroniza a visibilidade do FAB com o estado do botão do topo
-  function syncFab() {
-    const hidden = !!$btnTopo.disabled;
-    $fabWrap.classList.toggle('hidden', hidden);
-  }
-  new MutationObserver(syncFab).observe($btnTopo, { attributes:true, attributeFilter:['disabled'] });
-  window.addEventListener('load', syncFab);
+      // 1) Não deixe o "clique fora" cancelar a seleção quando clicamos no FAB
+      document.addEventListener('pointerdown', (e) => {
+        if (e.target.closest?.('#edit-fab')) {
+          e.stopPropagation();
+        }
+      }, true);
 
-  // 3) Clique no FAB: chama diretamente a função global do app, se existir.
-  //    Se não existir, emula um click real no botão do topo como fallback.
-  $fabBtn.addEventListener('click', (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
+      // 2) Sincroniza a visibilidade do FAB com o estado do botão do topo
+      function syncFab() {
+        const hidden = !!$btnTopo.disabled;
+        $fabWrap.classList.toggle('hidden', hidden);
+      }
+      new MutationObserver(syncFab).observe($btnTopo, { attributes: true, attributeFilter: ['disabled'] });
+      window.addEventListener('load', syncFab);
 
-    // tenta a função global (alguns projetos expõem algo assim)
-    if (typeof window.openEditModal === 'function') {
-      window.openEditModal();
-      return;
-    }
+      // 3) Clique no FAB: chama diretamente a função global do app, se existir.
+      //    Se não existir, emula um click real no botão do topo como fallback.
+      $fabBtn.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
 
-    // fallback: disparo de clique "real" no botão do topo
-    if (!$btnTopo.disabled) {
-      const evt = new MouseEvent('click', { bubbles:true, cancelable:true, view:window });
-      $btnTopo.dispatchEvent(evt);
-    }
-  });
+        // tenta a função global (alguns projetos expõem algo assim)
+        if (typeof window.openEditModal === 'function') {
+          window.openEditModal();
+          return;
+        }
 
-  // 4) Se o app alterar o estado de seleção por ESC/click fora, re-sincroniza
-  document.addEventListener('keydown', () => setTimeout(syncFab, 0), true);
-  document.addEventListener('click',  () => setTimeout(syncFab, 0), true);
+        // fallback: disparo de clique "real" no botão do topo
+        if (!$btnTopo.disabled) {
+          const evt = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+          $btnTopo.dispatchEvent(evt);
+        }
+      });
 
-  // 5) Logs rápidos para depuração (pode remover depois)
-  new MutationObserver((muts) => {
-    muts.forEach(() => console.log('[FAB] btn-editar disabled =', $btnTopo.disabled));
-  }).observe($btnTopo, { attributes:true, attributeFilter:['disabled'] });
-})();
-</script>
+      // 4) Se o app alterar o estado de seleção por ESC/click fora, re-sincroniza
+      document.addEventListener('keydown', () => setTimeout(syncFab, 0), true);
+      document.addEventListener('click', () => setTimeout(syncFab, 0), true);
+
+      // 5) Logs rápidos para depuração (pode remover depois)
+      new MutationObserver((muts) => {
+        muts.forEach(() => console.log('[FAB] btn-editar disabled =', $btnTopo.disabled));
+      }).observe($btnTopo, { attributes: true, attributeFilter: ['disabled'] });
+    })();
+  </script>
 
 </body>
 
