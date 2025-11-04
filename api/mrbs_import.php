@@ -138,10 +138,13 @@ $ROOM_MAP = [
 $mapFrontToMrbs = [
   0=>0, 1=>1, 2=>2, 3=>3,
   4=>5, 5=>6, 6=>7, 7=>8,
-  8=>10, 9=>11, 10=>12, 11=>13
+  8=>10, 9=>13, 10=>15, 11=>16  // Mapeamento
 ];
 $validMrbsIndex = [0,1,2,3,5,6,7,8,10,13,15,16];
+
 $validToPos = array_values($validMrbsIndex);
+
+
 
 // Técnica do “meio-dia”: minuto = índice do período
 function mk_period_epoch(string $ymd, int $slot) : int {
