@@ -361,36 +361,69 @@
 
   <script>
     (async () => {
-      // mesmo host/porta do Live Server
-      const LATEST_URL = `${location.origin}/FrontTCC/api/storage/ag_latest.json?v=${Date.now()}`;
-
-      try {
-        const resp = await fetch(LATEST_URL, { cache: 'no-store' });
-        if (resp.ok) {
-          const ag = await resp.json();
-          // expõe o bruto (opcional)
-          window.AG_PAYLOAD = ag;
-          // adapta para o formato do editor (usa meta de data.js)
-          if (window.AG_ADAPTER && window.EDITOR_DATA?.meta) {
-            window.EDITOR_DATA = window.AG_ADAPTER.adaptAGForEditor(
-              window.EDITOR_DATA.meta,
-              ag
-            );
-          }
-          console.log('AG payload carregado do Live Server:', ag);
-        } else {
-          console.warn('ag_latest.json não encontrado (usando placeholders do data.js)');
-        }
-      } catch (e) {
-        console.warn('Falha ao buscar ag_latest.json (usando placeholders):', e);
+      if (!window.EDITOR_DATA?.meta) {
+        await new Promise(r => setTimeout(r, 50));
       }
 
-      // injeta o app.js só depois de tentar carregar/adaptar
-      const script = document.createElement('script');
-      script.src = 'js/app.js';
-      document.body.appendChild(script);
+      async function listSavedEditor() {
+        try {
+          const r = await fetch(`${location.origin}/FrontTCC/api/list_schedules.php?v=${Date.now()}`, { cache: 'no-store' });
+          const data = await r.json();
+          // Normaliza para array de itens
+          if (Array.isArray(data)) return data;
+          if (data && Array.isArray(data.files)) return data.files;
+          if (data && Array.isArray(data.items)) return data.items;
+          return [];
+        } catch {
+          return [];
+        }
+      }
+
+      async function getSavedEditor(fileName) {
+        const url = `${location.origin}/FrontTCC/api/get_schedule.php?file=${encodeURIComponent(fileName)}`;
+        const resp = await fetch(url, { cache: 'no-store' });
+        const json = await resp.json();
+        if (!resp.ok || json?.ok === false) throw new Error(json?.error || `HTTP ${resp.status}`);
+        return json.data || json;
+      }
+
+      function pickLatest(items) {
+        if (!items.length) return null;
+        // pega maior savedAt; se não existir savedAt, usa o último da lista
+        const withDate = items.filter(it => typeof it.savedAt === 'string');
+        if (withDate.length) {
+          return withDate.reduce((a, b) => (new Date(a.savedAt) > new Date(b.savedAt) ? a : b));
+        }
+        return items[items.length - 1];
+      }
+
+      async function loadLatestFromAPI() {
+        const list = await listSavedEditor();
+        // DEBUG opcional:
+        console.log('[boot] lista recebida:', list);
+
+        const latestItem = pickLatest(list);
+        if (!latestItem?.file) {
+          console.warn('⚠️ Nenhum arquivo salvo. Usando placeholders.');
+          return { cons: null, file: '(placeholders)' };
+        }
+
+        console.log(`✅ Carregando horário da API: ${latestItem.file}`);
+        const cons = await getSavedEditor(latestItem.file);
+        return { cons, file: latestItem.file };
+      }
+
+      const { cons, file } = await loadLatestFromAPI();
+      window.__bootConsolidated = cons;
+      window.__bootLoadedName = file;
+
+      const s = document.createElement('script');
+      s.src = 'js/app.js';
+      document.body.appendChild(s);
     })();
   </script>
+
+
 
   <script>
     (() => {

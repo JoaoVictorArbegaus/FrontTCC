@@ -296,7 +296,7 @@ function adjustUnallocSpacer() {
 
   // Botões
   $cancel?.addEventListener('click', () => { hide(); });
-  
+
   // + Novo professor (cria e já seleciona)
   $addTeacher?.addEventListener('click', () => {
     // Prompt simples: nome e (opcional) ID curto
@@ -555,16 +555,16 @@ function recomputeConflicts() {
 
   // 2) indexações de ocupação
   const busyTeacher = {}; // busyTeacher[key][day][period] = Set(groups)
-  const busyRoom    = {}; // busyRoom[roomId][day][period] = Set(groups)
+  const busyRoom = {}; // busyRoom[roomId][day][period] = Set(groups)
   const teacherKeyToLabel = {}; // key -> label legível (nome)
 
   for (const [group, head] of groupHeads) {
     if (!head.dataset.lesson) continue;
 
     const lesson = JSON.parse(head.dataset.lesson);
-    const day   = Number(head.dataset.dia);
+    const day = Number(head.dataset.dia);
     const start = Number(head.dataset.periodo);
-    const dur   = Number(lesson.duration || 1);
+    const dur = Number(lesson.duration || 1);
 
     // --- professores
     const tIds = Array.isArray(lesson.teacherIds) ? lesson.teacherIds : [];
@@ -595,10 +595,10 @@ function recomputeConflicts() {
 
   // 3) detectar conflitos e coletar "quem" conflitou
   const conflictTeacherGroups = new Set();
-  const conflictRoomGroups    = new Set();
+  const conflictRoomGroups = new Set();
 
   const teacherConfLabelsByGroup = {}; // group -> Set(nomes)
-  const roomConfLabelsByGroup    = {}; // group -> Set(nomes)
+  const roomConfLabelsByGroup = {}; // group -> Set(nomes)
 
   const addT = (g, label) => {
     if (!teacherConfLabelsByGroup[g]) teacherConfLabelsByGroup[g] = new Set();
@@ -726,7 +726,7 @@ document.addEventListener('pointerdown', (e) => {
     t.closest?.('#edit-modal') ||
     t.closest?.('#top-toolbar') ||
     t.closest?.('#toast-container') ||
-    t.closest?.('#edit-fab');  
+    t.closest?.('#edit-fab');
 
   if (inside) return;
 
@@ -1038,11 +1038,21 @@ function criarGrade() {
 
 /* ----------------- Boot ----------------- */
 function init() {
+  if (window.__bootConsolidated) {
+    applyConsolidatedToEditor(window.__bootConsolidated);
+    console.log(
+      `%c✅ Horário carregado automaticamente da API: %c${window.__bootLoadedName}`,
+      'color:#4CAF50;font-weight:bold;', 'color:#2196F3;font-weight:bold;'
+    );
+    window.__bootConsolidated = null;
+    window.__bootLoadedName = null;
+  }
+
   renderPeriodsHeader();
   criarGrade();
   renderUnallocated();
   adjustUnallocSpacer();
-  reloadTimetable();
+  //reloadTimetable();
 }
 init();
 
@@ -1357,10 +1367,11 @@ async function listSavedEditor() {
 
 
 async function getSavedEditor(file) {
-  const url = `${ROOT}/api/get_schedule.php?file=${encodeURIComponent(file)}`;
-  const r = await fetch(url, { cache: 'no-store' });
-  if (!r.ok) throw new Error('Falha ao carregar');
-  return await r.json();
+  const resp = await fetch(`${location.origin}/FrontTCC/api/get_schedule.php?file=${encodeURIComponent(file)}`, { cache: 'no-store' });
+  const json = await resp.json();
+  if (!resp.ok || json?.ok === false) throw new Error(json?.error || `HTTP ${resp.status}`);
+  // aceita tanto {ok,data:{...}} quanto um JSON direto (se um dia mudar)
+  return json.data || json;
 }
 
 /* ===== aplicar consolidado salvo no editor ===== */
@@ -1622,7 +1633,7 @@ if (reloadBtn) {
   });
 }
 
-const $fabBtn  = document.getElementById('fab-edit');
+const $fabBtn = document.getElementById('fab-edit');
 
 $fabBtn?.addEventListener('click', (ev) => {
   ev.preventDefault();
