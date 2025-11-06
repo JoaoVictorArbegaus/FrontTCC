@@ -154,17 +154,16 @@
         <!-- ⬆️ Fim do wrapper -->
       </div>
 
-
       <!-- Painel inferior (não alocadas) -->
       <div id="unalloc-panel" class="unalloc-sticky mt-8 border-t border-gray-200">
         <div class="unalloc-sticky-inner bg-gray-50 rounded-t-lg p-4">
-          <div class="flex items-center justify-between mb-3">
+          <!-- cabeçalho com sticky -->
+          <div class="unalloc-header flex items-center justify-between mb-3">
             <h2 class="text-lg font-semibold">Aulas não alocadas</h2>
             <span id="unalloc-count" class="text-sm text-gray-600"></span>
           </div>
-
+          <!-- fim do cabeçalho -->
           <div id="unallocated-list" class="flex flex-wrap gap-2"></div>
-
           <div class="text-xs text-gray-500 mt-3 leading-relaxed">
             Selecione um cartão e depois clique em um espaço vazio na grade para alocar (respeita a
             duração e turma).<br />
@@ -172,7 +171,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 

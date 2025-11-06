@@ -342,3 +342,20 @@
 .conflict-badge-room {
   top: 22px;
 }
+
+/* Painel: limita altura do conteúdo e liga scroll interno */
+#unalloc-panel .unalloc-sticky-inner {
+  max-height: 32vh;        
+  min-height: 120px;       
+  overflow-y: auto;        
+}
+
+/* Cabeçalho fixo dentro do painel quando rolar */
+#unalloc-panel .unalloc-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f9fafb;     
+  padding-top: 0.25rem;    
+  padding-bottom: 0.5rem;
+}
