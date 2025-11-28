@@ -1539,9 +1539,13 @@ async function reloadTimetable() {
     renderUnallocated();
     console.log('Dados recarregados com sucesso:', window.EDITOR_DATA);
     markSavedSnapshot();
+    
+    // Notificação simples de sucesso
+    alert('Dados recebidos do Algoritmo com sucesso!');
+    
   } catch (error) {
     console.error('Erro ao recarregar horário:', error);
-    alert(`Falha ao recarregar horário: ${error.message}`);
+    alert(`Falha ao carregar horário: ${error.message}`);
   } finally {
     if (loader) loader.classList.add('hidden');
   }
