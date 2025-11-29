@@ -505,60 +505,73 @@
 
 
 
-      async function enviarParaMRBS() {
-        const dtInicio = document.getElementById('dt-inicio').value;
-        const dtFim = document.getElementById('dt-fim').value;
-        if (!dtInicio || !dtFim) {
-          alert("Informe a data de início e fim do semestre.");
-          return;
-        }
+     async function enviarParaMRBS() {
+    const dtInicio = document.getElementById('dt-inicio').value;
+    const dtFim = document.getElementById('dt-fim').value;
+    if (!dtInicio || !dtFim) {
+        alert("Informe a data de início e fim do semestre.");
+        return;
+    }
 
-        const sched = await getCurrentScheduleForSending();
-        if (!sched) return;
+    // CONFIRMAÇÃO IRREVERSÍVEL
+    const confirmMessage = `⚠️ ATENÇÃO: Esta ação NÃO PODE SER DESFEITA!\n\n` +
+                         `Você está prestes a enviar os dados da tela atual para o sistema MRBS.\n\n` +
+                         ` Período (dd/mm/yyy): ${dtInicio} a ${dtFim}\n\n` +
+                         `Esta operação:\n` +
+                         `• Criará reservas permanentes no sistema\n` +
+                         `• Não pode ser desfeita automaticamente\n\n` +
+                         `Tem certeza que deseja continuar?`;
 
-        const payload = {
-          tz: "America/Sao_Paulo",
-          start_date: dtInicio,
-          end_date: dtFim,
-          meta: { periods: sched.meta.periods },
-          classes: sched.classes,
-          teachers: sched.teachers,
-          subjects: sched.subjects,
-          rooms: sched.rooms,
-          allocations: sched.allocations
-        };
+    if (!confirm(confirmMessage)) {
+        alert("Envio cancelado pelo usuário.");
+        return;
+    }
 
-        try {
-          const r = await fetch(ENDPOINT + '?nocache=' + Date.now(), {
+    const sched = await getCurrentScheduleForSending();
+    if (!sched) return;
+
+    const payload = {
+        tz: "America/Sao_Paulo",
+        start_date: dtInicio,
+        end_date: dtFim,
+        meta: { periods: sched.meta.periods },
+        classes: sched.classes,
+        teachers: sched.teachers,
+        subjects: sched.subjects,
+        rooms: sched.rooms,
+        allocations: sched.allocations
+    };
+
+    try {
+        const r = await fetch(ENDPOINT + '?nocache=' + Date.now(), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
-          });
+        });
 
-          const resp = await r.json().catch(() => ({}));
-          if (!r.ok || !resp.ok) {
+        const resp = await r.json().catch(() => ({}));
+        if (!r.ok || !resp.ok) {
             console.error("Falha MRBS", r.status, resp);
             alert("Falha ao enviar para o MRBS. Verifique o console.");
             return;
-          }
-
-          // Processar e mostrar conflitos
-          showMRBSConflicts(resp);
-
-          // Debug info no console
-          if (resp.debug_info) {
-            console.log("🔍 Debug MRBS:", resp.debug_info);
-          }
-          if (resp.class_mappings) {
-            console.log("🎯 Mapeamentos por turma:", resp.class_mappings);
-          }
-
-        } catch (e) {
-          console.error(e);
-          alert("Erro de rede ao enviar para o MRBS.");
         }
-      }
 
+        // Processar e mostrar conflitos
+        showMRBSConflicts(resp);
+
+        // Debug info no console
+        if (resp.debug_info) {
+            console.log("🔍 Debug MRBS:", resp.debug_info);
+        }
+        if (resp.class_mappings) {
+            console.log("🎯 Mapeamentos por turma:", resp.class_mappings);
+        }
+
+    } catch (e) {
+        console.error(e);
+        alert("Erro de rede ao enviar para o MRBS.");
+    }
+}
 // Função para mostrar conflitos do MRBS
 function showMRBSConflicts(response) {
     let message = `✅ MRBS: ${response.inserted} reservas inseridas, ${response.skipped} puladas.`;
