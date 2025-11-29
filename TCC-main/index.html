@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Sistema de Agendamento de Turmas</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -503,6 +503,8 @@
         return null;
       }
 
+
+
       async function enviarParaMRBS() {
         const dtInicio = document.getElementById('dt-inicio').value;
         const dtFim = document.getElementById('dt-fim').value;
@@ -540,7 +542,8 @@
             return;
           }
 
-          alert(`✅ MRBS: ${resp.inserted} reservas inseridas, ${resp.skipped} puladas.`);
+          // Processar e mostrar conflitos
+          showMRBSConflicts(resp);
 
           // Debug info no console
           if (resp.debug_info) {
@@ -556,6 +559,60 @@
         }
       }
 
+// Função para mostrar conflitos do MRBS
+function showMRBSConflicts(response) {
+    let message = `✅ MRBS: ${response.inserted} reservas inseridas, ${response.skipped} puladas.`;
+    
+    const conflicts = [];
+    
+    // Salas não encontradas
+    if (response.missing_rooms && response.missing_rooms.length > 0) {
+        conflicts.push(`SALAS NÃO ENCONTRADAS:\n- ${response.missing_rooms.join('\n- ')}`);
+    }
+    
+    // Conflitos de sobreposição - AGORA COM DETALHES
+    if (response.skipped_reasons && response.skipped_reasons.overlap > 0) {
+        conflicts.push(`${response.skipped_reasons.overlap} AULAS COM CONFLITO DE HORÁRIO/SALA`);
+        
+        // MOSTRAR DETALHES ESPECÍFICOS DAS SALAS E TURMAS
+        if (response.conflict_summary) {
+            const topRooms = response.conflict_summary.top_rooms || {};
+            const topClasses = response.conflict_summary.top_classes || {};
+            
+            if (Object.keys(topRooms).length > 0) {
+                conflicts.push(`SALAS MAIS PROBLEMÁTICAS:\n${Object.entries(topRooms)
+                    .map(([sala, count]) => `- ${sala}: ${count} conflitos`)
+                    .join('\n')}`);
+            }
+            
+            if (Object.keys(topClasses).length > 0) {
+                conflicts.push(`TURMAS COM MAIS CONFLITOS:\n${Object.entries(topClasses)
+                    .map(([turma, count]) => `- ${turma}: ${count} conflitos`)
+                    .join('\n')}`);
+            }
+        }
+        
+        // Log detalhado no console
+        console.log('🔍 DETALHES COMPLETOS DOS CONFLITOS:', response.overlap_details);
+    }
+    
+    // Se houver conflitos, mostrar alerta detalhado
+    if (conflicts.length > 0) {
+        let detailedMessage = `${message}\n\nCONFLITOS ENCONTRADOS:\n\n`;
+        
+        conflicts.forEach(conflict => {
+            detailedMessage += `${conflict}\n\n`;
+        });
+        
+        alert(detailedMessage);
+        
+    } else {
+        alert(message);
+    }
+    
+    // Log completo para debugging
+    console.log('📊 RESPOSTA COMPLETA DO MRBS:', response);
+}
       document.getElementById("btn-enviar-mrbs")?.addEventListener("click", enviarParaMRBS);
 
       // Debug helper

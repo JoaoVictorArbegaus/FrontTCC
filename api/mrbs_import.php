@@ -273,6 +273,9 @@ try {
     'no_room_id' => 0,
     'room_not_found' => 0,
   ];
+  
+// Array para armazenar detalhes dos conflitos
+  $overlap_details = [];
   $unknown_rooms = [];
   $room_map_hits = [];
   $missing_rooms = [];
@@ -358,7 +361,6 @@ try {
     $idxStart = $mrbsStartIndex;
     $idxEnd = $mapFrontToMrbs_BASE[$lastFront] + 1; // +1 = limite superior
 
-
     $className = $clsNameById[$classId] ?? $classId;
     $subjectName = $subjNameById[$subjectId] ?? $subjectId;
     $teacherNames = array_map(fn($tid) => $teacherNameById[(string) $tid] ?? (string) $tid, $teacherIds);
@@ -393,9 +395,25 @@ try {
         ':start_time' => $start_ts,
         ':end_time' => $end_ts
       ]);
+      
       if ((int) $overlap->fetchColumn() > 0) {
         $skipped++;
         $skipped_reasons['overlap']++;
+        
+        //  Registrar detalhes do conflito
+        $overlap_details[] = [
+          'class_name' => $className,
+          'subject_name' => $subjectName,
+          'room_name' => $roomNameByFrontId[(string) $roomIdFront] ?? (string) $roomIdFront,
+          'day' => $dayIndex,
+          'front_start' => $frontStart,
+          'front_duration' => $frontDur,
+          'mrbs_start' => $idxStart,
+          'mrbs_end' => $idxEnd,
+          'date' => $ymd,
+          'mapping_tag' => $mappingTag
+        ];
+        
         $dt->modify('+7 day');
         continue;
       }
@@ -418,6 +436,23 @@ try {
     }
   }
 
+  // NOVO: Processar e resumir os conflitos
+  $conflict_summary = [];
+  $rooms_with_conflicts = [];
+  $classes_with_conflicts = [];
+  
+  foreach ($overlap_details as $conflict) {
+    $room = $conflict['room_name'];
+    $class = $conflict['class_name'];
+    
+    $rooms_with_conflicts[$room] = ($rooms_with_conflicts[$room] ?? 0) + 1;
+    $classes_with_conflicts[$class] = ($classes_with_conflicts[$class] ?? 0) + 1;
+  }
+  
+  // Ordenar por quantidade de conflitos
+  arsort($rooms_with_conflicts);
+  arsort($classes_with_conflicts);
+
   // ===== Saída JSON =====
   http_response_code(200);
   ob_clean();
@@ -429,8 +464,17 @@ try {
     'unknown_rooms' => array_values(array_unique($unknown_rooms)),
     'missing_rooms' => array_values(array_unique($missing_rooms)),
     'room_map_hits' => $room_map_hits,
-    'class_mappings' => $class_mappings,        // NomeTurma => '4N'/'3N'
-    'night_analysis' => $class_night_analysis,  // períodos noturnos por dia, flag has_4_periods, tag
+    'class_mappings' => $class_mappings,
+    'night_analysis' => $class_night_analysis,
+    
+    // NOVO: Detalhes dos conflitos
+    'overlap_details' => $overlap_details,
+    'conflict_summary' => [
+      'top_rooms' => array_slice($rooms_with_conflicts, 0, 10), // Top 10 salas problemáticas
+      'top_classes' => array_slice($classes_with_conflicts, 0, 10000), // Top 10 turmas problemáticas
+      'total_conflicts' => count($overlap_details)
+    ],
+    
     'debug_info' => [
       'rule' => "Único mapeamento base (8=>10). Se turma é '3N' e start==8, força 11.",
       'validMrbsIndex' => $validMrbsIndex
